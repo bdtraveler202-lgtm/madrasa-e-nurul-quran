@@ -286,3 +286,76 @@ text-align:center;
 }
 
 }
+/* Mobile Menu */
+
+nav.active{
+display:block;
+position:absolute;
+top:80px;
+left:0;
+width:100%;
+background:#0c6b34;
+padding:20px;
+}
+
+nav.active ul{
+flex-direction:column;
+gap:20px;
+}
+
+/* Sticky */
+
+.sticky{
+background:#084b23;
+transition:.4s;
+}
+
+/* Back To Top */
+
+#topBtn{
+
+position:fixed;
+
+bottom:30px;
+
+right:30px;
+
+width:50px;
+
+height:50px;
+
+border:none;
+
+border-radius:50%;
+
+background:#d4af37;
+
+font-size:22px;
+
+cursor:pointer;
+
+display:none;
+
+z-index:999;
+
+}
+
+/* Animation */
+
+.hidden{
+
+opacity:0;
+
+transform:translateY(80px);
+
+transition:1s;
+
+}
+
+.show{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
