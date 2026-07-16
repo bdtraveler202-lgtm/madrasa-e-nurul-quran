@@ -1,147 +1,235 @@
-/*==================================
- Google Font
-==================================*/
+/*=========================
+GOOGLE FONT
+=========================*/
+
 @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
 
-/*==================================
- Root Variables
-==================================*/
+/*=========================
+ROOT
+=========================*/
+
 :root{
-    --primary:#0B7A3E;
-    --secondary:#D4AF37;
-    --dark:#08131D;
-    --light:#F7FAF8;
-    --white:#ffffff;
-    --text:#333333;
-    --shadow:0 10px 30px rgba(0,0,0,.10);
+
+--green:#0E7A43;
+--dark:#0B1622;
+--gold:#D4AF37;
+--white:#ffffff;
+--light:#f5f8f7;
+--text:#444;
+--shadow:0 10px 30px rgba(0,0,0,.08);
+
 }
 
-/* Reset */
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
 
-html{
-    scroll-behavior:smooth;
+margin:0;
+padding:0;
+box-sizing:border-box;
+
 }
 
 body{
-    font-family:'Hind Siliguri',sans-serif;
-    background:var(--light);
-    color:var(--text);
-    overflow-x:hidden;
+
+font-family:'Hind Siliguri',sans-serif;
+
+background:#fff;
+
+color:var(--text);
+
+overflow-x:hidden;
+
 }
 
 img{
-    max-width:100%;
-    display:block;
+
+max-width:100%;
+display:block;
+
 }
 
 a{
-    text-decoration:none;
+
+text-decoration:none;
+
 }
 
-/*==================================
- Top Bar
-==================================*/
+/*=========================
+TOP BAR
+=========================*/
 
-.topbar{
-    background:var(--dark);
-    color:#fff;
-    padding:10px 0;
-    font-size:15px;
+.top-bar{
+
+background:#0B1622;
+
+color:white;
+
+font-size:14px;
+
+padding:8px 0;
+
 }
 
-.topbar a{
-    color:#fff;
+.top-bar a{
+
+color:white;
+
+margin-left:18px;
+
 }
 
-.topbar i{
-    color:var(--secondary);
+.top-bar i{
+
+color:#D4AF37;
+
+margin-right:6px;
+
 }
 
-/*==================================
- Navbar
-==================================*/
+/*=========================
+NAVBAR
+=========================*/
 
 .navbar{
-    background:var(--primary);
-    box-shadow:var(--shadow);
+
+background:white;
+
+padding:12px 0;
+
+box-shadow:0 3px 20px rgba(0,0,0,.05);
+
+position:sticky;
+
+top:0;
+
+z-index:999;
+
 }
 
 .navbar-brand{
-    font-weight:700;
-    color:#fff !important;
-    display:flex;
-    align-items:center;
-    gap:10px;
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+font-weight:700;
+
+color:#0E7A43;
+
+font-size:22px;
+
 }
 
-.nav-link{
-    color:#fff !important;
-    margin-left:15px;
-    transition:.3s;
+.navbar-brand img{
+
+width:58px;
+
 }
 
-.nav-link:hover{
-    color:var(--secondary)!important;
+.navbar-nav{
+
+gap:18px;
+
 }
-/*==================================
- Hero Section
-==================================*/
+
+.navbar-nav a{
+
+font-weight:600;
+
+color:#333;
+
+transition:.3s;
+
+}
+
+.navbar-nav a:hover{
+
+color:#0E7A43;
+
+}
+
+/*=========================
+HERO
+=========================*/
 
 .hero{
 
-    min-height:90vh;
+padding:90px 0;
 
-    display:flex;
-
-    align-items:center;
-
-    background:
-    linear-gradient(rgba(8,19,29,.75),
-    rgba(8,19,29,.75)),
-    url("../images/hero-bg.jpg");
-
-    background-size:cover;
-
-    background-position:center;
-
-    color:white;
+background:linear-gradient(135deg,#eef8f2,#ffffff);
 
 }
 
 .hero h1{
 
-    font-size:58px;
+font-size:62px;
 
-    font-weight:700;
+font-weight:700;
 
-    line-height:1.3;
+color:#0E7A43;
+
+line-height:1.2;
+
+margin-top:20px;
 
 }
 
 .hero p{
 
-    font-size:20px;
+font-size:20px;
 
-    margin-top:20px;
+line-height:1.9;
 
-    margin-bottom:20px;
+margin:25px 0;
+
+}
+
+.badge-admission{
+
+display:inline-block;
+
+background:#D4AF37;
+
+padding:12px 20px;
+
+border-radius:40px;
+
+font-weight:600;
+
+}
+
+.hero-btn{
+
+margin-top:35px;
+
+}
+
+.hero-btn .btn{
+
+padding:14px 30px;
+
+border-radius:50px;
+
+margin-right:15px;
+
+font-weight:600;
 
 }
 
 .hero-image{
 
-    max-width:520px;
+max-width:580px;
 
-    margin:auto;
+margin:auto;
 
-    animation:float 4s ease infinite;
+animation:float 5s ease-in-out infinite;
 
 }
+
+/*=========================
+FLOAT
+=========================*/
 
 @keyframes float{
 
@@ -165,261 +253,36 @@ transform:translateY(0);
 
 }
 
-.quran-box{
+/*=========================
+RESPONSIVE
+=========================*/
 
-    background:rgba(255,255,255,.12);
+@media(max-width:991px){
 
-    border-left:5px solid gold;
+.hero{
 
-    padding:18px;
+text-align:center;
 
-    border-radius:10px;
-
-    backdrop-filter:blur(8px);
-
-}
-
-.hero-btn .btn{
-
-    margin-right:10px;
-
-    margin-top:20px;
-
-    padding:13px 28px;
-
-    border-radius:40px;
-
-}
-/*==================================
- Statistics
-==================================*/
-
-.stats{
-
-    background:white;
+padding:70px 0;
 
 }
 
-.stats h2{
+.hero h1{
 
-    color:var(--primary);
-
-    font-size:45px;
-
-    font-weight:700;
+font-size:42px;
 
 }
 
-.stats p{
+.hero-image{
 
-    font-size:18px;
-
-    color:#666;
-
-}
-/*==================================
- About
-==================================*/
-
-.about{
-
-background:#fff;
+margin-top:50px;
 
 }
 
-.section-title{
-
-font-size:40px;
-
-font-weight:700;
-
-margin-bottom:20px;
-
-color:var(--primary);
-
-}
-
-.about p{
+.navbar-brand{
 
 font-size:18px;
 
-line-height:1.9;
-
 }
-
-/*==================================
- Principal
-==================================*/
-
-.principal{
-
-background:#f5f8f6;
-
-}
-
-.principal h2{
-
-color:var(--primary);
-
-margin-bottom:20px;
-
-}
-
-/*==================================
- Courses
-==================================*/
-
-.courses{
-
-background:#fff;
-
-}
-
-.course-card{
-
-padding:35px;
-
-text-align:center;
-
-border-radius:20px;
-
-background:white;
-
-box-shadow:var(--shadow);
-
-transition:.35s;
-
-height:100%;
-
-}
-
-.course-card:hover{
-
-transform:translateY(-10px);
-
-}
-
-.course-card i{
-
-font-size:50px;
-
-color:var(--primary);
-
-margin-bottom:20px;
-
-}
-
-.course-card h4{
-
-margin-bottom:15px;
-
-}
-/* Teachers */
-
-.teachers{
-
-background:#f8faf8;
-
-}
-
-.teacher-card{
-
-background:#fff;
-
-padding:25px;
-
-border-radius:20px;
-
-text-align:center;
-
-box-shadow:var(--shadow);
-
-transition:.3s;
-
-}
-
-.teacher-card:hover{
-
-transform:translateY(-8px);
-
-}
-
-.teacher-card img{
-
-width:170px;
-
-height:170px;
-
-object-fit:cover;
-
-border-radius:50%;
-
-margin:auto;
-
-}
-
-/* Notice */
-
-.notice{
-
-background:#fff;
-
-}
-
-.notice-list{
-
-list-style:none;
-
-padding:0;
-
-}
-
-.notice-list li{
-
-padding:15px;
-
-margin-bottom:12px;
-
-background:#f5f5f5;
-
-border-left:5px solid var(--primary);
-
-border-radius:8px;
-
-}
-
-/* Gallery */
-
-.gallery img{
-
-transition:.3s;
-
-}
-
-.gallery img:hover{
-
-transform:scale(1.05);
-
-}
-
-/* Events */
-
-.events{
-
-background:#f8faf8;
-
-}
-
-.event-card{
-
-padding:30px;
-
-background:#fff;
-
-border-radius:20px;
-
-box-shadow:var(--shadow);
-
-text-align:center;
 
 }
