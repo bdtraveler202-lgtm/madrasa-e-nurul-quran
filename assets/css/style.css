@@ -421,3 +421,132 @@ color:#0E7A43;
 margin-right:8px;
 
 }
+/*=========================
+PRINCIPAL
+=========================*/
+
+.principal{
+
+padding:100px 0;
+
+background:#f8faf8;
+
+}
+
+.principal-img{
+
+width:280px;
+
+height:280px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+border:8px solid #0E7A43;
+
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+margin:auto;
+
+}
+
+.principal h2{
+
+color:#0E7A43;
+
+margin-top:15px;
+
+font-weight:700;
+
+}
+
+.principal h5{
+
+color:#777;
+
+margin-bottom:20px;
+
+}
+
+.principal p{
+
+line-height:1.9;
+
+font-size:17px;
+
+}
+
+/*=========================
+COURSES
+=========================*/
+
+.courses{
+
+padding:100px 0;
+
+background:white;
+
+}
+
+.courses h2{
+
+font-size:42px;
+
+font-weight:700;
+
+color:#0E7A43;
+
+margin-top:15px;
+
+}
+
+.course-card{
+
+background:white;
+
+padding:35px 25px;
+
+border-radius:20px;
+
+text-align:center;
+
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+transition:.35s;
+
+height:100%;
+
+}
+
+.course-card:hover{
+
+transform:translateY(-10px);
+
+}
+
+.course-card i{
+
+font-size:48px;
+
+color:#0E7A43;
+
+margin-bottom:20px;
+
+}
+
+.course-card h4{
+
+font-weight:700;
+
+margin-bottom:15px;
+
+}
+
+.course-card p{
+
+font-size:16px;
+
+line-height:1.8;
+
+}
