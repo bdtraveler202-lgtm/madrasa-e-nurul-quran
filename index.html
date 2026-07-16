@@ -2,52 +2,53 @@
 <html lang="bn">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মাদরাসায়ে নূরুল কুরআন</title>
 
-<title>মাদরাসায়ে নূরুল কুরআন</title>
+    <meta name="description"
+        content="আধুনিক ইসলামিক শিক্ষা প্রতিষ্ঠান">
 
-<meta name="description" content="মাদরাসায়ে নূরুল কুরআন | আধুনিক ইসলামিক শিক্ষা প্রতিষ্ঠান">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- AOS -->
+    <link rel="stylesheet"
+        href="https://unpkg.com/aos@2.3.4/dist/aos.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<link rel="stylesheet"
-href="https://unpkg.com/aos@2.3.4/dist/aos.css">
-
-<link rel="stylesheet"
-href="assets/css/style.css">
-
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+        href="assets/css/style.css">
 </head>
 
 <body>
-<!--========================
-Top Bar
-=========================-->
 
-<div class="topbar">
+<!--=========================
+TOP BAR
+==========================-->
+
+<div class="top-bar">
 
 <div class="container">
 
-<div class="d-flex justify-content-between">
+<div class="row">
 
-<div>
+<div class="col-md-6">
 
 <i class="fa-solid fa-phone"></i>
 
-01312040301
+01312-040301
 
-</div>
-
-<div>
+&nbsp;&nbsp;
 
 <i class="fa-solid fa-envelope"></i>
 
@@ -55,22 +56,37 @@ info@madrasa.com
 
 </div>
 
+<div class="col-md-6 text-end">
+
+<a href="#"><i class="fab fa-facebook"></i></a>
+
+<a href="#"><i class="fab fa-youtube"></i></a>
+
+<a href="#"><i class="fab fa-whatsapp"></i></a>
+
+</div>
+
 </div>
 
 </div>
 
 </div>
+
+<!--=========================
+NAVBAR
+==========================-->
+
 <nav class="navbar navbar-expand-lg">
 
 <div class="container">
 
 <a class="navbar-brand" href="#">
 
-<img src="assets/images/logo.png" width="55">
+<img src="assets/images/logo.png">
 
 <span>
 
-মাদরাসায়ে<br>
+মাদরাসায়ে
 
 নূরুল কুরআন
 
@@ -78,7 +94,9 @@ info@madrasa.com
 
 </a>
 
-<button class="navbar-toggler"
+<button
+
+class="navbar-toggler"
 
 data-bs-toggle="collapse"
 
@@ -94,41 +112,19 @@ id="menu">
 
 <ul class="navbar-nav ms-auto">
 
-<li class="nav-item">
+<li><a href="#">হোম</a></li>
 
-<a class="nav-link" href="#">হোম</a>
+<li><a href="#">পরিচিতি</a></li>
 
-</li>
+<li><a href="#">ভর্তি</a></li>
 
-<li class="nav-item">
+<li><a href="#">শিক্ষকবৃন্দ</a></li>
 
-<a class="nav-link" href="#">পরিচিতি</a>
+<li><a href="#">নোটিশ</a></li>
 
-</li>
+<li><a href="#">গ্যালারি</a></li>
 
-<li class="nav-item">
-
-<a class="nav-link" href="#">ভর্তি</a>
-
-</li>
-
-<li class="nav-item">
-
-<a class="nav-link" href="#">শিক্ষকবৃন্দ</a>
-
-</li>
-
-<li class="nav-item">
-
-<a class="nav-link" href="#">নোটিশ</a>
-
-</li>
-
-<li class="nav-item">
-
-<a class="nav-link" href="#">যোগাযোগ</a>
-
-</li>
+<li><a href="#">যোগাযোগ</a></li>
 
 </ul>
 
@@ -136,18 +132,25 @@ id="menu">
 
 </div>
 
-</nav>    
+</nav>
+
+<!--=========================
+HERO
+==========================-->
+
 <section class="hero">
 
 <div class="container">
 
 <div class="row align-items-center">
 
-<div class="col-lg-6" data-aos="fade-right">
+<div class="col-lg-6"
 
-<span class="hero-tag">
+data-aos="fade-right">
 
-📚 ২০২৬ শিক্ষাবর্ষে ভর্তি চলছে
+<span class="badge-admission">
+
+📖 ২০২৬ শিক্ষাবর্ষে ভর্তি চলছে
 
 </span>
 
@@ -165,15 +168,19 @@ id="menu">
 
 </p>
 
-<div class="hero-buttons">
+<div class="hero-btn">
 
-<a href="#" class="btn btn-success btn-lg">
+<a href="#"
+
+class="btn btn-success">
 
 অনলাইনে ভর্তি
 
 </a>
 
-<a href="#" class="btn btn-warning btn-lg">
+<a href="#"
+
+class="btn btn-warning">
 
 ফলাফল
 
@@ -183,7 +190,7 @@ id="menu">
 
 </div>
 
-<div class="col-lg-6 text-center"
+<div class="col-lg-6"
 
 data-aos="fade-left">
 
@@ -191,7 +198,7 @@ data-aos="fade-left">
 
 src="assets/images/hero.png"
 
-class="hero-img"
+class="hero-image"
 
 alt="Hero">
 
@@ -202,5 +209,4 @@ alt="Hero">
 </div>
 
 </section>
-
     
