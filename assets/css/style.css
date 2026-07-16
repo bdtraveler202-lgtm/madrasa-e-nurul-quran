@@ -314,3 +314,112 @@ margin-bottom:20px;
 margin-bottom:15px;
 
 }
+/* Teachers */
+
+.teachers{
+
+background:#f8faf8;
+
+}
+
+.teacher-card{
+
+background:#fff;
+
+padding:25px;
+
+border-radius:20px;
+
+text-align:center;
+
+box-shadow:var(--shadow);
+
+transition:.3s;
+
+}
+
+.teacher-card:hover{
+
+transform:translateY(-8px);
+
+}
+
+.teacher-card img{
+
+width:170px;
+
+height:170px;
+
+object-fit:cover;
+
+border-radius:50%;
+
+margin:auto;
+
+}
+
+/* Notice */
+
+.notice{
+
+background:#fff;
+
+}
+
+.notice-list{
+
+list-style:none;
+
+padding:0;
+
+}
+
+.notice-list li{
+
+padding:15px;
+
+margin-bottom:12px;
+
+background:#f5f5f5;
+
+border-left:5px solid var(--primary);
+
+border-radius:8px;
+
+}
+
+/* Gallery */
+
+.gallery img{
+
+transition:.3s;
+
+}
+
+.gallery img:hover{
+
+transform:scale(1.05);
+
+}
+
+/* Events */
+
+.events{
+
+background:#f8faf8;
+
+}
+
+.event-card{
+
+padding:30px;
+
+background:#fff;
+
+border-radius:20px;
+
+box-shadow:var(--shadow);
+
+text-align:center;
+
+}
