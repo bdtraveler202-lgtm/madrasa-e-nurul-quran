@@ -217,4 +217,100 @@ transform:translateY(0);
     color:#666;
 
 }
+/*==================================
+ About
+==================================*/
 
+.about{
+
+background:#fff;
+
+}
+
+.section-title{
+
+font-size:40px;
+
+font-weight:700;
+
+margin-bottom:20px;
+
+color:var(--primary);
+
+}
+
+.about p{
+
+font-size:18px;
+
+line-height:1.9;
+
+}
+
+/*==================================
+ Principal
+==================================*/
+
+.principal{
+
+background:#f5f8f6;
+
+}
+
+.principal h2{
+
+color:var(--primary);
+
+margin-bottom:20px;
+
+}
+
+/*==================================
+ Courses
+==================================*/
+
+.courses{
+
+background:#fff;
+
+}
+
+.course-card{
+
+padding:35px;
+
+text-align:center;
+
+border-radius:20px;
+
+background:white;
+
+box-shadow:var(--shadow);
+
+transition:.35s;
+
+height:100%;
+
+}
+
+.course-card:hover{
+
+transform:translateY(-10px);
+
+}
+
+.course-card i{
+
+font-size:50px;
+
+color:var(--primary);
+
+margin-bottom:20px;
+
+}
+
+.course-card h4{
+
+margin-bottom:15px;
+
+}
