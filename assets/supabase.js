@@ -6,4 +6,4 @@ const SUPABASE_KEY =
 window.supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
-);
+); 
