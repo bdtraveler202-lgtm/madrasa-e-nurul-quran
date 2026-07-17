@@ -10,44 +10,54 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
-</head> 
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
 
 <body class="bg-light">
 
 <div class="container py-5">
 
-<h2 class="mb-4">
-
+<h2 class="mb-4 text-center">
 📚 শিক্ষার্থীদের তালিকা
-
 </h2>
+
 <div class="row mb-4">
 
-    <div class="col-md-6">
-        <input
-            type="text"
-            id="searchInput"
-            class="form-control"
-            placeholder="🔍 নাম দিয়ে খুঁজুন">
-    </div>
+<div class="col-md-6">
 
-    <div class="col-md-6">
-        <select
-            id="classFilter"
-            class="form-select">
-
-            <option value="">সব শ্রেণী</option>
-            <option value="নূরানী">নূরানী</option>
-            <option value="নাজেরা">নাজেরা</option>
-            <option value="হিফজ">হিফজ</option>
-
-        </select>
-    </div>
+<input
+type="text"
+id="searchInput"
+class="form-control"
+placeholder="🔍 নাম দিয়ে খুঁজুন">
 
 </div>
+
+<div class="col-md-6">
+
+<select
+id="classFilter"
+class="form-select">
+
+<option value="">সব শ্রেণী</option>
+
+<option value="নূরানী">নূরানী</option>
+
+<option value="নাজেরা">নাজেরা</option>
+
+<option value="হিফজ">হিফজ</option>
+
+</select>
+
+</div>
+
+</div>
+
 <div class="table-responsive">
 
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped table-hover">
 
 <thead class="table-success">
 
@@ -66,9 +76,11 @@
 <th>শ্রেণী</th>
 
 <th>ঠিকানা</th>
-    
-<th>অ্যাকশন</th>
-    
+
+<th width="170">
+অ্যাকশন
+</th>
+
 </tr>
 
 </thead>
@@ -83,90 +95,173 @@
 
 </div>
 
+<!-- =======================
+Edit Modal
+======================= -->
+
+<div class="modal fade" id="editModal" tabindex="-1">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h5 class="modal-title">
+
+শিক্ষার্থীর তথ্য সম্পাদনা
+
+</h5>
+
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="modal">
+
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<input
+type="hidden"
+id="edit_id">
+
+<div class="mb-3">
+
+<label>
+
+শিক্ষার্থীর নাম
+
+</label>
+
+<input
+type="text"
+id="edit_name"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>
+
+পিতার নাম
+
+</label>
+
+<input
+type="text"
+id="edit_father"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>
+
+মাতার নাম
+
+</label>
+
+<input
+type="text"
+id="edit_mother"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>
+
+মোবাইল
+
+</label>
+
+<input
+type="text"
+id="edit_mobile"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>
+
+শ্রেণী
+
+</label>
+
+<input
+type="text"
+id="edit_class"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>
+
+ঠিকানা
+
+</label>
+
+<input
+type="text"
+id="edit_address"
+class="form-control">
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+type="button"
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+বাতিল
+
+</button>
+
+<button
+type="button"
+class="btn btn-success"
+onclick="saveStudent()">
+
+Save Changes
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Bootstrap JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Supabase -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="assets/js/supabase.js"></script>
 
+<!-- Students JS -->
+
 <script src="assets/js/students.js"></script>
 
-<!-- Edit Student Modal -->
-<div class="modal fade" id="editModal" tabindex="-1">
-
-  <div class="modal-dialog">
-
-    <div class="modal-content">
-
-      <div class="modal-header">
-
-        <h5 class="modal-title">
-          শিক্ষার্থীর তথ্য সম্পাদনা
-        </h5>
-
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal">
-        </button>
-
-      </div>
-
-      <div class="modal-body">
-
-        <input type="hidden" id="edit_id">
-
-        <div class="mb-3">
-          <label>শিক্ষার্থীর নাম</label>
-          <input type="text" id="edit_name" class="form-control">
-        </div>
-
-        <div class="mb-3">
-          <label>পিতার নাম</label>
-          <input type="text" id="edit_father" class="form-control">
-        </div>
-
-        <div class="mb-3">
-          <label>মাতার নাম</label>
-          <input type="text" id="edit_mother" class="form-control">
-        </div>
-
-        <div class="mb-3">
-          <label>মোবাইল</label>
-          <input type="text" id="edit_mobile" class="form-control">
-        </div>
-
-        <div class="mb-3">
-          <label>শ্রেণী</label>
-          <input type="text" id="edit_class" class="form-control">
-        </div>
-
-        <div class="mb-3">
-          <label>ঠিকানা</label>
-          <input type="text" id="edit_address" class="form-control">
-        </div>
-
-      </div>
-
-      <div class="modal-footer">
-
-        <button
-          class="btn btn-secondary"
-          data-bs-dismiss="modal">
-          বাতিল
-        </button>
-
-        <button
-          class="btn btn-success"
-          onclick="saveStudent()">
-          Save
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-    
 </body>
+
 </html>
