@@ -1,8 +1,8 @@
 let students = [];
 
-// =========================
+// ===============================
 // Load Students
-// =========================
+// ===============================
 
 async function loadStudents() {
 
@@ -18,14 +18,13 @@ async function loadStudents() {
     }
 
     students = data;
-
     renderStudents(students);
 
 }
 
-// =========================
+// ===============================
 // Render Table
-// =========================
+// ===============================
 
 function renderStudents(list) {
 
@@ -72,13 +71,13 @@ function renderStudents(list) {
                 <button
                     class="btn btn-primary btn-sm"
                     onclick="editStudent(${student.id})">
-                    Edit
+                    <i class="fa-solid fa-pen"></i> Edit
                 </button>
 
                 <button
                     class="btn btn-danger btn-sm ms-2"
                     onclick="deleteStudent(${student.id})">
-                    Delete
+                    <i class="fa-solid fa-trash"></i> Delete
                 </button>
 
             </td>
@@ -91,9 +90,9 @@ function renderStudents(list) {
 
 }
 
-// =========================
-// Search + Filter
-// =========================
+// ===============================
+// Search & Filter
+// ===============================
 
 function filterStudents() {
 
@@ -131,9 +130,9 @@ document
     .getElementById("classFilter")
     .addEventListener("change", filterStudents);
 
-// =========================
+// ===============================
 // Delete Student
-// =========================
+// ===============================
 
 async function deleteStudent(id) {
 
@@ -150,56 +149,67 @@ async function deleteStudent(id) {
 
         console.error(error);
 
-        alert("❌ Delete করা যায়নি!");
+        alert("Delete করা যায়নি!");
 
         return;
 
     }
 
-    alert("✅ শিক্ষার্থী সফলভাবে Delete হয়েছে");
+    alert("শিক্ষার্থী সফলভাবে Delete হয়েছে");
 
     loadStudents();
 
 }
 
-// =========================
+// ===============================
 // Edit Student
-// =========================
+// ===============================
 
 async function editStudent(id) {
 
-    const student = students.find(s => s.id === id);
+    const student = students.find(s => s.id == id);
 
     if (!student) return;
 
-    const newName = prompt("শিক্ষার্থীর নাম", student.full_name);
-    if (newName === null) return;
+    document.getElementById("edit_id").value = student.id;
+    document.getElementById("edit_name").value = student.full_name;
+    document.getElementById("edit_father").value = student.father_name;
+    document.getElementById("edit_mother").value = student.mother_name;
+    document.getElementById("edit_mobile").value = student.mobile;
+    document.getElementById("edit_class").value = student.class;
+    document.getElementById("edit_address").value = student.address;
 
-    const newFather = prompt("পিতার নাম", student.father_name);
-    if (newFather === null) return;
+    const modal = new bootstrap.Modal(
+        document.getElementById("editModal")
+    );
 
-    const newMother = prompt("মাতার নাম", student.mother_name);
-    if (newMother === null) return;
+    modal.show();
 
-    const newMobile = prompt("মোবাইল", student.mobile);
-    if (newMobile === null) return;
+}
 
-    const newClass = prompt("শ্রেণী", student.class);
-    if (newClass === null) return;
+// ===============================
+// Save Student
+// ===============================
 
-    const newAddress = prompt("ঠিকানা", student.address);
-    if (newAddress === null) return;
+async function saveStudent() {
+
+    const id = document.getElementById("edit_id").value;
 
     const { error } = await window.supabaseClient
         .from("students")
         .update({
 
-            full_name: newName,
-            father_name: newFather,
-            mother_name: newMother,
-            mobile: newMobile,
-            class: newClass,
-            address: newAddress
+            full_name: document.getElementById("edit_name").value,
+
+            father_name: document.getElementById("edit_father").value,
+
+            mother_name: document.getElementById("edit_mother").value,
+
+            mobile: document.getElementById("edit_mobile").value,
+
+            class: document.getElementById("edit_class").value,
+
+            address: document.getElementById("edit_address").value
 
         })
         .eq("id", id);
@@ -208,20 +218,24 @@ async function editStudent(id) {
 
         console.error(error);
 
-        alert("❌ Update করা যায়নি!");
+        alert("Update করা যায়নি!");
 
         return;
 
     }
 
-    alert("✅ তথ্য সফলভাবে Update হয়েছে");
+    bootstrap.Modal
+        .getInstance(document.getElementById("editModal"))
+        .hide();
+
+    alert("তথ্য সফলভাবে Update হয়েছে");
 
     loadStudents();
 
 }
 
-// =========================
+// ===============================
 // Start
-// =========================
+// ===============================
 
 loadStudents();
