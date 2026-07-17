@@ -1,5 +1,25 @@
 // ======================================
-// Notice Management
+// Check Login Session
+// ======================================
+
+window.supabaseClient.auth.getSession().then(({ data }) => {
+
+    if (!data.session) {
+
+        alert("❌ আপনি Login করেননি!");
+
+        window.location.href = "login.html";
+
+    } else {
+
+        loadNotices();
+
+    }
+
+});
+
+// ======================================
+// Load Notices
 // ======================================
 
 async function loadNotices() {
@@ -19,17 +39,26 @@ async function loadNotices() {
 
     table.innerHTML = "";
 
+    if (data.length === 0) {
+
+        table.innerHTML = `
+        <tr>
+            <td colspan="3" class="text-center">
+                কোনো নোটিশ পাওয়া যায়নি
+            </td>
+        </tr>
+        `;
+
+        return;
+    }
+
     data.forEach(notice => {
 
         table.innerHTML += `
         <tr>
-
             <td>${notice.id}</td>
-
             <td>${notice.title}</td>
-
             <td>${notice.description}</td>
-
         </tr>
         `;
 
@@ -43,37 +72,49 @@ async function loadNotices() {
 
 const noticeForm = document.getElementById("noticeForm");
 
-noticeForm.addEventListener("submit", async function(e){
+if (noticeForm) {
 
-    e.preventDefault();
+    noticeForm.addEventListener("submit", async function (e) {
 
-    const title = document.getElementById("title").value;
+        e.preventDefault();
 
-    const description = document.getElementById("description").value;
+        const title = document.getElementById("title").value.trim();
 
-    const { error } = await window.supabaseClient
-        .from("notices")
-        .insert([{
+        const description = document.getElementById("description").value.trim();
 
-            title,
-            description
+        if (title === "" || description === "") {
 
-        }]);
+            alert("সব তথ্য পূরণ করুন!");
 
-   if (error) {
-    console.error(error);
-    alert(error.message);
-    return;
+            return;
+
+        }
+
+        const { error } = await window.supabaseClient
+            .from("notices")
+            .insert([
+                {
+                    title: title,
+                    description: description
+                }
+            ]);
+
+        if (error) {
+
+            console.error(error);
+
+            alert("❌ " + error.message);
+
+            return;
+
+        }
+
+        alert("✅ Notice সফলভাবে যোগ হয়েছে");
+
+        noticeForm.reset();
+
+        loadNotices();
+
+    });
+
 }
-
-    alert("✅ Notice সফলভাবে যোগ হয়েছে");
-
-    noticeForm.reset();
-
-    loadNotices();
-
-});
-
-// ======================================
-
-loadNotices();
