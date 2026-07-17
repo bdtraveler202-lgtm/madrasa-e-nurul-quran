@@ -1,5 +1,27 @@
 // ===============================
-// Admin Dashboard
+// Check Login Session
+// ===============================
+
+async function checkLogin() {
+
+    const { data, error } = await window.supabaseClient.auth.getSession();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    if (!data.session) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    loadDashboard();
+
+}
+
+// ===============================
+// Dashboard Statistics
 // ===============================
 
 async function loadDashboard() {
@@ -13,22 +35,40 @@ async function loadDashboard() {
         alert("ডেটা লোড করা যায়নি!");
         return;
     }
- 
-    // Total Students
+
     document.getElementById("totalStudents").innerText = data.length;
 
-    // Nurani
-    const nurani = data.filter(student => student.class === "নূরানী").length;
-    document.getElementById("nurani").innerText = nurani;
+    document.getElementById("nurani").innerText =
+        data.filter(s => s.class === "নূরানী").length;
 
-    // Nazera
-    const nazera = data.filter(student => student.class === "নাজেরা").length;
-    document.getElementById("nazera").innerText = nazera;
+    document.getElementById("nazera").innerText =
+        data.filter(s => s.class === "নাজেরা").length;
 
-    // Hifz
-    const hifz = data.filter(student => student.class === "হিফজ").length;
-    document.getElementById("hifz").innerText = hifz;
+    document.getElementById("hifz").innerText =
+        data.filter(s => s.class === "হিফজ").length;
 
 }
 
-loadDashboard();
+// ===============================
+// Logout
+// ===============================
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener("click", async () => {
+
+        await window.supabaseClient.auth.signOut();
+
+        window.location.href = "login.html";
+
+    });
+
+}
+
+// ===============================
+// Start
+// ===============================
+
+checkLogin();
