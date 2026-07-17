@@ -1,1 +1,68 @@
+<!DOCTYPE html>
+<html lang="bn">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>শিক্ষার্থীদের তালিকা</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container py-5">
+
+<h2 class="mb-4">
+
+📚 শিক্ষার্থীদের তালিকা
+
+</h2>
+
+<div class="table-responsive">
+
+<table class="table table-bordered table-striped">
+
+<thead class="table-success">
+
+<tr>
+
+<th>ID</th>
+
+<th>নাম</th>
+
+<th>পিতার নাম</th>
+
+<th>মাতার নাম</th>
+
+<th>মোবাইল</th>
+
+<th>শ্রেণী</th>
+
+<th>ঠিকানা</th>
+
+</tr>
+
+</thead>
+
+<tbody id="studentTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="assets/js/supabase.js"></script>
+
+<script src="assets/js/students.js"></script>
+
+</body>
+</html>
