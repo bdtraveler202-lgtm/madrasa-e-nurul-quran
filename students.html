@@ -89,5 +89,84 @@
 
 <script src="assets/js/students.js"></script>
 
+<!-- Edit Student Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">
+          শিক্ষার্থীর তথ্য সম্পাদনা
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <input type="hidden" id="edit_id">
+
+        <div class="mb-3">
+          <label>শিক্ষার্থীর নাম</label>
+          <input type="text" id="edit_name" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label>পিতার নাম</label>
+          <input type="text" id="edit_father" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label>মাতার নাম</label>
+          <input type="text" id="edit_mother" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label>মোবাইল</label>
+          <input type="text" id="edit_mobile" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label>শ্রেণী</label>
+          <input type="text" id="edit_class" class="form-control">
+        </div>
+
+        <div class="mb-3">
+          <label>ঠিকানা</label>
+          <input type="text" id="edit_address" class="form-control">
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          বাতিল
+        </button>
+
+        <button
+          class="btn btn-success"
+          onclick="saveStudent()">
+          Save
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+    
 </body>
 </html>
