@@ -13,7 +13,7 @@ async function loadDashboard() {
         alert("ডেটা লোড করা যায়নি!");
         return;
     }
-
+ 
     // Total Students
     document.getElementById("totalStudents").innerText = data.length;
 
