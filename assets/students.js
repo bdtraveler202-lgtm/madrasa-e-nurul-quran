@@ -34,7 +34,7 @@ async function loadStudents() {
 
 <td>${student.address}</td>
 
-</tr>
+</tr> 
 
 `;
 
