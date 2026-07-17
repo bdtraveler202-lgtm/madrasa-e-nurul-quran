@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="bn">
 
-<head> 
+<head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
-
-<title>Admin Dashboard</title>
+<title>Admin Dashboard | মাদরাসায়ে নূরুল কুরআন</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -19,35 +17,51 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <body class="bg-light">
 
+<nav class="navbar navbar-dark bg-success shadow">
+
+<div class="container">
+
+<a class="navbar-brand fw-bold" href="#">
+
+🕌 মাদরাসায়ে নূরুল কুরআন
+
+</a>
+
+<button
+id="logoutBtn"
+class="btn btn-light">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</button>
+
+</div>
+
+</nav>
+
 <div class="container py-5">
 
-<h2 class="mb-5">
+<h2 class="text-center mb-5">
 
 ⚙️ Admin Dashboard
 
 </h2>
 
-<div class="row">
+<div class="row g-4">
 
 <div class="col-md-3">
 
-<div class="card shadow text-center">
+<div class="card shadow border-0 text-center">
 
 <div class="card-body">
 
-<i class="fa-solid fa-user-graduate fa-3x text-success"></i>
+<i class="fa-solid fa-user-graduate fa-3x text-success mb-3"></i>
 
-<h3 id="totalStudents">
+<h2 id="totalStudents">0</h2>
 
-0
-
-</h3>
-
-<p>
-
-মোট শিক্ষার্থী
-
-</p>
+<p class="mb-0">মোট শিক্ষার্থী</p>
 
 </div>
 
@@ -57,23 +71,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <div class="col-md-3">
 
-<div class="card shadow text-center">
+<div class="card shadow border-0 text-center">
 
 <div class="card-body">
 
-<i class="fa-solid fa-book-open fa-3x text-primary"></i>
+<i class="fa-solid fa-book-open fa-3x text-primary mb-3"></i>
 
-<h3 id="nurani">
+<h2 id="nurani">0</h2>
 
-0
-
-</h3>
-
-<p>
-
-নূরানী
-
-</p>
+<p class="mb-0">নূরানী বিভাগ</p>
 
 </div>
 
@@ -83,23 +89,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <div class="col-md-3">
 
-<div class="card shadow text-center">
+<div class="card shadow border-0 text-center">
 
 <div class="card-body">
 
-<i class="fa-solid fa-book-quran fa-3x text-warning"></i>
+<i class="fa-solid fa-book-quran fa-3x text-warning mb-3"></i>
 
-<h3 id="nazera">
+<h2 id="nazera">0</h2>
 
-0
-
-</h3>
-
-<p>
-
-নাজেরা
-
-</p>
+<p class="mb-0">নাজেরা বিভাগ</p>
 
 </div>
 
@@ -109,23 +107,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <div class="col-md-3">
 
-<div class="card shadow text-center">
+<div class="card shadow border-0 text-center">
 
 <div class="card-body">
 
-<i class="fa-solid fa-mosque fa-3x text-danger"></i>
+<i class="fa-solid fa-mosque fa-3x text-danger mb-3"></i>
 
-<h3 id="hifz">
+<h2 id="hifz">0</h2>
 
-0
-
-</h3>
-
-<p>
-
-হিফজ
-
-</p>
+<p class="mb-0">হিফজ বিভাগ</p>
 
 </div>
 
@@ -137,14 +127,17 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <hr class="my-5">
 
-<div class="row">
+<div class="row g-3">
 
 <div class="col-md-4">
 
-<a href="students.html"
+<a
+href="students.html"
 class="btn btn-success w-100">
 
-👨‍🎓 Student List
+<i class="fa-solid fa-users"></i>
+
+Student List
 
 </a>
 
@@ -152,10 +145,13 @@ class="btn btn-success w-100">
 
 <div class="col-md-4">
 
-<a href="index.html"
+<a
+href="index.html"
 class="btn btn-primary w-100">
 
-🏠 Home
+<i class="fa-solid fa-house"></i>
+
+Home
 
 </a>
 
@@ -163,24 +159,41 @@ class="btn btn-primary w-100">
 
 <div class="col-md-4">
 
-<button
-class="btn btn-danger w-100">
+<a
+href="login.html"
+class="btn btn-warning w-100">
 
-Logout
+<i class="fa-solid fa-user-lock"></i>
 
-</button>
+Admin Login
+
+</a>
 
 </div>
 
 </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="assets/supabase.js"></script>
 
 <script src="assets/admin.js"></script>
+
+<script>
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+await window.supabaseClient.auth.signOut();
+
+window.location.href = "login.html";
+
+});
+
+</script>
 
 </body>
 
