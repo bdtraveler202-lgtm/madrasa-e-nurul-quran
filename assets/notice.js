@@ -60,15 +60,11 @@ noticeForm.addEventListener("submit", async function(e){
 
         }]);
 
-    if(error){
-
-        console.error(error);
-
-        alert("❌ Notice যোগ করা যায়নি");
-
-        return;
-
-    }
+   if (error) {
+    console.error(error);
+    alert(error.message);
+    return;
+}
 
     alert("✅ Notice সফলভাবে যোগ হয়েছে");
 
