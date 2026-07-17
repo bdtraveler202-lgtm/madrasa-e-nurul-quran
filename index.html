@@ -116,8 +116,8 @@ id="menu">
 
 <li><a href="#">পরিচিতি</a></li>
 
-<li><a href="#">ভর্তি</a></li>
-
+<li><a href="#admission">ভর্তি</a></li>
+    
 <li><a href="#">শিক্ষকবৃন্দ</a></li>
 
 <li><a href="#">নোটিশ</a></li>
@@ -170,14 +170,13 @@ data-aos="fade-right">
 
 <div class="hero-btn">
 
-<a href="#"
-
+<a href="#admission"
 class="btn btn-success">
 
 অনলাইনে ভর্তি
 
 </a>
-
+    
 <a href="#"
 
 class="btn btn-warning">
@@ -739,6 +738,103 @@ class="btn btn-warning btn-lg">
 
 </section>
 
+ <section id="admission" class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2>অনলাইন ভর্তি আবেদন</h2>
+
+<p>নিচের ফর্মটি পূরণ করুন</p>
+
+</div>
+
+<form id="admissionForm">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+id="full_name"
+class="form-control"
+placeholder="শিক্ষার্থীর নাম"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+id="father_name"
+class="form-control"
+placeholder="পিতার নাম"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+id="mother_name"
+class="form-control"
+placeholder="মাতার নাম"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+id="mobile"
+class="form-control"
+placeholder="মোবাইল নম্বর"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+id="class"
+class="form-control"
+placeholder="শ্রেণী"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+id="address"
+class="form-control"
+placeholder="ঠিকানা"
+required>
+
+</div>
+
+</div>
+
+<button
+type="submit"
+class="btn btn-success">
+
+ভর্তি আবেদন জমা দিন
+
+</button>
+
+</form>
+
+</div>
+
+</section>   
 <!--=========================
 CONTACT
 ==========================-->
@@ -995,7 +1091,7 @@ once:true
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+ <script src="assets/js/supabase.js"></script>   
 <script src="assets/js/app.js"></script>
 
 </body>
