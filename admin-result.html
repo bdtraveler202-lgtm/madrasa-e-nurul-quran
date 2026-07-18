@@ -274,6 +274,153 @@ placeholder="🔍 Roll অথবা নাম দিয়ে খুঁজুন
 
 <script src="assets/admin-result.js"></script>
 
+ <!-- Edit Result Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+
+<div class="modal-dialog">
+
+<div class="modal-content">
+
+<div class="modal-header bg-primary text-white">
+
+<h5 class="modal-title">
+
+✏️ Result Edit
+
+</h5>
+
+<button
+type="button"
+class="btn-close btn-close-white"
+data-bs-dismiss="modal">
+</button>
+
+</div>
+
+<div class="modal-body">
+
+<input type="hidden" id="edit_id">
+
+<div class="mb-3">
+
+<label>Student Name</label>
+
+<input
+type="text"
+id="edit_student_name"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>Roll</label>
+
+<input
+type="text"
+id="edit_roll"
+class="form-control">
+
+</div>
+
+<div class="mb-3">
+
+<label>Class</label>
+
+<input
+type="text"
+id="edit_class"
+class="form-control">
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>Bangla</label>
+
+<input
+type="number"
+id="edit_bangla"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>English</label>
+
+<input
+type="number"
+id="edit_english"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Math</label>
+
+<input
+type="number"
+id="edit_math"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Arabic</label>
+
+<input
+type="number"
+id="edit_arabic"
+class="form-control">
+
+</div>
+
+<div class="col-md-12 mb-3">
+
+<label>Quran</label>
+
+<input
+type="number"
+id="edit_quran"
+class="form-control">
+
+</div>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Cancel
+
+</button>
+
+<button
+class="btn btn-success"
+onclick="updateResult()">
+
+Update
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div> 
+
 </body>
 
 </html>
