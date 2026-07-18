@@ -45,27 +45,41 @@ document.getElementById("resultCount").innerText = data.length;
 
             <td>${result.grade}</td>
 
-      <td>
+     <td>
 
-    <button
-        class="btn btn-warning btn-sm me-2"
-        onclick="editResult(${result.id})">
+<button
+class="btn btn-info btn-sm me-1"
+onclick="viewResult(${result.id})">
 
-        <i class="fa-solid fa-pen"></i>
-        Edit
+View
 
-    </button>
+</button>
 
-    <button
-        class="btn btn-danger btn-sm"
-        onclick="deleteResult(${result.id})">
+<button
+class="btn btn-warning btn-sm me-1"
+onclick="editResult(${result.id})">
 
-        <i class="fa-solid fa-trash"></i>
-        Delete
+Edit
 
-    </button>
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+onclick="deleteResult(${result.id})">
+
+Delete
+
+</button>
 
 </td>
+
+function viewResult(id){
+
+localStorage.setItem("result_id", id);
+
+window.location.href = "result-view.html";
+
+}
         </tr>
         `;
 
