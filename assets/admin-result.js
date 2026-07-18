@@ -45,26 +45,27 @@ document.getElementById("resultCount").innerText = data.length;
 
             <td>${result.grade}</td>
 
-         <td>
+      <td>
 
     <button
-        class="btn btn-warning btn-sm me-1"
+        class="btn btn-warning btn-sm me-2"
         onclick="editResult(${result.id})">
 
+        <i class="fa-solid fa-pen"></i>
         Edit
 
     </button>
 
     <button
         class="btn btn-danger btn-sm"
-        disabled>
+        onclick="deleteResult(${result.id})">
 
+        <i class="fa-solid fa-trash"></i>
         Delete
 
     </button>
 
 </td>
-
         </tr>
         `;
 
