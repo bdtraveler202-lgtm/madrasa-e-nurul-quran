@@ -9,7 +9,7 @@ let results = [];
 // ======================================
 
 function renderResults(data) {
-
+document.getElementById("resultCount").innerText = data.length;
     const table = document.getElementById("resultTable");
 
     table.innerHTML = "";
