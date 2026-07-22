@@ -1,12 +1,15 @@
 // ======================================
-// Result View
+// Result View System
 // ======================================
 
-const resultId = localStorage.getItem("result_id");
+// URL থেকে Result ID নেওয়া
+const params = new URLSearchParams(window.location.search);
+const resultId = params.get("id");
 
+// Result ID না থাকলে ফিরে যাবে
 if (!resultId) {
 
-    alert("কোনো Result নির্বাচন করা হয়নি");
+    alert("কোনো Result নির্বাচন করা হয়নি!");
 
     window.location.href = "admin-result.html";
 
@@ -24,11 +27,11 @@ async function loadResult() {
         .eq("id", resultId)
         .single();
 
-    if (error) {
+    if (error || !data) {
 
         console.error(error);
 
-        alert("Result পাওয়া যায়নি");
+        alert("Result পাওয়া যায়নি!");
 
         window.location.href = "admin-result.html";
 
@@ -36,21 +39,34 @@ async function loadResult() {
 
     }
 
-    document.getElementById("student_name").innerText = data.student_name || "";
-    document.getElementById("roll").innerText = data.roll || "";
-    document.getElementById("class").innerText = data.class || "";
+    // ==========================
+    // Basic Information
+    // ==========================
 
-    document.getElementById("bangla").innerText = data.bangla || 0;
-    document.getElementById("english").innerText = data.english || 0;
-    document.getElementById("math").innerText = data.math || 0;
-    document.getElementById("arabic").innerText = data.arabic || 0;
-    document.getElementById("quran").innerText = data.quran || 0;
+    document.getElementById("student_name").innerText = data.student_name ?? "";
 
-    document.getElementById("total").innerText = data.total || 0;
-    document.getElementById("gpa").innerText = data.gpa || "0.00";
-    document.getElementById("grade").innerText = data.grade || "F";
+    document.getElementById("roll").innerText = data.roll ?? "";
 
+    document.getElementById("class").innerText = data.class ?? "";
+
+    document.getElementById("bangla").innerText = data.bangla ?? 0;
+
+    document.getElementById("english").innerText = data.english ?? 0;
+
+    document.getElementById("math").innerText = data.math ?? 0;
+
+    document.getElementById("arabic").innerText = data.arabic ?? 0;
+
+    document.getElementById("quran").innerText = data.quran ?? 0;
+
+    document.getElementById("total").innerText = data.total ?? 0;
+
+    document.getElementById("gpa").innerText = data.gpa ?? "0.00";
+
+    document.getElementById("grade").innerText = data.grade ?? "F"; 
+    // ==========================
     // Pass / Fail
+    // ==========================
 
     const status = document.getElementById("status");
 
@@ -70,14 +86,73 @@ async function loadResult() {
 
     }
 
-}
+    // ==========================
+    // Student Photo
+    // ==========================
 
+    const photo = document.getElementById("studentPhoto");
+
+    if (photo) {
+
+        if (data.photo && data.photo !== "") {
+
+            photo.src = data.photo;
+
+        } else {
+
+            photo.src =
+                "https://ui-avatars.com/api/?name=" +
+                encodeURIComponent(data.student_name) +
+                "&background=198754&color=ffffff&size=300";
+
+        }
+
+    }
+
+    // ==========================
+    // Dynamic QR Code
+    // ==========================
+
+    const qrBox = document.getElementById("qrcode");
+
+    if (qrBox && typeof QRCode !== "undefined") {
+
+        qrBox.innerHTML = "";
+
+        new QRCode(qrBox, {
+
+            text: window.location.href,
+
+            width: 120,
+
+            height: 120
+
+        });
+
+    }
+
+    // ==========================
+    // Merit Position (Placeholder)
+    // ==========================
+
+    const position = document.getElementById("position");
+
+    if (position) {
+
+        position.innerHTML =
+            '<span class="badge bg-dark">--</span>';
+
+    }
+
+} 
+// ======================================
+// Start
 // ======================================
 
 loadResult();
 
 // ======================================
-// Print
+// Print Result
 // ======================================
 
 function printResult() {
@@ -87,7 +162,7 @@ function printResult() {
 }
 
 // ======================================
-// Professional PDF Download
+// Download PDF
 // ======================================
 
 async function downloadPDF() {
@@ -96,48 +171,65 @@ async function downloadPDF() {
 
     if (!card) {
 
-        alert("Result Card পাওয়া যায়নি");
+        alert("Result Card পাওয়া যায়নি!");
 
         return;
 
     }
 
-    const canvas = await html2canvas(card, {
+    try {
 
-        scale: 2,
+        const canvas = await html2canvas(card, {
 
-        useCORS: true,
+            scale: 2,
+            useCORS: true,
+            backgroundColor: "#ffffff"
 
-        backgroundColor: "#ffffff"
+        });
 
-    });
+        const imgData = canvas.toDataURL("image/png");
 
-    const imgData = canvas.toDataURL("image/png");
+        const { jsPDF } = window.jspdf;
 
-    const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("p", "mm", "a4");
 
-    const pdf = new jsPDF("p", "mm", "a4");
+        const pageWidth = pdf.internal.pageSize.getWidth();
 
-    const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight =
+            (canvas.height * pageWidth) / canvas.width;
 
-    const pageHeight = (canvas.height * pageWidth) / canvas.width;
+        pdf.addImage(
 
-    pdf.addImage(
+            imgData,
 
-        imgData,
+            "PNG",
 
-        "PNG",
+            0,
 
-        0,
+            0,
 
-        0,
+            pageWidth,
 
-        pageWidth,
+            pageHeight
 
-        pageHeight
+        );
 
-    );
+        pdf.save(
 
-    pdf.save("Student_Result.pdf");
+            "Result_" +
+            resultId +
+            ".pdf"
+
+        );
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        alert("PDF তৈরি করা যায়নি!");
+
+    }
 
 }
