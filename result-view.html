@@ -4,9 +4,16 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Student Result | মাদরাসায়ে নূরুল কুরআন</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+
+Student Result |
+মাদরাসায়ে নূরুল কুরআন
+
+</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -15,84 +22,192 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <style>
 
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+
+}
+
 body{
-background:#f1f5f9;
+
+background:#eef3f8;
 font-family:Arial,sans-serif;
+
 }
 
 .result-card{
+
+position:relative;
+
 max-width:900px;
+
 margin:auto;
+
 background:#fff;
-border-radius:15px;
+
+border-radius:20px;
+
 overflow:hidden;
-box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+box-shadow:0 15px 40px rgba(0,0,0,.15);
+
 }
 
 .header{
+
 background:#198754;
+
 color:#fff;
+
+padding:35px;
+
 text-align:center;
-padding:30px;
+
 }
 
 .header img{
-width:90px;
-height:90px;
+
+width:95px;
+
+height:95px;
+
 object-fit:contain;
-margin-bottom:10px;
+
+margin-bottom:15px;
+
 }
 
 .header h2{
+
 font-weight:bold;
-margin:0;
+
+margin-bottom:5px;
+
 }
 
-.header p{
-margin:5px 0;
+.header h5{
+
+margin-top:15px;
+
+}
+
+.student-photo{
+
+width:160px;
+
+height:160px;
+
+border-radius:50%;
+
+border:5px solid #198754;
+
+object-fit:cover;
+
+box-shadow:0 0 20px rgba(0,0,0,.2);
+
 }
 
 .info-table td{
-padding:10px;
+
+padding:12px;
+
+font-size:17px;
+
 }
 
 .subject-table th,
 .subject-table td{
+
 text-align:center;
+
 vertical-align:middle;
+
+font-size:17px;
+
+}
+
+.badge{
+
+font-size:16px;
+
+padding:10px 18px;
+
 }
 
 .footer{
-margin-top:60px;
+
+margin-top:70px;
+
 }
 
 .signature{
+
 text-align:center;
+
 }
 
 .signature hr{
+
 border:1px solid #000;
+
 opacity:1;
-margin-bottom:8px;
+
+margin-bottom:10px;
+
+}
+
+.watermark{
+
+position:absolute;
+
+top:42%;
+
+left:18%;
+
+font-size:90px;
+
+font-weight:bold;
+
+color:rgba(25,135,84,.07);
+
+transform:rotate(-30deg);
+
+pointer-events:none;
+
+user-select:none;
+
 }
 
 .action-buttons{
+
 text-align:center;
-margin-top:30px;
+
+padding:35px;
+
 }
 
 @media print{
 
 .action-buttons{
+
 display:none;
+
 }
 
 body{
+
 background:#fff;
+
 }
 
 .result-card{
+
 box-shadow:none;
+
+border:none;
+
 }
 
 }
@@ -107,35 +222,70 @@ box-shadow:none;
 
 <div class="result-card" id="resultCard">
 
+<div class="watermark">
+
+NURUL QURAN
+
+</div>
+<!-- ===========================
+Header
+=========================== -->
+
 <div class="header">
 
-<img src="assets/images/logo.png">
+<img
+src="assets/images/logo.png"
+alt="Logo">
 
-<h2>মাদরাসায়ে নূরুল কুরআন</h2>
+<h2>
 
-<p>ভল্লভপুর, দিঘলী, চন্দ্রগঞ্জ, লক্ষ্মীপুর</p>
+মাদরাসায়ে নূরুল কুরআন
 
-<h4 class="mt-3">
+</h2>
+
+<p>
+
+ভল্লভপুর, দিঘলী, চন্দ্রগঞ্জ, লক্ষ্মীপুর
+
+</p>
+
+<h5>
 
 Academic Result Sheet
 
-</h4>
+</h5>
+
+<p class="mt-2">
+
+First Terminal Examination - 2026
+
+</p>
 
 </div>
+
+<!-- ===========================
+Body
+=========================== -->
 
 <div class="p-4">
 
 <div class="row">
 
+<!-- Student Photo -->
+
 <div class="col-md-3 text-center">
 
 <img
-src="assets/images/student.png"
+
 id="studentPhoto"
-class="img-thumbnail"
-width="150">
+
+src="assets/images/student.png"
+
+class="student-photo">
 
 </div>
+
+<!-- Student Information -->
 
 <div class="col-md-9">
 
@@ -143,7 +293,7 @@ width="150">
 
 <tr>
 
-<th width="200">
+<th width="220">
 
 Student Name
 
@@ -193,6 +343,38 @@ Session
 
 </tr>
 
+<tr>
+
+<th>
+
+Exam
+
+</th>
+
+<td>
+
+First Terminal Examination
+
+</td>
+
+</tr>
+
+<tr>
+
+<th>
+
+Publish Date
+
+</th>
+
+<td id="publish_date">
+
+01 January 2026
+
+</td>
+
+</tr>
+
 </table>
 
 </div>
@@ -201,15 +383,27 @@ Session
 
 <hr>
 
+<!-- ===========================
+Subject Table
+=========================== -->
+
 <table class="table table-bordered subject-table">
 
 <thead class="table-success">
 
 <tr>
 
-<th>Subject</th>
+<th>
 
-<th>Marks</th>
+Subject
+
+</th>
+
+<th>
+
+Marks
+
+</th>
 
 </tr>
 
@@ -219,7 +413,11 @@ Session
 
 <tr>
 
-<td>বাংলা</td>
+<td>
+
+বাংলা
+
+</td>
 
 <td id="bangla"></td>
 
@@ -227,7 +425,11 @@ Session
 
 <tr>
 
-<td>ইংরেজি</td>
+<td>
+
+ইংরেজি
+
+</td>
 
 <td id="english"></td>
 
@@ -235,7 +437,11 @@ Session
 
 <tr>
 
-<td>গণিত</td>
+<td>
+
+গণিত
+
+</td>
 
 <td id="math"></td>
 
@@ -243,7 +449,11 @@ Session
 
 <tr>
 
-<td>আরবি</td>
+<td>
+
+আরবি
+
+</td>
 
 <td id="arabic"></td>
 
@@ -251,7 +461,11 @@ Session
 
 <tr>
 
-<td>কুরআন</td>
+<td>
+
+কুরআন
+
+</td>
 
 <td id="quran"></td>
 
@@ -259,66 +473,188 @@ Session
 
 <tr class="table-warning">
 
-<th>Total</th>
+<th>
 
-<th id="total"></th>
+Total
+
+</th>
+
+<th>
+
+<span
+id="total"
+class="badge bg-warning text-dark">
+
+</span>
+
+</th>
 
 </tr>
 
 <tr class="table-info">
 
-<th>GPA</th>
+<th>
 
-<th id="gpa"></th>
+GPA
+
+</th>
+
+<th>
+
+<span
+id="gpa"
+class="badge bg-primary">
+
+</span>
+
+</th>
 
 </tr>
 
-<tr class="table-primary">
-
-<th>Grade</th>
-
-<th id="grade"></th>
-
-</tr> 
 <tr class="table-success">
 
-<th>Result</th>
+<th>
 
-<th id="status">Pass</th>
+Grade
+
+</th>
+
+<th>
+
+<span
+id="grade"
+class="badge bg-success">
+
+</span>
+
+</th>
+
+</tr>
+
+<tr class="table-danger">
+
+<th>
+
+Result
+
+</th>
+
+<th>
+
+<span
+id="status"
+class="badge bg-success">
+
+PASS
+
+</span>
+
+</th>
+
+</tr>
+
+<tr class="table-secondary">
+
+<th>
+
+Merit Position
+
+</th>
+
+<th>
+
+<span
+id="position"
+class="badge bg-dark">
+
+--
+
+</span>
+
+</th>
 
 </tr>
 
 </tbody>
 
-</table>
+</table> 
+<!-- ===========================
+QR Verification
+=========================== -->
 
-<div class="row footer">
+<div class="row mt-5">
 
-<div class="col-6 signature">
+<div class="col-md-6 text-center">
 
-<hr>
+<img
+src="assets/images/qr.png"
+alt="QR Code"
+style="width:120px;height:120px;">
 
-<p>
+<p class="mt-2">
 
-Class Teacher
+Verify Online
 
 </p>
 
 </div>
 
-<div class="col-6 signature">
+<div class="col-md-6 text-center">
 
-<hr>
+<img
+src="assets/images/signature.png"
+alt="Principal Signature"
+style="width:180px;max-width:100%;">
 
-<p>
+<hr class="mt-2">
+
+<strong>
 
 Principal
 
+</strong>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Footer
+=========================== -->
+
+<div class="footer text-center">
+
+<hr>
+
+<p class="text-muted mb-1">
+
+Generated By
+
+<strong>
+
+Madrasa-E Nurul Quran
+
+</strong>
+
+</p>
+
+<p class="text-muted">
+
+Powered By
+
+<strong>
+
+Mezanur Rahman
+
+</strong>
+
 </p>
 
 </div>
 
-</div>
+<!-- ===========================
+Buttons
+=========================== -->
 
 <div class="action-buttons">
 
@@ -360,6 +696,10 @@ Back
 
 </div>
 
+<!-- ===========================
+Scripts
+=========================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -367,10 +707,12 @@ Back
 <script src="assets/supabase.js"></script>
 
 <script src="assets/result-view.js"></script>
-  
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </body>
 
-</html>
+</html>  
   
