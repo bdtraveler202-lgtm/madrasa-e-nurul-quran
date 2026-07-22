@@ -108,7 +108,61 @@ async function loadResult() {
         }
 
     }
+// ==========================
+// Merit Position
+// ==========================
 
+const { data: classResults } = await window.supabaseClient
+    .from("results")
+    .select("id,total")
+    .eq("class", data.class)
+    .order("total", { ascending: false });
+
+if (classResults) {
+
+    const rank =
+        classResults.findIndex(r => r.id == data.id) + 1;
+
+    const position =
+        document.getElementById("position");
+
+    if (position) {
+
+        let badge = "";
+
+        if (rank === 1) {
+
+            badge =
+            '<span class="badge bg-warning text-dark">🥇 1st</span>';
+
+        }
+
+        else if (rank === 2) {
+
+            badge =
+            '<span class="badge bg-secondary">🥈 2nd</span>';
+
+        }
+
+        else if (rank === 3) {
+
+            badge =
+            '<span class="badge bg-danger">🥉 3rd</span>';
+
+        }
+
+        else {
+
+            badge =
+            '<span class="badge bg-dark">#' + rank + '</span>';
+
+        }
+
+        position.innerHTML = badge;
+
+    }
+
+}
     // ==========================
     // Dynamic QR Code
     // ==========================
