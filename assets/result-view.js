@@ -65,3 +65,46 @@ async function loadResult() {
 // ======================================
 
 loadResult();
+// ======================================
+// Download PDF
+// ======================================
+
+async function downloadPDF() {
+
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Madrasa-E Nurul Quran", 20, 20);
+
+    doc.setFontSize(14);
+    doc.text("Academic Result Sheet", 20, 30);
+
+    doc.setFontSize(12);
+
+    doc.text("Student Name : " + document.getElementById("student_name").innerText,20,50);
+
+    doc.text("Roll : " + document.getElementById("roll").innerText,20,60);
+
+    doc.text("Class : " + document.getElementById("class").innerText,20,70);
+
+    doc.text("Bangla : " + document.getElementById("bangla").innerText,20,90);
+
+    doc.text("English : " + document.getElementById("english").innerText,20,100);
+
+    doc.text("Math : " + document.getElementById("math").innerText,20,110);
+
+    doc.text("Arabic : " + document.getElementById("arabic").innerText,20,120);
+
+    doc.text("Quran : " + document.getElementById("quran").innerText,20,130);
+
+    doc.text("Total : " + document.getElementById("total").innerText,20,145);
+
+    doc.text("GPA : " + document.getElementById("gpa").innerText,20,155);
+
+    doc.text("Grade : " + document.getElementById("grade").innerText,20,165);
+
+    doc.save("Student_Result.pdf");
+
+}
