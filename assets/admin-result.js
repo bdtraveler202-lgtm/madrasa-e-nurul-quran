@@ -334,12 +334,10 @@ if (resultForm) {
 // ======================================
 // View Result
 // ======================================
+function viewResult(id){
 
-function viewResult(id) {
-
-    localStorage.setItem("result_id", id);
-
-    window.location.href = "result-view.html";
+    window.location.href =
+    "result-view.html?id=" + id;
 
 }
 
