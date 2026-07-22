@@ -36,7 +36,7 @@ function renderStudents(list) {
 
         table.innerHTML = `
         <tr>
-            <td colspan="8" class="text-center">
+            <td colspan="9" class="text-center">
                 কোনো শিক্ষার্থী পাওয়া যায়নি
             </td>
         </tr>
@@ -48,11 +48,29 @@ function renderStudents(list) {
 
     list.forEach(student => {
 
+        const photo = student.photo
+            ? student.photo
+            : "https://placehold.co/60x60?text=No+Photo";
+
         table.innerHTML += `
 
         <tr>
 
             <td>${student.id}</td>
+
+            <td>
+
+                <img
+                    src="${photo}"
+                    width="60"
+                    height="60"
+                    style="
+                        object-fit:cover;
+                        border-radius:50%;
+                        border:2px solid #198754;
+                    ">
+
+            </td>
 
             <td>${student.full_name}</td>
 
@@ -71,13 +89,21 @@ function renderStudents(list) {
                 <button
                     class="btn btn-primary btn-sm"
                     onclick="editStudent(${student.id})">
-                    <i class="fa-solid fa-pen"></i> Edit
+
+                    <i class="fa-solid fa-pen"></i>
+
+                    Edit
+
                 </button>
 
                 <button
                     class="btn btn-danger btn-sm ms-2"
                     onclick="deleteStudent(${student.id})">
-                    <i class="fa-solid fa-trash"></i> Delete
+
+                    <i class="fa-solid fa-trash"></i>
+
+                    Delete
+
                 </button>
 
             </td>
@@ -107,8 +133,9 @@ function filterStudents() {
 
     const filtered = students.filter(student => {
 
-        const matchName =
-            student.full_name.toLowerCase().includes(search);
+        const matchName = student.full_name
+            .toLowerCase()
+            .includes(search);
 
         const matchClass =
             selectedClass === "" ||
@@ -155,7 +182,7 @@ async function deleteStudent(id) {
 
     }
 
-    alert("শিক্ষার্থী সফলভাবে Delete হয়েছে");
+    alert("✅ শিক্ষার্থী সফলভাবে Delete হয়েছে");
 
     loadStudents();
 
@@ -228,7 +255,7 @@ async function saveStudent() {
         .getInstance(document.getElementById("editModal"))
         .hide();
 
-    alert("তথ্য সফলভাবে Update হয়েছে");
+    alert("✅ তথ্য সফলভাবে Update হয়েছে");
 
     loadStudents();
 
