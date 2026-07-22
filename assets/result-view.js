@@ -19,16 +19,14 @@ if (!resultId) {
 async function loadResult() {
 
     const { data, error } = await window.supabaseClient
-
         .from("results")
-
         .select("*")
-
         .eq("id", resultId)
-
         .single();
 
     if (error) {
+
+        console.error(error);
 
         alert("Result পাওয়া যায়নি");
 
@@ -38,73 +36,108 @@ async function loadResult() {
 
     }
 
-    document.getElementById("student_name").innerText = data.student_name;
+    document.getElementById("student_name").innerText = data.student_name || "";
+    document.getElementById("roll").innerText = data.roll || "";
+    document.getElementById("class").innerText = data.class || "";
 
-    document.getElementById("roll").innerText = data.roll;
+    document.getElementById("bangla").innerText = data.bangla || 0;
+    document.getElementById("english").innerText = data.english || 0;
+    document.getElementById("math").innerText = data.math || 0;
+    document.getElementById("arabic").innerText = data.arabic || 0;
+    document.getElementById("quran").innerText = data.quran || 0;
 
-    document.getElementById("class").innerText = data.class;
+    document.getElementById("total").innerText = data.total || 0;
+    document.getElementById("gpa").innerText = data.gpa || "0.00";
+    document.getElementById("grade").innerText = data.grade || "F";
 
-    document.getElementById("bangla").innerText = data.bangla;
+    // Pass / Fail
 
-    document.getElementById("english").innerText = data.english;
+    const status = document.getElementById("status");
 
-    document.getElementById("math").innerText = data.math;
+    if (status) {
 
-    document.getElementById("arabic").innerText = data.arabic;
+        if (data.grade === "F") {
 
-    document.getElementById("quran").innerText = data.quran;
+            status.innerHTML =
+                '<span class="badge bg-danger">FAIL</span>';
 
-    document.getElementById("total").innerText = data.total;
+        } else {
 
-    document.getElementById("gpa").innerText = data.gpa;
+            status.innerHTML =
+                '<span class="badge bg-success">PASS</span>';
 
-    document.getElementById("grade").innerText = data.grade;
+        }
+
+    }
 
 }
 
 // ======================================
 
 loadResult();
+
 // ======================================
-// Download PDF
+// Print
+// ======================================
+
+function printResult() {
+
+    window.print();
+
+}
+
+// ======================================
+// Professional PDF Download
 // ======================================
 
 async function downloadPDF() {
 
+    const card = document.getElementById("resultCard");
+
+    if (!card) {
+
+        alert("Result Card পাওয়া যায়নি");
+
+        return;
+
+    }
+
+    const canvas = await html2canvas(card, {
+
+        scale: 2,
+
+        useCORS: true,
+
+        backgroundColor: "#ffffff"
+
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+
     const { jsPDF } = window.jspdf;
 
-    const doc = new jsPDF();
+    const pdf = new jsPDF("p", "mm", "a4");
 
-    doc.setFontSize(18);
-    doc.text("Madrasa-E Nurul Quran", 20, 20);
+    const pageWidth = pdf.internal.pageSize.getWidth();
 
-    doc.setFontSize(14);
-    doc.text("Academic Result Sheet", 20, 30);
+    const pageHeight = (canvas.height * pageWidth) / canvas.width;
 
-    doc.setFontSize(12);
+    pdf.addImage(
 
-    doc.text("Student Name : " + document.getElementById("student_name").innerText,20,50);
+        imgData,
 
-    doc.text("Roll : " + document.getElementById("roll").innerText,20,60);
+        "PNG",
 
-    doc.text("Class : " + document.getElementById("class").innerText,20,70);
+        0,
 
-    doc.text("Bangla : " + document.getElementById("bangla").innerText,20,90);
+        0,
 
-    doc.text("English : " + document.getElementById("english").innerText,20,100);
+        pageWidth,
 
-    doc.text("Math : " + document.getElementById("math").innerText,20,110);
+        pageHeight
 
-    doc.text("Arabic : " + document.getElementById("arabic").innerText,20,120);
+    );
 
-    doc.text("Quran : " + document.getElementById("quran").innerText,20,130);
-
-    doc.text("Total : " + document.getElementById("total").innerText,20,145);
-
-    doc.text("GPA : " + document.getElementById("gpa").innerText,20,155);
-
-    doc.text("Grade : " + document.getElementById("grade").innerText,20,165);
-
-    doc.save("Student_Result.pdf");
+    pdf.save("Student_Result.pdf");
 
 }
