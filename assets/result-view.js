@@ -2,11 +2,10 @@
 // Result View System
 // ======================================
 
-// URL থেকে Result ID নেওয়া
+// URL Parameter
 const params = new URLSearchParams(window.location.search);
 const resultId = params.get("id");
 
-// Result ID না থাকলে ফিরে যাবে
 if (!resultId) {
 
     alert("কোনো Result নির্বাচন করা হয়নি!");
@@ -43,46 +42,55 @@ async function loadResult() {
     // Basic Information
     // ==========================
 
-    document.getElementById("student_name").innerText = data.student_name ?? "";
+    document.getElementById("student_name").innerText =
+        data.student_name || "";
 
-    document.getElementById("roll").innerText = data.roll ?? "";
+    document.getElementById("roll").innerText =
+        data.roll || "";
 
-    document.getElementById("class").innerText = data.class ?? "";
+    document.getElementById("class").innerText =
+        data.class || "";
 
-    document.getElementById("bangla").innerText = data.bangla ?? 0;
+    document.getElementById("bangla").innerText =
+        data.bangla || 0;
 
-    document.getElementById("english").innerText = data.english ?? 0;
+    document.getElementById("english").innerText =
+        data.english || 0;
 
-    document.getElementById("math").innerText = data.math ?? 0;
+    document.getElementById("math").innerText =
+        data.math || 0;
 
-    document.getElementById("arabic").innerText = data.arabic ?? 0;
+    document.getElementById("arabic").innerText =
+        data.arabic || 0;
 
-    document.getElementById("quran").innerText = data.quran ?? 0;
+    document.getElementById("quran").innerText =
+        data.quran || 0;
 
-    document.getElementById("total").innerText = data.total ?? 0;
+    document.getElementById("total").innerText =
+        data.total || 0;
 
-    document.getElementById("gpa").innerText = data.gpa ?? "0.00";
+    document.getElementById("gpa").innerText =
+        data.gpa || "0.00";
 
-    document.getElementById("grade").innerText = data.grade ?? "F"; 
+    document.getElementById("grade").innerText =
+        data.grade || "F";
+
     // ==========================
-    // Pass / Fail
+    // PASS / FAIL
     // ==========================
 
-    const status = document.getElementById("status");
+    const status =
+        document.getElementById("status");
 
-    if (status) {
+    if (data.grade === "F") {
 
-        if (data.grade === "F") {
+        status.innerHTML =
+            '<span class="badge bg-danger">FAIL</span>';
 
-            status.innerHTML =
-                '<span class="badge bg-danger">FAIL</span>';
+    } else {
 
-        } else {
-
-            status.innerHTML =
-                '<span class="badge bg-success">PASS</span>';
-
-        }
+        status.innerHTML =
+            '<span class="badge bg-success">PASS</span>';
 
     }
 
@@ -90,84 +98,126 @@ async function loadResult() {
     // Student Photo
     // ==========================
 
-    const photo = document.getElementById("studentPhoto");
+    const photo =
+        document.getElementById("studentPhoto");
 
-    if (photo) {
+    if (data.photo && data.photo !== "") {
 
-        if (data.photo && data.photo !== "") {
+        photo.src = data.photo;
 
-            photo.src = data.photo;
+    } else {
 
-        } else {
+        photo.src =
+            "https://ui-avatars.com/api/?name=" +
+            encodeURIComponent(data.student_name) +
+            "&background=198754&color=ffffff&size=300";
 
-            photo.src =
-                "https://ui-avatars.com/api/?name=" +
-                encodeURIComponent(data.student_name) +
-                "&background=198754&color=ffffff&size=300";
+    } 
+    // ==========================
+    // Merit Position
+    // ==========================
+
+    const { data: classResults } = await window.supabaseClient
+
+        .from("results")
+
+        .select("id,total")
+
+        .eq("class", data.class)
+
+        .order("total", { ascending: false });
+
+    if (classResults) {
+
+        const rank =
+            classResults.findIndex(r => r.id == data.id) + 1;
+
+        const position =
+            document.getElementById("position");
+
+        const achievement =
+            document.getElementById("achievement");
+
+        if (position) {
+
+            let badge = "";
+
+            if (rank === 1) {
+
+                badge =
+                '<span class="badge bg-warning text-dark">🥇 1st</span>';
+
+            }
+
+            else if (rank === 2) {
+
+                badge =
+                '<span class="badge bg-secondary">🥈 2nd</span>';
+
+            }
+
+            else if (rank === 3) {
+
+                badge =
+                '<span class="badge bg-danger">🥉 3rd</span>';
+
+            }
+
+            else {
+
+                badge =
+                '<span class="badge bg-dark">#' + rank + '</span>';
+
+            }
+
+            position.innerHTML = badge;
+
+        }
+
+        // ==========================
+        // Achievement
+        // ==========================
+
+        if (achievement) {
+
+            if (rank === 1) {
+
+                achievement.innerHTML =
+                "🏆 Class Topper";
+
+            }
+
+            else if (rank <= 3) {
+
+                achievement.innerHTML =
+                "⭐ Top 3 Student";
+
+            }
+
+            else if (rank <= 10) {
+
+                achievement.innerHTML =
+                "🌟 Excellent";
+
+            }
+
+            else {
+
+                achievement.innerHTML =
+                "✅ Good Performance";
+
+            }
 
         }
 
     }
-// ==========================
-// Merit Position
-// ==========================
 
-const { data: classResults } = await window.supabaseClient
-    .from("results")
-    .select("id,total")
-    .eq("class", data.class)
-    .order("total", { ascending: false });
-
-if (classResults) {
-
-    const rank =
-        classResults.findIndex(r => r.id == data.id) + 1;
-
-    const position =
-        document.getElementById("position");
-
-    if (position) {
-
-        let badge = "";
-
-        if (rank === 1) {
-
-            badge =
-            '<span class="badge bg-warning text-dark">🥇 1st</span>';
-
-        }
-
-        else if (rank === 2) {
-
-            badge =
-            '<span class="badge bg-secondary">🥈 2nd</span>';
-
-        }
-
-        else if (rank === 3) {
-
-            badge =
-            '<span class="badge bg-danger">🥉 3rd</span>';
-
-        }
-
-        else {
-
-            badge =
-            '<span class="badge bg-dark">#' + rank + '</span>';
-
-        }
-
-        position.innerHTML = badge;
-
-    }
-
-}
     // ==========================
-    // Dynamic QR Code
+    // QR Code
     // ==========================
 
-    const qrBox = document.getElementById("qrcode");
+    const qrBox =
+        document.getElementById("qrcode");
 
     if (qrBox && typeof QRCode !== "undefined") {
 
@@ -185,20 +235,7 @@ if (classResults) {
 
     }
 
-    // ==========================
-    // Merit Position (Placeholder)
-    // ==========================
-
-    const position = document.getElementById("position");
-
-    if (position) {
-
-        position.innerHTML =
-            '<span class="badge bg-dark">--</span>';
-
-    }
-
-} 
+} // <-- loadResult() এখানে শেষ হবে
 // ======================================
 // Start
 // ======================================
@@ -236,7 +273,11 @@ async function downloadPDF() {
         const canvas = await html2canvas(card, {
 
             scale: 2,
+
             useCORS: true,
+
+            allowTaint: true,
+
             backgroundColor: "#ffffff"
 
         });
@@ -253,37 +294,33 @@ async function downloadPDF() {
             (canvas.height * pageWidth) / canvas.width;
 
         pdf.addImage(
-
             imgData,
-
             "PNG",
-
             0,
-
             0,
-
             pageWidth,
-
             pageHeight
-
         );
 
-        pdf.save(
+        const roll =
+            document.getElementById("roll").innerText || "Unknown";
 
-            "Result_" +
-            resultId +
-            ".pdf"
+        const student =
+            document.getElementById("student_name")
+            .innerText
+            .replace(/\s+/g, "_");
 
-        );
+        pdf.save(`Result_${student}_${roll}.pdf`);
 
-    }
-
-    catch (err) {
+    } catch (err) {
 
         console.error(err);
 
-        alert("PDF তৈরি করা যায়নি!");
+        alert("❌ PDF তৈরি করা যায়নি!");
 
     }
 
 }
+
+
+
