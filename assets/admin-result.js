@@ -1,5 +1,5 @@
 // ======================================
-// Result Management
+// Result Management System
 // ======================================
 
 let results = [];
@@ -10,7 +10,11 @@ let results = [];
 
 function renderResults(data) {
 
-    document.getElementById("resultCount").innerText = data.length;
+    const resultCount = document.getElementById("resultCount");
+
+    if (resultCount) {
+        resultCount.innerText = data.length;
+    }
 
     const table = document.getElementById("resultTable");
 
@@ -20,7 +24,7 @@ function renderResults(data) {
 
         table.innerHTML = `
         <tr>
-            <td colspan="8" class="text-center">
+            <td colspan="8" class="text-center py-4">
                 কোনো Result পাওয়া যায়নি
             </td>
         </tr>
@@ -33,6 +37,7 @@ function renderResults(data) {
     data.forEach(result => {
 
         table.innerHTML += `
+
         <tr>
 
             <td>${result.id}</td>
@@ -45,39 +50,54 @@ function renderResults(data) {
 
             <td>${result.total}</td>
 
-            <td>${result.gpa}</td>
+            <td>
+                <span class="badge bg-success">
+                    ${result.gpa}
+                </span>
+            </td>
 
-            <td>${result.grade}</td>
+            <td>
+                <span class="badge bg-primary">
+                    ${result.grade}
+                </span>
+            </td>
 
             <td>
 
                 <button
-                class="btn btn-info btn-sm me-1"
-                onclick="viewResult(${result.id})">
+                    class="btn btn-info btn-sm me-1"
+                    onclick="viewResult(${result.id})">
 
-                View
+                    <i class="fa-solid fa-eye"></i>
 
-                </button>
-
-                <button
-                class="btn btn-warning btn-sm me-1"
-                onclick="editResult(${result.id})">
-
-                Edit
+                    View
 
                 </button>
 
                 <button
-                class="btn btn-danger btn-sm"
-                onclick="deleteResult(${result.id})">
+                    class="btn btn-warning btn-sm me-1"
+                    onclick="editResult(${result.id})">
 
-                Delete
+                    <i class="fa-solid fa-pen"></i>
+
+                    Edit
+
+                </button>
+
+                <button
+                    class="btn btn-danger btn-sm"
+                    onclick="deleteResult(${result.id})">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                    Delete
 
                 </button>
 
             </td>
 
         </tr>
+
         `;
 
     });
@@ -91,15 +111,20 @@ function renderResults(data) {
 async function loadResults() {
 
     const { data, error } = await window.supabaseClient
+
         .from("results")
+
         .select("*")
-        .order("id", { ascending: false });
+
+        .order("id", {
+            ascending: false
+        });
 
     if (error) {
 
         console.error(error);
 
-        alert("Result লোড করা যায়নি!");
+        alert("Result লোড করা যায়নি");
 
         return;
 
@@ -118,20 +143,25 @@ async function loadResults() {
 function searchResults() {
 
     const keyword = document
+
         .getElementById("searchRoll")
+
         .value
+
         .toLowerCase();
 
     const filtered = results.filter(result => {
 
         return (
 
-            result.roll.toString().includes(keyword)
+            result.student_name
+                .toLowerCase()
+                .includes(keyword)
 
             ||
 
-            result.student_name
-                .toLowerCase()
+            result.roll
+                .toString()
                 .includes(keyword)
 
         );
@@ -143,7 +173,7 @@ function searchResults() {
 }
 
 // ======================================
-// GPA + Grade
+// GPA & Grade
 // ======================================
 
 function calculateResult(total) {
@@ -157,7 +187,6 @@ function calculateResult(total) {
     if (average >= 80) {
 
         gpa = "5.00";
-
         grade = "A+";
 
     }
@@ -165,7 +194,6 @@ function calculateResult(total) {
     else if (average >= 70) {
 
         gpa = "4.00";
-
         grade = "A";
 
     }
@@ -173,7 +201,6 @@ function calculateResult(total) {
     else if (average >= 60) {
 
         gpa = "3.50";
-
         grade = "A-";
 
     }
@@ -181,7 +208,6 @@ function calculateResult(total) {
     else if (average >= 50) {
 
         gpa = "3.00";
-
         grade = "B";
 
     }
@@ -189,7 +215,6 @@ function calculateResult(total) {
     else if (average >= 40) {
 
         gpa = "2.00";
-
         grade = "C";
 
     }
@@ -197,7 +222,6 @@ function calculateResult(total) {
     else if (average >= 33) {
 
         gpa = "1.00";
-
         grade = "D";
 
     }
@@ -205,7 +229,6 @@ function calculateResult(total) {
     return {
 
         gpa,
-
         grade
 
     };
@@ -217,65 +240,102 @@ function calculateResult(total) {
 
 const resultForm = document.getElementById("resultForm");
 
-resultForm.addEventListener("submit", async function (e) {
+if (resultForm) {
 
-    e.preventDefault();
+    resultForm.addEventListener("submit", async function (e) {
 
-    const student_name = document.getElementById("student_name").value;
-    const roll = document.getElementById("roll").value;
-    const studentClass = document.getElementById("class").value;
+        e.preventDefault();
 
-    const bangla = Number(document.getElementById("bangla").value);
-    const english = Number(document.getElementById("english").value);
-    const math = Number(document.getElementById("math").value);
-    const arabic = Number(document.getElementById("arabic").value);
-    const quran = Number(document.getElementById("quran").value);
+        const student_name = document.getElementById("student_name").value.trim();
+        const roll = document.getElementById("roll").value.trim();
+        const studentClass = document.getElementById("class").value.trim();
 
-    const total = bangla + english + math + arabic + quran;
+        const bangla = Number(document.getElementById("bangla").value);
+        const english = Number(document.getElementById("english").value);
+        const math = Number(document.getElementById("math").value);
+        const arabic = Number(document.getElementById("arabic").value);
+        const quran = Number(document.getElementById("quran").value);
 
-    const calc = calculateResult(total);
+        // ছাত্রের Photo বের করা
+        let photo = "";
 
-    const { error } = await window.supabaseClient
-        .from("results")
-        .insert([{
+        const { data: studentData } = await window.supabaseClient
 
-            student_name,
-            roll,
-            class: studentClass,
+            .from("students")
 
-            bangla,
-            english,
-            math,
-            arabic,
-            quran,
+            .select("photo")
 
-            total,
-            gpa: calc.gpa,
-            grade: calc.grade
+            .eq("full_name", student_name)
 
-        }]);
+            .maybeSingle();
 
-    if (error) {
+        if (studentData) {
 
-        alert(error.message);
+            photo = studentData.photo;
 
-        return;
+        }
 
-    }
+        const total = bangla + english + math + arabic + quran;
 
-    alert("✅ Result সফলভাবে সংরক্ষণ হয়েছে");
+        const calc = calculateResult(total);
 
-    resultForm.reset();
+        const { error } = await window.supabaseClient
 
-    loadResults();
+            .from("results")
 
-});
+            .insert([{
+
+                student_name,
+
+                roll,
+
+                class: studentClass,
+
+                photo,
+
+                bangla,
+
+                english,
+
+                math,
+
+                arabic,
+
+                quran,
+
+                total,
+
+                gpa: calc.gpa,
+
+                grade: calc.grade
+
+            }]);
+
+        if (error) {
+
+            console.error(error);
+
+            alert(error.message);
+
+            return;
+
+        }
+
+        alert("✅ Result সফলভাবে সংরক্ষণ হয়েছে");
+
+        resultForm.reset();
+
+        loadResults();
+
+    });
+
+}
 
 // ======================================
 // View Result
 // ======================================
 
-function viewResult(id){
+function viewResult(id) {
 
     localStorage.setItem("result_id", id);
 
@@ -287,11 +347,11 @@ function viewResult(id){
 // Edit Result
 // ======================================
 
-function editResult(id){
+function editResult(id) {
 
     const result = results.find(r => r.id == id);
 
-    if(!result){
+    if (!result) {
 
         alert("Result পাওয়া যায়নি");
 
@@ -318,28 +378,42 @@ function editResult(id){
     document.getElementById("edit_quran").value = result.quran;
 
     new bootstrap.Modal(
+
         document.getElementById("editModal")
+
     ).show();
 
 }
-
 // ======================================
 // Update Result
 // ======================================
 
-async function updateResult(){
+async function updateResult() {
 
     const id = document.getElementById("edit_id").value;
 
-    const student_name = document.getElementById("edit_student_name").value;
-    const roll = document.getElementById("edit_roll").value;
-    const studentClass = document.getElementById("edit_class").value;
+    const student_name = document.getElementById("edit_student_name").value.trim();
+    const roll = document.getElementById("edit_roll").value.trim();
+    const studentClass = document.getElementById("edit_class").value.trim();
 
     const bangla = Number(document.getElementById("edit_bangla").value);
     const english = Number(document.getElementById("edit_english").value);
     const math = Number(document.getElementById("edit_math").value);
     const arabic = Number(document.getElementById("edit_arabic").value);
     const quran = Number(document.getElementById("edit_quran").value);
+
+    // ছাত্রের Photo আপডেট
+    let photo = "";
+
+    const { data: studentData } = await window.supabaseClient
+        .from("students")
+        .select("photo")
+        .eq("full_name", student_name)
+        .maybeSingle();
+
+    if (studentData) {
+        photo = studentData.photo;
+    }
 
     const total = bangla + english + math + arabic + quran;
 
@@ -352,6 +426,8 @@ async function updateResult(){
             student_name,
             roll,
             class: studentClass,
+
+            photo,
 
             bangla,
             english,
@@ -366,7 +442,9 @@ async function updateResult(){
         })
         .eq("id", id);
 
-    if(error){
+    if (error) {
+
+        console.error(error);
 
         alert(error.message);
 
@@ -374,24 +452,25 @@ async function updateResult(){
 
     }
 
-    bootstrap.Modal.getInstance(
-        document.getElementById("editModal")
-    ).hide();
+    bootstrap.Modal
+        .getInstance(document.getElementById("editModal"))
+        .hide();
 
-    alert("✅ Result Updated");
+    alert("✅ Result Updated Successfully");
 
     loadResults();
 
 }
+
 // ======================================
 // Delete Result
 // ======================================
 
 async function deleteResult(id) {
 
-    const confirmDelete = confirm("আপনি কি নিশ্চিত Result Delete করতে চান?");
-
-    if (!confirmDelete) return;
+    if (!confirm("আপনি কি এই Result Delete করতে চান?")) {
+        return;
+    }
 
     const { error } = await window.supabaseClient
         .from("results")
@@ -399,6 +478,8 @@ async function deleteResult(id) {
         .eq("id", id);
 
     if (error) {
+
+        console.error(error);
 
         alert(error.message);
 
