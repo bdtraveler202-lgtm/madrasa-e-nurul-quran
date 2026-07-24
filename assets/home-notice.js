@@ -72,6 +72,11 @@ async function loadHomeNotices() {
 
                     </h5>
 
+<p class="text-muted small mb-2">
+    <i class="fa-solid fa-calendar-days"></i>
+    ${new Date(notice.created_at).toLocaleDateString("en-GB")}
+</p>
+
                     ${
                         notice.important
                         ? `<span class="badge bg-danger mb-2">Important</span>`
@@ -86,19 +91,25 @@ async function loadHomeNotices() {
 
                 </div>
 
-                <div class="card-footer bg-white">
+               <div class="card-footer bg-white">
 
-                    ${
-                        notice.pdf_url
-                        ? `<a href="${notice.pdf_url}" target="_blank" class="btn btn-success btn-sm">
+    ${
+        notice.pdf_url
+        ? `<a href="${notice.pdf_url}" target="_blank" class="btn btn-success btn-sm">
+            Download PDF
+        </a>`
+        : ""
+    }
 
-                        Download PDF
+    <a
+        href="notice-view.html?id=${notice.id}"
+        class="btn btn-outline-primary btn-sm ms-2">
 
-                        </a>`
-                        : ""
-                    }
+        Read More
 
-                </div>
+    </a>
+
+</div>
 
             </div>
 
