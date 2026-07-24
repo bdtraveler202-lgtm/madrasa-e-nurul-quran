@@ -137,7 +137,145 @@ disabled>
     });
 
 } 
+// ======================================
+// UPLOAD GALLERY IMAGE
+// ======================================
+
+async function uploadGalleryImage(file) {
+
+    if (!file) return "";
+
+    const fileName =
+        Date.now() + "_" + file.name.replace(/\s+/g, "_");
 
 
+    const { error } =
+        await window.supabaseClient.storage
+        .from("gallery-images")
+        .upload(fileName, file, {
+            upsert:true
+        });
+
+
+    if (error) {
+
+        console.error(error);
+
+        throw error;
+
+    }
+
+
+    const { data } =
+        window.supabaseClient.storage
+        .from("gallery-images")
+        .getPublicUrl(fileName);
+
+
+    return data.publicUrl;
+
+}
+// ======================================
+// ADD GALLERY IMAGE
+// ======================================
+
+const galleryForm =
+document.getElementById("galleryForm");
+
+
+if (galleryForm) {
+
+
+galleryForm.addEventListener("submit", async function(e){
+
+
+    e.preventDefault();
+
+
+    const btn =
+    document.getElementById("submitBtn");
+
+
+    btn.disabled = true;
+
+    btn.innerHTML = "Uploading...";
+
+
+    try {
+
+
+        const title =
+        document.getElementById("title").value.trim();
+
+
+        const category =
+        document.getElementById("category").value;
+
+
+        const imageFile =
+        document.getElementById("galleryImage").files[0];
+
+
+        const image_url =
+        await uploadGalleryImage(imageFile);
+
+
+
+        const { error } =
+        await window.supabaseClient
+        .from("gallery")
+        .insert([{
+
+            title,
+            category,
+            image_url
+
+        }]);
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        alert("✅ Image Uploaded Successfully");
+
+
+        galleryForm.reset();
+
+
+        loadGallery();
+
+
+
+    } catch(err){
+
+
+        console.error(err);
+
+
+        alert("❌ " + err.message);
+
+
+
+    } finally{
+
+
+        btn.disabled = false;
+
+
+        btn.innerHTML =
+        "Upload Image";
+
+
+    }
+
+
+});
+
+
+}
 
 
