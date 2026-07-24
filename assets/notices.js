@@ -1,15 +1,18 @@
 // ======================================
-// PUBLIC NOTICE BOARD
-// assets/notices.js
+// PUBLIC NOTICE BOARD V2
+// ======================================
+
+let allNotices = [];
+
+// ======================================
+// LOAD NOTICES
 // ======================================
 
 async function loadNotices() {
 
-    const noticeContainer = document.getElementById("noticeContainer");
+    const container = document.getElementById("noticeContainer");
 
-    if (!noticeContainer) return;
-
-    noticeContainer.innerHTML = `
+    container.innerHTML = `
         <div class="col-12 text-center py-5">
             <div class="spinner-border text-success"></div>
             <p class="mt-3">নোটিশ লোড হচ্ছে...</p>
@@ -25,41 +28,62 @@ async function loadNotices() {
 
     if (error) {
 
-        noticeContainer.innerHTML = `
-            <div class="alert alert-danger">
-                ❌ Notice Load Failed
+        console.error(error);
+
+        container.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    ❌ Notice Load Failed
+                </div>
             </div>
         `;
 
-        console.error(error);
         return;
+
     }
 
-    if (!data || data.length === 0) {
+    allNotices = data || [];
 
-        noticeContainer.innerHTML = `
-            <div class="alert alert-warning">
+    renderNoticeCards(allNotices);
+
+} 
+// ======================================
+// RENDER NOTICE CARDS
+// ======================================
+
+function renderNoticeCards(list) {
+
+    const container = document.getElementById("noticeContainer");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    if (list.length === 0) {
+
+        container.innerHTML = `
+        <div class="col-12">
+            <div class="alert alert-warning text-center">
                 কোনো নোটিশ পাওয়া যায়নি।
             </div>
+        </div>
         `;
 
         return;
+
     }
 
-    noticeContainer.innerHTML = "";
+    list.forEach(notice => {
 
-    data.forEach(notice => {
-
-        noticeContainer.innerHTML += `
+        container.innerHTML += `
 
 <div class="col-lg-4 col-md-6">
 
-<div class="card shadow h-100 border-0">
+<div class="card notice-card shadow-sm h-100">
 
 ${notice.image_url ? `
 <img src="${notice.image_url}"
-class="card-img-top"
-style="height:220px;object-fit:cover;">
+class="card-img-top notice-img">
 ` : ""}
 
 <div class="card-body">
@@ -73,18 +97,24 @@ ${notice.pinned ? `
 ` : ""}
 
 ${notice.important ? `
-<span class="badge bg-danger">
+<span class="badge bg-danger ms-1">
 ⭐ Important
 </span>
 ` : ""}
 
+<span class="badge bg-success ms-1">
+${notice.category || "সাধারণ"}
+</span>
+
 </div>
 
 <h5 class="fw-bold">
+
 ${notice.title}
+
 </h5>
 
-<p class="text-muted">
+<p class="text-muted small">
 
 <i class="fa-solid fa-calendar-days"></i>
 
@@ -94,8 +124,8 @@ ${new Date(notice.created_at).toLocaleDateString("en-GB")}
 
 <p>
 
-${notice.description.length > 180
-? notice.description.substring(0,180) + "..."
+${notice.description.length > 120
+? notice.description.substring(0,120) + "..."
 : notice.description}
 
 </p>
@@ -109,7 +139,7 @@ ${notice.pdf_url ? `
 target="_blank"
 class="btn btn-success btn-sm">
 
-<i class="fa-solid fa-download"></i>
+<i class="fa-solid fa-file-pdf"></i>
 
 PDF
 
@@ -140,64 +170,9 @@ Read More
 loadNotices();
 
 
-// ======================================
-// SEARCH
-// ======================================
 
-const search = document.getElementById("searchNotice");
 
-if (search) {
 
-    search.addEventListener("keyup", async function () {
 
-        const keyword = this.value.toLowerCase();
 
-        const { data } = await window.supabaseClient
-            .from("notices")
-            .select("*")
-            .order("created_at", { ascending: false });
 
-        const filtered = data.filter(item =>
-            item.title.toLowerCase().includes(keyword) ||
-            item.description.toLowerCase().includes(keyword)
-        );
-
-        const noticeContainer =
-            document.getElementById("noticeContainer");
-
-        noticeContainer.innerHTML = "";
-
-        filtered.forEach(notice => {
-
-            noticeContainer.innerHTML += `
-
-<div class="col-lg-4 col-md-6">
-
-<div class="card shadow h-100">
-
-<div class="card-body">
-
-<h5>${notice.title}</h5>
-
-<p>${notice.description.substring(0,150)}...</p>
-
-<a href="notice-view.html?id=${notice.id}"
-class="btn btn-primary btn-sm">
-
-Read More
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-        });
-
-    });
-
-}
