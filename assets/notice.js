@@ -291,39 +291,7 @@ if (noticeForm) {
             }
 
             // Save Database
-            const { error } = await window.supabaseClient
-
-                .from("notices")
-
-                .insert([{
-
-                    title: title,
-                    description: description,
-
-                    image_url: image_url,
-                    pdf_url: pdf_url,
-
-                    important: important,
-                    pinned: pinned
-
-                }]);
-
-            if (error) {
-
-                console.error(error);
-
-                alert("❌ " + error.message);
-
-                return;
-
-            }
-
-            alert("✅ Notice Published Successfully");
-
-            noticeForm.reset();
-
-            loadNotices();
-
+           
         } catch (err) {
 
             console.error(err);
@@ -332,7 +300,61 @@ if (noticeForm) {
 
         } finally {
 
-            submitBtn.disabled = false;
+            submitBtn.disabled = false; 
+
+          // Save / Update
+
+let error;
+
+if (editNoticeId) {
+
+    ({ error } = await window.supabaseClient
+        .from("notices")
+        .update({
+            title,
+            description,
+            important,
+            pinned,
+            image_url,
+            pdf_url
+        })
+        .eq("id", editNoticeId));
+
+} else {
+
+    ({ error } = await window.supabaseClient
+        .from("notices")
+        .insert([{
+            title,
+            description,
+            important,
+            pinned,
+            image_url,
+            pdf_url
+        }]));
+
+}
+
+if (error) {
+
+    alert(error.message);
+
+    return;
+
+}
+
+alert(editNoticeId
+    ? "✅ Notice Updated Successfully"
+    : "✅ Notice Published Successfully");
+
+noticeForm.reset();
+
+editNoticeId = null;
+
+document.getElementById("submitBtn").innerHTML =
+'<i class="fa fa-plus"></i> Add Notice';
+
+loadNotices();  
 
             submitBtn.innerHTML = `
                 <i class="fa-solid fa-paper-plane"></i>
