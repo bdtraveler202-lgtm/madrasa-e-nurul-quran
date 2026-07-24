@@ -866,3 +866,11 @@ background:#fff;
 box-shadow:0 5px 20px rgba(0,0,0,.15);
 
 }
+.notice-card{
+    transition:0.3s;
+}
+
+.notice-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
