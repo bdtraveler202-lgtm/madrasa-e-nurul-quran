@@ -1,22 +1,25 @@
-// ==========================================
-// NOTICE MANAGEMENT SYSTEM
-// Part 1
-// ==========================================
+// ======================================
+// Notice Management System
+// ======================================
 
 let notices = [];
-let editNoticeId = null;
 
-// ==========================================
+// ======================================
 // Login Check
-// ==========================================
+// ======================================
 
 async function checkLogin() {
 
-    const { data } = await window.supabaseClient.auth.getSession();
+    const { data, error } = await window.supabaseClient.auth.getSession();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
 
     if (!data.session) {
 
-        alert("❌ Please Login First");
+        alert("❌ আপনি Login করেননি!");
 
         window.location.href = "login.html";
 
@@ -31,9 +34,9 @@ async function checkLogin() {
 checkLogin();
 
 
-// ==========================================
+// ======================================
 // Load Notices
-// ==========================================
+// ======================================
 
 async function loadNotices() {
 
@@ -45,7 +48,7 @@ async function loadNotices() {
 
         .order("pinned", { ascending: false })
 
-        .order("id", { ascending: false });
+        .order("created_at", { ascending: false });
 
     if (error) {
 
@@ -59,36 +62,42 @@ async function loadNotices() {
 
     notices = data || [];
 
-    renderNoticeTable(notices);
+    renderNotices();
 
 }
 
 
-// ==========================================
-// Render Notice Table
-// ==========================================
+// ======================================
+// Render Table
+// ======================================
 
-function renderNoticeTable(list) {
+function renderNotices() {
 
     const table = document.getElementById("noticeTable");
 
     table.innerHTML = "";
 
-    if (list.length === 0) {
+    if (notices.length === 0) {
 
         table.innerHTML = `
+
         <tr>
-            <td colspan="8" class="text-center">
-                No Notice Found
+
+            <td colspan="7" class="text-center">
+
+                কোনো Notice পাওয়া যায়নি
+
             </td>
+
         </tr>
+
         `;
 
         return;
 
     }
 
-    list.forEach(notice => {
+    notices.forEach(notice => {
 
         table.innerHTML += `
 
@@ -104,7 +113,11 @@ function renderNoticeTable(list) {
 
             </td>
 
-            <td>${notice.description}</td>
+            <td>
+
+                ${notice.description}
+
+            </td>
 
             <td>
 
@@ -112,7 +125,7 @@ function renderNoticeTable(list) {
 
                     ? '<span class="badge bg-danger">Important</span>'
 
-                    : '-'}
+                    : '<span class="badge bg-secondary">Normal</span>'}
 
             </td>
 
@@ -120,9 +133,9 @@ function renderNoticeTable(list) {
 
                 ${notice.image_url
 
-                    ? `<img src="${notice.image_url}" width="60">`
+                    ? `<img src="${notice.image_url}" width="70">`
 
-                    : '-'}
+                    : "-"}
 
             </td>
 
@@ -130,31 +143,19 @@ function renderNoticeTable(list) {
 
                 ${notice.pdf_url
 
-                    ? `<a href="${notice.pdf_url}" target="_blank" class="btn btn-sm btn-primary">PDF</a>`
+                    ? `<a href="${notice.pdf_url}" target="_blank" class="btn btn-primary btn-sm">PDF</a>`
 
-                    : '-'}
+                    : "-"}
 
             </td>
 
             <td>
 
                 <button
+                    class="btn btn-danger btn-sm"
+                    onclick="deleteNotice(${notice.id})">
 
-                class="btn btn-warning btn-sm"
-
-                onclick="editNotice(${notice.id})">
-
-                Edit
-
-                </button>
-
-                <button
-
-                class="btn btn-danger btn-sm"
-
-                onclick="deleteNotice(${notice.id})">
-
-                Delete
+                    Delete
 
                 </button>
 
@@ -167,144 +168,4 @@ function renderNoticeTable(list) {
     });
 
 } 
-// ==========================================
-// Upload Image
-// ==========================================
-
-async function uploadNoticeImage(file) {
-
-    if (!file) return "";
-
-    const fileName = Date.now() + "_" + file.name;
-
-    const { error } = await window.supabaseClient.storage
-        .from("notice-images")
-        .upload(fileName, file);
-
-    if (error) {
-
-        alert("Image Upload Failed");
-
-        throw error;
-
-    }
-
-    const { data } = window.supabaseClient.storage
-        .from("notice-images")
-        .getPublicUrl(fileName);
-
-    return data.publicUrl;
-
-}
-
-
-// ==========================================
-// Upload PDF
-// ==========================================
-
-async function uploadNoticePDF(file) {
-
-    if (!file) return "";
-
-    const fileName = Date.now() + "_" + file.name;
-
-    const { error } = await window.supabaseClient.storage
-        .from("notice-pdf")
-        .upload(fileName, file);
-
-    if (error) {
-
-        alert("PDF Upload Failed");
-
-        throw error;
-
-    }
-
-    const { data } = window.supabaseClient.storage
-        .from("notice-pdf")
-        .getPublicUrl(fileName);
-
-    return data.publicUrl;
-
-}
-
-
-// ==========================================
-// Add Notice
-// ==========================================
-
-const noticeForm = document.getElementById("noticeForm");
-
-if (noticeForm) {
-
-noticeForm.addEventListener("submit", async function (e) {
-
-    e.preventDefault();
-
-    const title = document.getElementById("title").value.trim();
-
-    const description = document.getElementById("description").value.trim();
-
-    const important = document.getElementById("important").checked;
-
-    const pinned = document.getElementById("pinned").checked;
-
-    const imageFile = document.getElementById("noticeImage").files[0];
-
-    const pdfFile = document.getElementById("noticePDF").files[0];
-
-    let image_url = "";
-
-    let pdf_url = "";
-
-    if (imageFile) {
-
-        image_url = await uploadNoticeImage(imageFile);
-
-    }
-
-    if (pdfFile) {
-
-        pdf_url = await uploadNoticePDF(pdfFile);
-
-    }
-
-    const { error } = await window.supabaseClient
-
-        .from("notices")
-
-        .insert([{
-
-            title,
-
-            description,
-
-            important,
-
-            pinned,
-
-            image_url,
-
-            pdf_url
-
-        }]);
-
-    if (error) {
-
-        alert(error.message);
-
-        return;
-
-    }
-
-    alert("✅ Notice Published Successfully");
-
-    noticeForm.reset();
-
-    loadNotices();
-
-});
-
-} 
-
 
