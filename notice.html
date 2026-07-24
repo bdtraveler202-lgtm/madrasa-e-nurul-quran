@@ -31,12 +31,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <form id="noticeForm">
 
-    <!-- Notice Title -->
+    <!-- Title -->
     <div class="mb-3">
-        <label class="form-label fw-bold">
-            Notice Title
-        </label>
-
+        <label class="form-label">Notice Title</label>
         <input
             type="text"
             id="title"
@@ -47,10 +44,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
     <!-- Description -->
     <div class="mb-3">
-        <label class="form-label fw-bold">
-            Description
-        </label>
-
+        <label class="form-label">Description</label>
         <textarea
             id="description"
             class="form-control"
@@ -61,10 +55,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
     <!-- Notice Image -->
     <div class="mb-3">
-        <label class="form-label fw-bold">
-            Notice Image
-        </label>
-
+        <label class="form-label">Notice Image</label>
         <input
             type="file"
             id="noticeImage"
@@ -72,12 +63,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             accept="image/*">
     </div>
 
-    <!-- PDF Upload -->
+    <!-- PDF -->
     <div class="mb-3">
-        <label class="form-label fw-bold">
-            PDF File
-        </label>
-
+        <label class="form-label">PDF File</label>
         <input
             type="file"
             id="noticePDF"
@@ -87,53 +75,38 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
     <!-- Important -->
     <div class="form-check mb-2">
-
         <input
             class="form-check-input"
             type="checkbox"
             id="important">
-
-        <label
-            class="form-check-label"
-            for="important">
-
+        <label class="form-check-label">
             ⭐ Important Notice
-
         </label>
-
     </div>
 
     <!-- Pin -->
-    <div class="form-check mb-4">
-
+    <div class="form-check mb-3">
         <input
             class="form-check-input"
             type="checkbox"
             id="pinned">
-
-        <label
-            class="form-check-label"
-            for="pinned">
-
-            📌 Pin this Notice
-
+        <label class="form-check-label">
+            📌 Pin Notice
         </label>
-
     </div>
 
-    <!-- Button -->
+    <!-- Submit -->
     <button
         type="submit"
-        class="btn btn-success w-100">
+        class="btn btn-success w-100"
+        id="submitBtn">
 
-        <i class="fa-solid fa-paper-plane"></i>
-
-        Publish Notice
+        <i class="fa-solid fa-plus"></i>
+        Add Notice
 
     </button>
 
 </form>
-
 </div>
 
 </div>
