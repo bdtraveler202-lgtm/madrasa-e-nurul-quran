@@ -4,46 +4,45 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>সকল নোটিশ | মাদরাসায়ে নূরুল কুরআন</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 <style>
 
 body{
-    background:#f5f7fb;
-    font-family:Arial,sans-serif;
+background:#f4f7fb;
 }
 
 .notice-header{
-    background:#198754;
-    color:#fff;
-    padding:60px 0;
-}
-
-.notice-header h1{
-    font-weight:700;
+background:#198754;
+color:#fff;
+padding:50px 0;
 }
 
 .notice-card{
-    transition:.3s;
+transition:.3s;
+border:none;
+border-radius:15px;
+overflow:hidden;
 }
 
 .notice-card:hover{
-    transform:translateY(-5px);
+transform:translateY(-6px);
 }
 
 .notice-img{
-    height:220px;
-    object-fit:cover;
+height:220px;
+object-fit:cover;
 }
 
 .badge{
-    font-size:14px;
+font-size:13px;
 }
 
 </style>
@@ -52,21 +51,24 @@ body{
 
 <body>
 
-<!-- Header -->
-
 <section class="notice-header">
 
-<div class="container">
+<div class="container text-center">
 
-<h1>
+<h1 class="fw-bold">
+
 📢 সকল নোটিশ
+
 </h1>
 
-<p class="mb-4">
-মাদরাসায়ে নূরুল কুরআনের সকল বিজ্ঞপ্তি
+<p>
+
+মাদরাসায়ে নূরুল কুরআনের সর্বশেষ নোটিশসমূহ
+
 </p>
 
-<a href="index.html" class="btn btn-light">
+<a href="index.html"
+class="btn btn-light">
 
 <i class="fa-solid fa-house"></i>
 
@@ -78,35 +80,73 @@ body{
 
 </section>
 
-<!-- Search -->
+<div class="container py-5">
 
-<section class="container mt-5">
+<div class="row mb-4">
 
-<div class="row justify-content-center">
-
-<div class="col-lg-6">
+<div class="col-md-6">
 
 <input
 type="text"
 id="searchNotice"
-class="form-control form-control-lg"
+class="form-control"
 placeholder="🔍 নোটিশ খুঁজুন...">
 
 </div>
 
+<div class="col-md-6">
+
+<select
+id="categoryFilter"
+class="form-select">
+
+<option value="">
+
+সব Category
+
+</option>
+
+<option value="সাধারণ">
+
+📢 সাধারণ
+
+</option>
+
+<option value="ভর্তি">
+
+📚 ভর্তি
+
+</option>
+
+<option value="পরীক্ষা">
+
+📝 পরীক্ষা
+
+</option>
+
+<option value="অনুষ্ঠান">
+
+🎉 অনুষ্ঠান
+
+</option>
+
+<option value="জরুরি">
+
+🚨 জরুরি
+
+</option>
+
+</select>
+
 </div>
 
-</section>
-
-<!-- Notice Board -->
-
-<section class="container py-5">
+</div>
 
 <div
 id="noticeContainer"
 class="row g-4">
 
-<div class="col-12 text-center">
+<div class="col-12 text-center py-5">
 
 <div class="spinner-border text-success"></div>
 
@@ -120,13 +160,7 @@ class="row g-4">
 
 </div>
 
-</section>
-
-<footer class="bg-success text-white text-center py-4">
-
-© 2026 মাদরাসায়ে নূরুল কুরআন | All Rights Reserved
-
-</footer>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -135,5 +169,4 @@ class="row g-4">
 <script src="assets/notices.js"></script>
 
 </body>
-
 </html>
