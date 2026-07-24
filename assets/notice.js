@@ -71,14 +71,12 @@ async function loadNotices() {
 // Render Table
 // ======================================
 
-function renderNotices() {
+function renderNoticeTable(list) 
+   const table = document.getElementById("noticeTable");
 
-    const table = document.getElementById("noticeTable");
+table.innerHTML = "";
 
-    table.innerHTML = "";
-
-    if (notices.length === 0) {
-
+list.forEach(notice=>{
         table.innerHTML = `
 
         <tr>
@@ -480,5 +478,30 @@ async function deleteNotice(id) {
     alert("🗑️ Notice Deleted Successfully");
 
     loadNotices();
+
+}
+// ======================================
+// Live Search
+// ======================================
+
+const searchBox = document.getElementById("searchNotice");
+
+if (searchBox) {
+
+    searchBox.addEventListener("input", function () {
+
+        const keyword = this.value.toLowerCase();
+
+        const filtered = notices.filter(notice => {
+
+            return notice.title
+                .toLowerCase()
+                .includes(keyword);
+
+        });
+
+        renderNoticeTable(filtered);
+
+    });
 
 }
