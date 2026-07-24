@@ -268,7 +268,7 @@ if (noticeForm) {
 
             const title = document.getElementById("title").value.trim();
             const description = document.getElementById("description").value.trim();
-
+            const category = document.getElementById("category").value;
             const important = document.getElementById("important").checked;
             const pinned = document.getElementById("pinned").checked;
 
@@ -309,13 +309,14 @@ if (editNoticeId) {
     ({ error } = await window.supabaseClient
         .from("notices")
         .update({
-            title,
-            description,
-            important,
-            pinned,
-            image_url,
-            pdf_url
-        })
+    title,
+    description,
+    category,
+    important,
+    pinned,
+    image_url,
+    pdf_url
+})
         .eq("id", editNoticeId));
 
 } else {
