@@ -396,7 +396,36 @@ function editNotice(id) {
     });
 
 }
+// ======================================
+// DELETE NOTICE
+// ======================================
 
+async function deleteNotice(id) {
+
+    const confirmDelete = confirm(
+        "আপনি কি এই Notice Delete করতে চান?"
+    );
+
+    if (!confirmDelete) return;
+
+    const { error } = await window.supabaseClient
+        .from("notices")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+
+        alert("❌ " + error.message);
+
+        return;
+
+    }
+
+    alert("🗑️ Notice Deleted Successfully");
+
+    loadNotices();
+
+}
 
 
 
