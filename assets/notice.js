@@ -395,4 +395,90 @@ behavior:"smooth"
 });
 
 }  
+// ======================================
+// Delete Notice
+// ======================================
 
+async function deleteNotice(id) {
+
+    const confirmDelete = confirm(
+        "আপনি কি নিশ্চিত এই Notice Delete করতে চান?"
+    );
+
+    if (!confirmDelete) return;
+
+    // Find Notice
+    const notice = notices.find(n => n.id == id);
+
+    if (!notice) {
+
+        alert("Notice পাওয়া যায়নি!");
+
+        return;
+
+    }
+
+    // Delete Image From Storage
+    if (notice.image_url) {
+
+        try {
+
+            const imagePath = decodeURIComponent(
+                notice.image_url.split("/notice-images/")[1]
+            );
+
+            await window.supabaseClient.storage
+                .from("notice-images")
+                .remove([imagePath]);
+
+        } catch (e) {
+
+            console.log("Image Delete Skip");
+
+        }
+
+    }
+
+    // Delete PDF From Storage
+    if (notice.pdf_url) {
+
+        try {
+
+            const pdfPath = decodeURIComponent(
+                notice.pdf_url.split("/notice-pdf/")[1]
+            );
+
+            await window.supabaseClient.storage
+                .from("notice-pdf")
+                .remove([pdfPath]);
+
+        } catch (e) {
+
+            console.log("PDF Delete Skip");
+
+        }
+
+    }
+
+    // Delete Database Row
+    const { error } = await window.supabaseClient
+
+        .from("notices")
+
+        .delete()
+
+        .eq("id", id);
+
+    if (error) {
+
+        alert("❌ " + error.message);
+
+        return;
+
+    }
+
+    alert("🗑️ Notice Deleted Successfully");
+
+    loadNotices();
+
+}
