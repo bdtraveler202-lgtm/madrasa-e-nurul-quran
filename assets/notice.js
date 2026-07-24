@@ -273,18 +273,61 @@ if (noticeForm) {
                 pdf_url = await uploadNoticePDF(pdfFile);
             }
 
-            const { error } = await window.supabaseClient
-                .from("notices")
-                .insert([{
-                    title,
-                    description,
-                    category,
-                    important,
-                    pinned,
-                    image_url,
-                    pdf_url
-                }]);
+            let result;
 
+if (editNoticeId) {
+
+    result = await window.supabaseClient
+        .from("notices")
+        .update({
+            title,
+            description,
+            category,
+            important,
+            pinned,
+            image_url,
+            pdf_url
+        })
+        .eq("id", editNoticeId);
+
+} else {
+
+    result = await window.supabaseClient
+        .from("notices")
+        .insert([{
+            title,
+            description,
+            category,
+            important,
+            pinned,
+            image_url,
+            pdf_url
+        }]);
+
+}
+
+if (result.error) {
+    throw result.error;
+}
+
+alert(
+    editNoticeId
+        ? "✅ Notice Updated Successfully"
+        : "✅ Notice Published Successfully"
+);
+
+noticeForm.reset();
+
+editNoticeId = null;
+
+document.getElementById("submitBtn").innerHTML = `
+    <i class="fa-solid fa-paper-plane"></i>
+    Publish Notice
+`;
+
+loadNotices();
+
+            
             if (error) {
                 throw error;
             }
@@ -315,7 +358,44 @@ if (noticeForm) {
     });
 
 }
+// ======================================
+// EDIT NOTICE
+// ======================================
 
+function editNotice(id) {
+
+    const notice = notices.find(item => item.id === id);
+
+    if (!notice) return;
+
+    editNoticeId = id;
+
+    document.getElementById("title").value =
+        notice.title;
+
+    document.getElementById("description").value =
+        notice.description;
+
+    document.getElementById("category").value =
+        notice.category || "সাধারণ";
+
+    document.getElementById("important").checked =
+        notice.important;
+
+    document.getElementById("pinned").checked =
+        notice.pinned;
+
+    document.getElementById("submitBtn").innerHTML = `
+        <i class="fa-solid fa-floppy-disk"></i>
+        Update Notice
+    `;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
 
 
 
