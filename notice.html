@@ -13,17 +13,45 @@
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+<style>
+
+body{
+background:#f5f7fb;
+}
+
+.card{
+border:none;
+border-radius:15px;
+}
+
+.table img{
+border-radius:8px;
+}
+
+</style>
+
 </head>
 
-<body class="bg-light">
+<body>
 
 <div class="container py-5">
 
-<h2 class="mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+<h2>
 
 📢 Notice Management
 
 </h2>
+
+<a href="admin.html"
+class="btn btn-secondary">
+
+Dashboard
+
+</a>
+
+</div>
 
 <div class="card shadow">
 
@@ -31,33 +59,27 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <form id="noticeForm">
 
-    <!-- Title -->
-    <div class="mb-3">
-        <label class="form-label">Notice Title</label>
-        <input
-            type="text"
-            id="title"
-            class="form-control"
-            placeholder="Notice Title"
-            required>
-    </div>
+<div class="row">
 
-    <!-- Description -->
-    <div class="mb-3">
-        <label class="form-label">Description</label>
-        <textarea
-            id="description"
-            class="form-control"
-            rows="5"
-            placeholder="Write Notice..."
-            required></textarea>
-    </div>
+<div class="col-md-6 mb-3">
 
-<!-- Category -->
+<label class="form-label">
 
-<div class="mb-3">
+Notice Title
 
-<label class="form-label fw-bold">
+</label>
+
+<input
+type="text"
+id="title"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
 
 Category
 
@@ -67,111 +89,133 @@ Category
 id="category"
 class="form-select">
 
-<option value="সাধারণ">
+<option value="সাধারণ">📢 সাধারণ</option>
 
-📢 সাধারণ
+<option value="ভর্তি">📚 ভর্তি</option>
 
-</option>
+<option value="পরীক্ষা">📝 পরীক্ষা</option>
 
-<option value="ভর্তি">
+<option value="অনুষ্ঠান">🎉 অনুষ্ঠান</option>
 
-📚 ভর্তি
-
-</option>
-
-<option value="পরীক্ষা">
-
-📝 পরীক্ষা
-
-</option>
-
-<option value="অনুষ্ঠান">
-
-🎉 অনুষ্ঠান
-
-</option>
-
-<option value="জরুরি">
-
-🚨 জরুরি
-
-</option>
+<option value="জরুরি">🚨 জরুরি</option>
 
 </select>
 
 </div>
-    
-    <!-- Notice Image -->
-    <div class="mb-3">
-        <label class="form-label">Notice Image</label>
-        <input
-            type="file"
-            id="noticeImage"
-            class="form-control"
-            accept="image/*">
-    </div>
 
-    <!-- PDF -->
-    <div class="mb-3">
-        <label class="form-label">PDF File</label>
-        <input
-            type="file"
-            id="noticePDF"
-            class="form-control"
-            accept=".pdf">
-    </div>
+</div>
 
-    <!-- Important -->
-    <div class="form-check mb-2">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="important">
-        <label class="form-check-label">
-            ⭐ Important Notice
-        </label>
-    </div>
+<div class="mb-3">
 
-    <!-- Pin -->
-    <div class="form-check mb-3">
-        <input
-            class="form-check-input"
-            type="checkbox"
-            id="pinned">
-        <label class="form-check-label">
-            📌 Pin Notice
-        </label>
-    </div>
+<label>
 
-    <!-- Submit -->
-    <button
-        type="submit"
-        class="btn btn-success w-100"
-        id="submitBtn">
+Description
 
-        <i class="fa-solid fa-plus"></i>
-        Add Notice
+</label>
 
-    </button>
+<textarea
+id="description"
+class="form-control"
+rows="5"
+required></textarea>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>
+
+Notice Image
+
+</label>
+
+<input
+type="file"
+id="noticeImage"
+class="form-control"
+accept="image/*">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>
+
+PDF File
+
+</label>
+
+<input
+type="file"
+id="noticePDF"
+class="form-control"
+accept=".pdf">
+
+</div>
+
+</div>
+
+<div class="form-check">
+
+<input
+type="checkbox"
+id="important"
+class="form-check-input">
+
+<label
+class="form-check-label">
+
+⭐ Important
+
+</label>
+
+</div>
+
+<div class="form-check mb-4">
+
+<input
+type="checkbox"
+id="pinned"
+class="form-check-input">
+
+<label
+class="form-check-label">
+
+📌 Pin Notice
+
+</label>
+
+</div>
+
+<button
+id="submitBtn"
+class="btn btn-success w-100">
+
+<i class="fa-solid fa-paper-plane"></i>
+
+Publish Notice
+
+</button>
 
 </form>
-</div>
 
 </div>
 
-<hr>
+</div>
 
-<h3>সকল নোটিশ</h3>
-<div class="mb-3">
+<hr class="my-5">
 
 <input
 type="text"
 id="searchNotice"
-class="form-control"
-placeholder="🔍 Search Notice by Title...">
+class="form-control mb-3"
+placeholder="🔍 Search Notice...">
 
-</div>
-<table class="table table-bordered mt-3">
+<div class="table-responsive">
+
+<table class="table table-bordered table-hover">
 
 <thead class="table-success">
 
@@ -181,9 +225,7 @@ placeholder="🔍 Search Notice by Title...">
 
 <th>Title</th>
 
-<th>Description</th>
-
-<th>Type</th>
+<th>Category</th>
 
 <th>Image</th>
 
@@ -194,11 +236,25 @@ placeholder="🔍 Search Notice by Title...">
 </tr>
 
 </thead>
+
 <tbody id="noticeTable">
+
+<tr>
+
+<td colspan="6"
+class="text-center">
+
+Loading...
+
+</td>
+
+</tr>
 
 </tbody>
 
 </table>
+
+</div>
 
 </div>
 
