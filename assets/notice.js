@@ -164,3 +164,103 @@ function renderNoticeTable(list) {
     });
 
 }
+// ======================================
+// Add Notice
+// ======================================
+
+const noticeForm = document.getElementById("noticeForm");
+
+if (noticeForm) {
+
+noticeForm.addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+const title=document.getElementById("title").value.trim();
+
+const description=document.getElementById("description").value.trim();
+
+const important=document.getElementById("important").checked;
+
+const pinned=document.getElementById("pinned").checked;
+
+const imageFile=document.getElementById("noticeImage").files[0];
+
+const pdfFile=document.getElementById("noticePDF").files[0];
+
+let image_url="";
+
+let pdf_url="";
+
+if(title===""){
+
+alert("Notice Title লিখুন");
+
+return;
+
+}
+
+// ======================================
+// Upload Image
+// ======================================
+
+if(imageFile){
+
+const imageName=Date.now()+"_"+imageFile.name;
+
+const {error:imageError}=await window.supabaseClient.storage
+
+.from("notice-images")
+
+.upload(imageName,imageFile);
+
+if(imageError){
+
+alert(imageError.message);
+
+return;
+
+}
+
+const {data:imageData}=window.supabaseClient.storage
+
+.from("notice-images")
+
+.getPublicUrl(imageName);
+
+image_url=imageData.publicUrl;
+
+}
+
+// ======================================
+// Upload PDF
+// ======================================
+
+if(pdfFile){
+
+const pdfName=Date.now()+"_"+pdfFile.name;
+
+const {error:pdfError}=await window.supabaseClient.storage
+
+.from("notice-pdf")
+
+.upload(pdfName,pdfFile);
+
+if(pdfError){
+
+alert(pdfError.message);
+
+return;
+
+}
+
+const {data:pdfData}=window.supabaseClient.storage
+
+.from("notice-pdf")
+
+.getPublicUrl(pdfName);
+
+pdf_url=pdfData.publicUrl;
+
+} 
+                            
