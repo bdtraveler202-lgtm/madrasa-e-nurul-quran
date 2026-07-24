@@ -326,6 +326,7 @@ if (editNoticeId) {
         .insert([{
             title,
             description,
+            category,            
             important,
             pinned,
             image_url,
