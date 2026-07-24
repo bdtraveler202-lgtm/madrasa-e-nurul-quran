@@ -1,136 +1,173 @@
 // ======================================
-// Notice Details Page
+// NOTICE DETAILS PAGE
+// assets/notice-view.js
 // ======================================
 
+// URL থেকে Notice ID নেওয়া
 const params = new URLSearchParams(window.location.search);
-
 const noticeId = params.get("id");
 
-if (!noticeId) {
-
-    alert("Notice পাওয়া যায়নি");
-
-    window.location.href = "index.html";
-
-}
-
 // ======================================
-// Load Notice
+// LOAD NOTICE
 // ======================================
 
 async function loadNotice() {
 
-    const { data, error } = await window.supabaseClient
+    const content = document.getElementById("noticeContent");
 
-        .from("notices")
+    if (!noticeId) {
 
-        .select("*")
-
-        .eq("id", noticeId)
-
-        .single();
-
-    if (error) {
-
-        alert("Notice পাওয়া যায়নি");
-
-        window.location.href = "index.html";
+        content.innerHTML = `
+            <div class="alert alert-danger text-center">
+                ❌ Invalid Notice ID
+            </div>
+        `;
 
         return;
 
     }
 
-    // =============================
-    // Title
-    // =============================
+    const { data, error } = await window.supabaseClient
+        .from("notices")
+        .select("*")
+        .eq("id", noticeId)
+        .single();
 
-    document.getElementById("title").innerText = data.title;
+    if (error || !data) {
 
-    // =============================
-    // Date
-    // =============================
+        console.error(error);
 
-    document.getElementById("date").innerHTML =
-
-        `<i class="fa-solid fa-calendar-days"></i>
-        ${new Date(data.created_at).toLocaleDateString("en-GB")}`;
-
-    // =============================
-    // Description
-    // =============================
-
-    document.getElementById("description").innerText =
-        data.description;
-
-    // =============================
-    // Image
-    // =============================
-
-    if (data.image_url) {
-
-        const img = document.getElementById("image");
-
-        img.src = data.image_url;
-
-        img.style.display = "block";
-
-    }
-
-    // =============================
-    // PDF
-    // =============================
-
-    if (data.pdf_url) {
-
-        document.getElementById("pdfArea").innerHTML = `
-
-        <a
-        href="${data.pdf_url}"
-        target="_blank"
-        class="btn btn-success">
-
-        <i class="fa-solid fa-download"></i>
-
-        Download PDF
-
-        </a>
-
+        content.innerHTML = `
+            <div class="alert alert-danger text-center">
+                ❌ Notice পাওয়া যায়নি।
+            </div>
         `;
 
-    }
-
-    // =============================
-    // Badge
-    // =============================
-
-    let badge = "";
-
-    if (data.pinned) {
-
-        badge +=
-
-        `<span class="badge bg-warning text-dark me-2">
-
-        📌 Pinned
-
-        </span>`;
+        return;
 
     }
 
-    if (data.important) {
+    content.innerHTML = `
 
-        badge +=
+<div class="card notice-card shadow">
 
-        `<span class="badge bg-danger">
+<div class="card-body">
 
-        ⭐ Important
+${data.image_url ? `
+<img src="${data.image_url}"
+class="notice-img mb-4">
+` : ""}
 
-        </span>`;
+<div class="mb-3">
 
-    }
+${data.pinned ? `
+<span class="badge bg-warning text-dark">
+📌 Pinned
+</span>
+` : ""}
 
-    document.getElementById("badgeArea").innerHTML = badge;
+${data.important ? `
+<span class="badge bg-danger ms-2">
+⭐ Important
+</span>
+` : ""}
+
+<span class="badge bg-success ms-2">
+${data.category || "সাধারণ"}
+</span>
+
+</div>
+
+<h2 class="fw-bold">
+
+${data.title}
+
+</h2>
+
+<p class="text-muted">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+${new Date(data.created_at).toLocaleDateString("en-GB")}
+
+</p>
+
+<hr>
+
+<p style="white-space:pre-line;line-height:1.9">
+
+${data.description}
+
+</p>
+
+${data.pdf_url ? `
+
+<a href="${data.pdf_url}"
+target="_blank"
+class="btn btn-success mt-3">
+
+<i class="fa-solid fa-download"></i>
+
+Download PDF
+
+</a>
+
+` : ""}
+
+<button
+onclick="window.print()"
+class="btn btn-dark mt-3 ms-2">
+
+<i class="fa-solid fa-print"></i>
+
+Print
+
+</button>
+
+<button
+onclick="shareNotice()"
+class="btn btn-primary mt-3 ms-2">
+
+<i class="fa-solid fa-share"></i>
+
+Share
+
+</button>
+
+</div>
+
+</div>
+
+`;
 
 }
 
-loadNotice();
+// ======================================
+// SHARE
+// ======================================
+
+function shareNotice() {
+
+    if (navigator.share) {
+
+        navigator.share({
+
+            title: document.title,
+
+            url: window.location.href
+
+        });
+
+    } else {
+
+        navigator.clipboard.writeText(window.location.href);
+
+        alert("🔗 Link Copied");
+
+    }
+
+}
+
+loadNotice(); 
+
+
