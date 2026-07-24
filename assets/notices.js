@@ -168,7 +168,52 @@ Read More
 }
 
 loadNotices();
+// ======================================
+// LIVE SEARCH + CATEGORY FILTER
+// ======================================
 
+const searchInput = document.getElementById("searchNotice");
+const categoryFilter = document.getElementById("categoryFilter");
+
+function filterNotices() {
+
+    const keyword = searchInput.value.toLowerCase().trim();
+
+    const category = categoryFilter.value;
+
+    const filtered = allNotices.filter(notice => {
+
+        const matchKeyword =
+
+            notice.title.toLowerCase().includes(keyword) ||
+
+            notice.description.toLowerCase().includes(keyword);
+
+        const matchCategory =
+
+            category === "" ||
+
+            notice.category === category;
+
+        return matchKeyword && matchCategory;
+
+    });
+
+    renderNoticeCards(filtered);
+
+}
+
+if (searchInput) {
+
+    searchInput.addEventListener("input", filterNotices);
+
+}
+
+if (categoryFilter) {
+
+    categoryFilter.addEventListener("change", filterNotices);
+
+}
 
 
 
