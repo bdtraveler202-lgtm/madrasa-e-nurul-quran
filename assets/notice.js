@@ -1,4 +1,3 @@
-alert("notice.js Loaded");
 // ======================================
 // Notice Management System
 // ======================================
@@ -130,26 +129,37 @@ function renderNotices() {
 
             </td>
 
-            <td>
+<td>
+    ${
+        notice.image_url
+        ? `<img src="${notice.image_url}" width="80" class="img-thumbnail">`
+        : "-"
+    }
+</td>
 
-                ${notice.image_url
+<td>
+    ${
+        notice.pdf_url
+        ? `<a href="${notice.pdf_url}" target="_blank" download class="btn btn-primary btn-sm">
+            <i class="fa fa-download"></i> PDF
+           </a>`
+        : "-"
+    }
+</td>
 
-                    ? `<img src="${notice.image_url}" width="70">`
+<td>
+    ${
+        notice.important
+        ? `<span class="badge bg-danger">Important</span>`
+        : "-"
+    }
+</td> 
 
-                    : "-"}
-
-            </td>
-
-            <td>
-
-                ${notice.pdf_url
-
-                    ? `<a href="${notice.pdf_url}" target="_blank" class="btn btn-primary btn-sm">PDF</a>`
-
-                    : "-"}
-
-            </td>
-
+<td>
+    ${notice.pinned ? "📌 " : ""}
+    ${notice.title}
+</td>
+           
             <td>
 
                 <button
