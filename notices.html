@@ -1,128 +1,198 @@
-<!DOCTYPE html>
-<html lang="bn">
+// ======================================
+// PUBLIC NOTICE BOARD
+// assets/notices.js
+// ======================================
 
-<head>
+let allNotices = [];
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+// Load All Notices
+async function loadNotices() {
 
-<title>সকল নোটিশ | মাদরাসায়ে নূরুল কুরআন</title>
+    const noticeBoard = document.getElementById("noticeBoard");
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    noticeBoard.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-success"></div>
+            <p class="mt-3">নোটিশ লোড হচ্ছে...</p>
+        </div>
+    `;
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    const { data, error } = await window.supabaseClient
+        .from("notices")
+        .select("*")
+        .order("pinned", { ascending: false })
+        .order("important", { ascending: false })
+        .order("created_at", { ascending: false });
 
-<style>
+    if (error) {
 
-body{
-    background:#f5f7fb;
+        console.error(error);
+
+        noticeBoard.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    ❌ নোটিশ লোড করা যায়নি
+                </div>
+            </div>
+        `;
+
+        return;
+
+    }
+
+    allNotices = data || [];
+
+    renderNotices(allNotices);
+
 }
 
-.notice-header{
-    background:#198754;
-    color:#fff;
-    padding:40px 0;
-}
 
-.notice-card{
-    transition:.3s;
-}
+// ======================================
+// Render Notices
+// ======================================
 
-.notice-card:hover{
-    transform:translateY(-5px);
-}
+function renderNotices(notices) {
 
-.notice-img{
-    height:220px;
-    object-fit:cover;
-}
+    const noticeBoard = document.getElementById("noticeBoard");
 
-</style>
+    noticeBoard.innerHTML = "";
 
-</head>
+    if (notices.length === 0) {
 
-<body>
+        noticeBoard.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    কোনো নোটিশ পাওয়া যায়নি।
+                </div>
+            </div>
+        `;
 
-<!-- Header -->
+        return;
 
-<section class="notice-header">
+    }
 
-<div class="container">
+    notices.forEach(notice => {
 
-<h1 class="fw-bold">
+        noticeBoard.innerHTML += `
 
-📢 সকল নোটিশ
+<div class="col-lg-4 col-md-6">
 
-</h1>
+<div class="card notice-card shadow h-100">
 
-<p>
+${notice.image_url ?
 
-মাদরাসায়ে নূরুল কুরআনের সর্বশেষ বিজ্ঞপ্তি
+`<img src="${notice.image_url}"
+class="card-img-top notice-img">`
 
+: ""}
+
+<div class="card-body">
+
+<div class="mb-2">
+
+${notice.pinned ?
+
+`<span class="badge bg-warning text-dark me-2">
+📌 Pinned
+</span>`
+
+: ""}
+
+${notice.important ?
+
+`<span class="badge bg-danger">
+⭐ Important
+</span>`
+
+: ""}
+
+</div>
+
+<h5 class="fw-bold">
+${notice.title}
+</h5>
+
+<p class="text-muted small">
+<i class="fa-solid fa-calendar-days"></i>
+${new Date(notice.created_at).toLocaleDateString("en-GB")}
 </p>
 
-<a href="index.html" class="btn btn-light">
+<p>
+${notice.description.length > 180
+? notice.description.substring(0,180) + "..."
+: notice.description}
+</p>
 
-<i class="fa-solid fa-house"></i>
+</div>
 
-হোমে ফিরে যান
+<div class="card-footer bg-white">
+
+${notice.pdf_url ?
+
+`<a href="${notice.pdf_url}"
+target="_blank"
+class="btn btn-success btn-sm">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+PDF
+
+</a>`
+
+: ""}
+
+<a
+href="notice-view.html?id=${notice.id}"
+class="btn btn-primary btn-sm ms-2">
+
+<i class="fa-solid fa-eye"></i>
+
+Read More
 
 </a>
 
 </div>
 
-</section>
-
-<!-- Search -->
-
-<div class="container mt-4">
-
-<div class="row justify-content-center">
-
-<div class="col-lg-6">
-
-<input
-type="text"
-id="searchNotice"
-class="form-control form-control-lg"
-placeholder="নোটিশ খুঁজুন...">
-
 </div>
 
 </div>
 
-</div>
+`;
 
-<!-- Notice Board -->
+    });
 
-<div class="container py-5">
+}
 
-<div
-id="noticeBoard"
-class="row g-4">
 
-<div class="col-12 text-center">
+// ======================================
+// Search
+// ======================================
 
-<div class="spinner-border text-success"></div>
+const searchBox = document.getElementById("searchNotice");
 
-<p class="mt-3">
+if (searchBox) {
 
-নোটিশ লোড হচ্ছে...
+    searchBox.addEventListener("keyup", function () {
 
-</p>
+        const keyword = this.value.toLowerCase();
 
-</div>
+        const filtered = allNotices.filter(notice =>
 
-</div>
+            notice.title.toLowerCase().includes(keyword) ||
 
-</div>
+            notice.description.toLowerCase().includes(keyword)
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        );
 
-<script src="assets/supabase.js"></script>
+        renderNotices(filtered);
 
-<script src="assets/notices.js"></script>
+    });
 
-</body>
-</html>
+}
+
+
+// ======================================
+// Start
+// ======================================
+
+loadNotices();
