@@ -160,20 +160,33 @@ function renderNotices() {
     ${notice.title}
 </td>
            
-            <td>
+<td>
 
-                <button
-                    class="btn btn-danger btn-sm"
-                    onclick="deleteNotice(${notice.id})">
+<button
+class="btn btn-warning btn-sm"
+onclick="editNotice(${notice.id})">
 
-                    Delete
+<i class="fa fa-edit"></i>
 
-                </button>
+Edit
 
-            </td>
+</button>
 
-        </tr>
+</td>
 
+
+class="btn btn-danger btn-sm"
+onclick="deleteNotice(${notice.id})">
+
+<i class="fa fa-trash"></i>
+
+Delete
+
+</button>
+
+</td>
+
+           
         `;
 
     });
@@ -331,5 +344,33 @@ if (noticeForm) {
     });
 
 }
+// ======================================
+// Edit Notice
+// ======================================
 
+function editNotice(id){
+
+const notice = notices.find(n => n.id == id);
+
+if(!notice) return;
+
+editNoticeId = id;
+
+document.getElementById("title").value = notice.title;
+
+document.getElementById("description").value = notice.description;
+
+document.getElementById("important").checked = notice.important;
+
+document.getElementById("pinned").checked = notice.pinned;
+
+document.getElementById("submitBtn").innerHTML =
+'<i class="fa fa-save"></i> Update Notice';
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}  
 
