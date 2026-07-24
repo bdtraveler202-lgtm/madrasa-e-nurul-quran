@@ -1,89 +1,159 @@
 // ======================================
-// Home Page Notice Loader
+// HOME PAGE NOTICE BOARD
 // ======================================
 
-async function loadNotices() {
+async function loadNoticeBoard() {
+
+    const board = document.getElementById("noticeBoard");
+
+    if (!board) return;
+
+    board.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-success"></div>
+            <p class="mt-3">নোটিশ লোড হচ্ছে...</p>
+        </div>
+    `;
 
     const { data, error } = await window.supabaseClient
         .from("notices")
         .select("*")
         .order("pinned", { ascending: false })
+        .order("important", { ascending: false })
         .order("created_at", { ascending: false });
-
-    const noticeList = document.getElementById("noticeList");
 
     if (error) {
 
         console.error(error);
 
-        noticeList.innerHTML =
-            "<li>❌ নোটিশ লোড করা যায়নি</li>";
+        board.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger text-center">
+                    ❌ নোটিশ লোড করা যায়নি
+                </div>
+            </div>
+        `;
 
         return;
 
     }
-
-    noticeList.innerHTML = "";
 
     if (!data || data.length === 0) {
 
-        noticeList.innerHTML =
-            "<li>কোনো নোটিশ পাওয়া যায়নি।</li>";
+        board.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    কোনো নোটিশ পাওয়া যায়নি।
+                </div>
+            </div>
+        `;
 
         return;
 
     }
 
+    board.innerHTML = "";
+
     data.forEach(notice => {
 
-        noticeList.innerHTML += `
+        board.innerHTML += `
 
-        <li class="mb-4">
+<div class="col-lg-4 col-md-6">
 
-            <h5>
+<div class="card shadow-sm border-0 h-100">
 
-                ${notice.pinned ? "📌 " : ""}
+${notice.image_url ?
 
-                ${notice.title}
+`<img src="${notice.image_url}"
+class="card-img-top"
+style="height:220px;object-fit:cover;">`
 
-                ${notice.important
-                    ? '<span class="badge bg-danger ms-2">Important</span>'
-                    : ''}
+: ""}
 
-            </h5>
+<div class="card-body">
 
-            <p>${notice.description}</p>
+<div class="mb-2">
 
-            ${notice.image_url
-                ? `
-                <img
-                    src="${notice.image_url}"
-                    class="img-fluid rounded mb-2"
-                    style="max-width:300px;">
-                `
-                : ""}
+${notice.pinned ?
 
-            ${notice.pdf_url
-                ? `
-                <br>
+`<span class="badge bg-warning text-dark me-2">
+📌 Pinned
+</span>`
 
-                <a
-                    href="${notice.pdf_url}"
-                    target="_blank"
-                    class="btn btn-primary btn-sm">
+: ""}
 
-                    📄 Download PDF
+${notice.important ?
 
-                </a>
-                `
-                : ""}
+`<span class="badge bg-danger">
+⭐ Important
+</span>`
 
-        </li>
+: ""}
 
-        `;
+</div>
+
+<h5 class="fw-bold">
+
+${notice.title}
+
+</h5>
+
+<p class="text-muted small">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+${new Date(notice.created_at).toLocaleDateString("en-GB")}
+
+</p>
+
+<p>
+
+${notice.description.length > 150
+
+? notice.description.substring(0,150) + "..."
+
+: notice.description}
+
+</p>
+
+</div>
+
+<div class="card-footer bg-white border-0">
+
+${notice.pdf_url ?
+
+`<a href="${notice.pdf_url}"
+target="_blank"
+class="btn btn-success btn-sm">
+
+<i class="fa-solid fa-download"></i>
+
+PDF
+
+</a>`
+
+: ""}
+
+<a
+href="notice-view.html?id=${notice.id}"
+class="btn btn-primary btn-sm ms-2">
+
+<i class="fa-solid fa-eye"></i>
+
+Read More
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+`;
 
     });
 
 }
 
-loadNotices();
+loadNoticeBoard();
