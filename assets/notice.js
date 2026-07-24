@@ -1,23 +1,22 @@
-// ======================================
-// Notice Management System
+// ==========================================
+// NOTICE MANAGEMENT SYSTEM
 // Part 1
-// ======================================
-
-// Global Variables
+// ==========================================
 
 let notices = [];
-
 let editNoticeId = null;
 
-// ======================================
-// Check Login
-// ======================================
+// ==========================================
+// Login Check
+// ==========================================
 
-window.supabaseClient.auth.getSession().then(({ data }) => {
+async function checkLogin() {
+
+    const { data } = await window.supabaseClient.auth.getSession();
 
     if (!data.session) {
 
-        alert("❌ আপনি Login করেননি!");
+        alert("❌ Please Login First");
 
         window.location.href = "login.html";
 
@@ -27,11 +26,14 @@ window.supabaseClient.auth.getSession().then(({ data }) => {
 
     loadNotices();
 
-});
+}
 
-// ======================================
+checkLogin();
+
+
+// ==========================================
 // Load Notices
-// ======================================
+// ==========================================
 
 async function loadNotices() {
 
@@ -49,21 +51,22 @@ async function loadNotices() {
 
         console.error(error);
 
-        alert("Notice Load Failed!");
+        alert(error.message);
 
         return;
 
     }
 
-    notices = data;
+    notices = data || [];
 
     renderNoticeTable(notices);
 
 }
 
-// ======================================
+
+// ==========================================
 // Render Notice Table
-// ======================================
+// ==========================================
 
 function renderNoticeTable(list) {
 
@@ -74,17 +77,11 @@ function renderNoticeTable(list) {
     if (list.length === 0) {
 
         table.innerHTML = `
-
         <tr>
-
             <td colspan="8" class="text-center">
-
-                কোনো Notice পাওয়া যায়নি
-
+                No Notice Found
             </td>
-
         </tr>
-
         `;
 
         return;
@@ -107,29 +104,35 @@ function renderNoticeTable(list) {
 
             </td>
 
+            <td>${notice.description}</td>
+
             <td>
 
                 ${notice.important
 
                     ? '<span class="badge bg-danger">Important</span>'
 
-                    : "-"}
+                    : '-'}
 
             </td>
 
             <td>
 
-                ${notice.created_at
+                ${notice.image_url
 
-                    ? new Date(notice.created_at).toLocaleDateString()
+                    ? `<img src="${notice.image_url}" width="60">`
 
-                    : "-"}
+                    : '-'}
 
             </td>
 
             <td>
 
-                ${notice.downloads || 0}
+                ${notice.pdf_url
+
+                    ? `<a href="${notice.pdf_url}" target="_blank" class="btn btn-sm btn-primary">PDF</a>`
+
+                    : '-'}
 
             </td>
 
@@ -141,17 +144,17 @@ function renderNoticeTable(list) {
 
                 onclick="editNotice(${notice.id})">
 
-                <i class="fa fa-edit"></i>
+                Edit
 
                 </button>
 
                 <button
 
-                class="btn btn-danger btn-sm ms-1"
+                class="btn btn-danger btn-sm"
 
                 onclick="deleteNotice(${notice.id})">
 
-                <i class="fa fa-trash"></i>
+                Delete
 
                 </button>
 
@@ -163,104 +166,145 @@ function renderNoticeTable(list) {
 
     });
 
+} 
+// ==========================================
+// Upload Image
+// ==========================================
+
+async function uploadNoticeImage(file) {
+
+    if (!file) return "";
+
+    const fileName = Date.now() + "_" + file.name;
+
+    const { error } = await window.supabaseClient.storage
+        .from("notice-images")
+        .upload(fileName, file);
+
+    if (error) {
+
+        alert("Image Upload Failed");
+
+        throw error;
+
+    }
+
+    const { data } = window.supabaseClient.storage
+        .from("notice-images")
+        .getPublicUrl(fileName);
+
+    return data.publicUrl;
+
 }
-// ======================================
+
+
+// ==========================================
+// Upload PDF
+// ==========================================
+
+async function uploadNoticePDF(file) {
+
+    if (!file) return "";
+
+    const fileName = Date.now() + "_" + file.name;
+
+    const { error } = await window.supabaseClient.storage
+        .from("notice-pdf")
+        .upload(fileName, file);
+
+    if (error) {
+
+        alert("PDF Upload Failed");
+
+        throw error;
+
+    }
+
+    const { data } = window.supabaseClient.storage
+        .from("notice-pdf")
+        .getPublicUrl(fileName);
+
+    return data.publicUrl;
+
+}
+
+
+// ==========================================
 // Add Notice
-// ======================================
+// ==========================================
 
 const noticeForm = document.getElementById("noticeForm");
 
 if (noticeForm) {
 
-noticeForm.addEventListener("submit", async function(e){
+noticeForm.addEventListener("submit", async function (e) {
 
-e.preventDefault();
+    e.preventDefault();
 
-const title=document.getElementById("title").value.trim();
+    const title = document.getElementById("title").value.trim();
 
-const description=document.getElementById("description").value.trim();
+    const description = document.getElementById("description").value.trim();
 
-const important=document.getElementById("important").checked;
+    const important = document.getElementById("important").checked;
 
-const pinned=document.getElementById("pinned").checked;
+    const pinned = document.getElementById("pinned").checked;
 
-const imageFile=document.getElementById("noticeImage").files[0];
+    const imageFile = document.getElementById("noticeImage").files[0];
 
-const pdfFile=document.getElementById("noticePDF").files[0];
+    const pdfFile = document.getElementById("noticePDF").files[0];
 
-let image_url="";
+    let image_url = "";
 
-let pdf_url="";
+    let pdf_url = "";
 
-if(title===""){
+    if (imageFile) {
 
-alert("Notice Title লিখুন");
+        image_url = await uploadNoticeImage(imageFile);
 
-return;
+    }
 
-}
+    if (pdfFile) {
 
-// ======================================
-// Upload Image
-// ======================================
+        pdf_url = await uploadNoticePDF(pdfFile);
 
-if(imageFile){
+    }
 
-const imageName=Date.now()+"_"+imageFile.name;
+    const { error } = await window.supabaseClient
 
-const {error:imageError}=await window.supabaseClient.storage
+        .from("notices")
 
-.from("notice-images")
+        .insert([{
 
-.upload(imageName,imageFile);
+            title,
 
-if(imageError){
+            description,
 
-alert(imageError.message);
+            important,
 
-return;
+            pinned,
 
-}
+            image_url,
 
-const {data:imageData}=window.supabaseClient.storage
+            pdf_url
 
-.from("notice-images")
+        }]);
 
-.getPublicUrl(imageName);
+    if (error) {
 
-image_url=imageData.publicUrl;
+        alert(error.message);
 
-}
+        return;
 
-// ======================================
-// Upload PDF
-// ======================================
+    }
 
-if(pdfFile){
+    alert("✅ Notice Published Successfully");
 
-const pdfName=Date.now()+"_"+pdfFile.name;
+    noticeForm.reset();
 
-const {error:pdfError}=await window.supabaseClient.storage
+    loadNotices();
 
-.from("notice-pdf")
-
-.upload(pdfName,pdfFile);
-
-if(pdfError){
-
-alert(pdfError.message);
-
-return;
-
-}
-
-const {data:pdfData}=window.supabaseClient.storage
-
-.from("notice-pdf")
-
-.getPublicUrl(pdfName);
-
-pdf_url=pdfData.publicUrl;
+});
 
 } 
-                            
+
+
