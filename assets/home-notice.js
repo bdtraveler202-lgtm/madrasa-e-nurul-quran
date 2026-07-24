@@ -54,8 +54,7 @@ async function loadHomeNotices() {
 
         <div class="col-lg-4 col-md-6">
 
-            <div class="card shadow h-100">
-
+           <div class="card notice-card shadow h-100">
                 ${
                     notice.image_url
                     ? `<img src="${notice.image_url}" class="card-img-top" style="height:220px;object-fit:cover;">`
@@ -64,14 +63,20 @@ async function loadHomeNotices() {
 
                 <div class="card-body">
 
-                    <h5 class="card-title">
+${
+notice.pinned
+? `<span class="badge bg-warning text-dark mb-2">
+📌 Pinned
+</span>`
+: ""
+}
 
-                        ${notice.pinned ? "📌" : ""}
+<h5 class="card-title">
 
-                        ${notice.title}
+${notice.title}
 
-                    </h5>
-
+</h5>
+                   
 <p class="text-muted small mb-2">
     <i class="fa-solid fa-calendar-days"></i>
     ${new Date(notice.created_at).toLocaleDateString("en-GB")}
