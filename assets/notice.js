@@ -1,8 +1,10 @@
 // ======================================
-// Notice Management System
+// NOTICE MANAGEMENT SYSTEM
+// Part 1
 // ======================================
 
 let notices = [];
+let editNoticeId = null;
 
 // ======================================
 // Login Check
@@ -10,11 +12,17 @@ let notices = [];
 
 async function checkLogin() {
 
-    const { data, error } = await window.supabaseClient.auth.getSession();
+    const { data, error } =
+        await window.supabaseClient.auth.getSession();
 
     if (error) {
+
         console.error(error);
+
+        alert("Login Error");
+
         return;
+
     }
 
     if (!data.session) {
@@ -40,13 +48,16 @@ checkLogin();
 
 async function loadNotices() {
 
-    const { data, error } = await window.supabaseClient
+    const { data, error } =
+        await window.supabaseClient
 
         .from("notices")
 
         .select("*")
 
         .order("pinned", { ascending: false })
+
+        .order("important", { ascending: false })
 
         .order("created_at", { ascending: false });
 
@@ -62,102 +73,82 @@ async function loadNotices() {
 
     notices = data || [];
 
-    renderNotices();
+    renderNoticeTable(notices);
 
-}
-
-
+} 
 // ======================================
-// Render Table
+// Render Notice Table
 // ======================================
 
-function renderNoticeTable(list) 
-   const table = document.getElementById("noticeTable");
+function renderNoticeTable(list) {
 
-table.innerHTML = "";
+    const table = document.getElementById("noticeTable");
 
-list.forEach(notice=>{
+    if (!table) return;
+
+    table.innerHTML = "";
+
+    if (list.length === 0) {
+
         table.innerHTML = `
-
         <tr>
-
             <td colspan="7" class="text-center">
-
                 কোনো Notice পাওয়া যায়নি
-
             </td>
-
         </tr>
-
         `;
 
         return;
 
     }
 
-    notices.forEach(notice => {
+    list.forEach(notice => {
 
         table.innerHTML += `
 
-        <tr>
+<tr>
 
-            <td>${notice.id}</td>
-
-            <td>
-
-                ${notice.pinned ? "📌 " : ""}
-
-                ${notice.title}
-
-            </td>
-
-            <td>
-
-                ${notice.description}
-
-            </td>
-
-            <td>
-
-                ${notice.important
-
-                    ? '<span class="badge bg-danger">Important</span>'
-
-                    : '<span class="badge bg-secondary">Normal</span>'}
-
-            </td>
+<td>${notice.id}</td>
 
 <td>
-    ${
-        notice.image_url
-        ? `<img src="${notice.image_url}" width="80" class="img-thumbnail">`
-        : "-"
-    }
+
+${notice.pinned ? "📌 " : ""}
+
+${notice.title}
+
+</td>
+
+<td>${notice.description}</td>
+
+<td>
+
+${notice.category ?? "সাধারণ"}
+
 </td>
 
 <td>
-    ${
-        notice.pdf_url
-        ? `<a href="${notice.pdf_url}" target="_blank" download class="btn btn-primary btn-sm">
-            <i class="fa fa-download"></i> PDF
-           </a>`
-        : "-"
-    }
+
+${notice.image_url
+
+? `<img src="${notice.image_url}" width="70" class="img-thumbnail">`
+
+: "-"}
+
 </td>
 
 <td>
-    ${
-        notice.important
-        ? `<span class="badge bg-danger">Important</span>`
-        : "-"
-    }
-</td> 
 
-<td>
-    ${notice.pinned ? "📌 " : ""}
-    ${notice.title}
+${notice.pdf_url
+
+? `<a href="${notice.pdf_url}" target="_blank" class="btn btn-primary btn-sm">
+<i class="fa fa-file-pdf"></i>
+PDF
+</a>`
+
+: "-"}
+
 </td>
-           
+
 <td>
 
 <button
@@ -166,30 +157,25 @@ onclick="editNotice(${notice.id})">
 
 <i class="fa fa-edit"></i>
 
-Edit
-
 </button>
 
-</td>
-
-
-class="btn btn-danger btn-sm"
+<button
+class="btn btn-danger btn-sm ms-1"
 onclick="deleteNotice(${notice.id})">
 
 <i class="fa fa-trash"></i>
 
-Delete
-
 </button>
 
 </td>
 
-           
-        `;
+</tr>
+
+`;
 
     });
 
-} 
+}
 // ======================================
 // Upload Notice Image
 // ======================================
@@ -198,25 +184,34 @@ async function uploadNoticeImage(file) {
 
     if (!file) return "";
 
-    const fileName = Date.now() + "_" + file.name.replace(/\s+/g, "_");
+    const fileName =
+        Date.now() + "_" +
+        file.name.replace(/\s+/g, "_");
 
-    const { error } = await window.supabaseClient.storage
+    const { error } =
+        await window.supabaseClient.storage
         .from("notice-images")
         .upload(fileName, file, {
             upsert: true
         });
 
     if (error) {
-        console.error("Image Upload Error:", error);
-        alert("❌ Image Upload Failed\n" + error.message);
-        return "";
+
+        console.error(error);
+
+        alert("❌ Image Upload Failed");
+
+        throw error;
+
     }
 
-    const { data } = window.supabaseClient.storage
+    const { data } =
+        window.supabaseClient.storage
         .from("notice-images")
         .getPublicUrl(fileName);
 
     return data.publicUrl;
+
 }
 
 
@@ -228,28 +223,37 @@ async function uploadNoticePDF(file) {
 
     if (!file) return "";
 
-    const fileName = Date.now() + "_" + file.name.replace(/\s+/g, "_");
+    const fileName =
+        Date.now() + "_" +
+        file.name.replace(/\s+/g, "_");
 
-    const { error } = await window.supabaseClient.storage
+    const { error } =
+        await window.supabaseClient.storage
         .from("notice-pdf")
         .upload(fileName, file, {
             upsert: true
         });
 
     if (error) {
-        console.error("PDF Upload Error:", error);
-        alert("❌ PDF Upload Failed\n" + error.message);
-        return "";
+
+        console.error(error);
+
+        alert("❌ PDF Upload Failed");
+
+        throw error;
+
     }
 
-    const { data } = window.supabaseClient.storage
+    const { data } =
+        window.supabaseClient.storage
         .from("notice-pdf")
         .getPublicUrl(fileName);
 
     return data.publicUrl;
-} 
+
+}
 // ======================================
-// Add Notice
+// Add / Update Notice
 // ======================================
 
 const noticeForm = document.getElementById("noticeForm");
@@ -260,36 +264,98 @@ if (noticeForm) {
 
         e.preventDefault();
 
-        const submitBtn = noticeForm.querySelector("button[type='submit']");
+        const submitBtn = document.getElementById("submitBtn");
+
         submitBtn.disabled = true;
-        submitBtn.innerHTML = "Uploading...";
+        submitBtn.innerHTML = "Saving...";
 
         try {
 
             const title = document.getElementById("title").value.trim();
+
             const description = document.getElementById("description").value.trim();
+
             const category = document.getElementById("category").value;
+
             const important = document.getElementById("important").checked;
+
             const pinned = document.getElementById("pinned").checked;
 
             const imageFile = document.getElementById("noticeImage").files[0];
+
             const pdfFile = document.getElementById("noticePDF").files[0];
 
             let image_url = "";
             let pdf_url = "";
 
-            // Upload Image
             if (imageFile) {
+
                 image_url = await uploadNoticeImage(imageFile);
+
             }
 
-            // Upload PDF
             if (pdfFile) {
+
                 pdf_url = await uploadNoticePDF(pdfFile);
+
             }
 
-            // Save Database
-           
+            let result;
+
+            if (editNoticeId) {
+
+                result = await window.supabaseClient
+                    .from("notices")
+                    .update({
+                        title,
+                        description,
+                        category,
+                        important,
+                        pinned,
+                        image_url,
+                        pdf_url
+                    })
+                    .eq("id", editNoticeId);
+
+            } else {
+
+                result = await window.supabaseClient
+                    .from("notices")
+                    .insert([{
+                        title,
+                        description,
+                        category,
+                        important,
+                        pinned,
+                        image_url,
+                        pdf_url
+                    }]);
+
+            }
+
+            if (result.error) {
+
+                alert(result.error.message);
+
+                return;
+
+            }
+
+            alert(
+                editNoticeId
+                    ? "✅ Notice Updated Successfully"
+                    : "✅ Notice Published Successfully"
+            );
+
+            noticeForm.reset();
+
+            editNoticeId = null;
+
+            submitBtn.innerHTML =
+                '<i class="fa-solid fa-paper-plane"></i> Publish Notice';
+
+            loadNotices();
+
         } catch (err) {
 
             console.error(err);
@@ -298,68 +364,7 @@ if (noticeForm) {
 
         } finally {
 
-            submitBtn.disabled = false; 
-
-          // Save / Update
-
-let error;
-
-if (editNoticeId) {
-
-    ({ error } = await window.supabaseClient
-        .from("notices")
-        .update({
-    title,
-    description,
-    category,
-    important,
-    pinned,
-    image_url,
-    pdf_url
-})
-        .eq("id", editNoticeId));
-
-} else {
-
-    ({ error } = await window.supabaseClient
-        .from("notices")
-        .insert([{
-            title,
-            description,
-            category,            
-            important,
-            pinned,
-            image_url,
-            pdf_url
-        }]));
-
-}
-
-if (error) {
-
-    alert(error.message);
-
-    return;
-
-}
-
-alert(editNoticeId
-    ? "✅ Notice Updated Successfully"
-    : "✅ Notice Published Successfully");
-
-noticeForm.reset();
-
-editNoticeId = null;
-
-document.getElementById("submitBtn").innerHTML =
-'<i class="fa fa-plus"></i> Add Notice';
-
-loadNotices();  
-
-            submitBtn.innerHTML = `
-                <i class="fa-solid fa-paper-plane"></i>
-                Publish Notice
-            `;
+            submitBtn.disabled = false;
 
         }
 
@@ -370,140 +375,41 @@ loadNotices();
 // Edit Notice
 // ======================================
 
-function editNotice(id){
+function editNotice(id) {
 
-const notice = notices.find(n => n.id == id);
+    const notice = notices.find(n => n.id === id);
 
-if(!notice) return;
+    if (!notice) return;
 
-editNoticeId = id;
+    editNoticeId = id;
 
-document.getElementById("title").value = notice.title;
+    document.getElementById("title").value = notice.title || "";
 
-document.getElementById("description").value = notice.description;
+    document.getElementById("description").value = notice.description || "";
 
-document.getElementById("important").checked = notice.important;
+    document.getElementById("category").value =
+        notice.category || "সাধারণ";
 
-document.getElementById("pinned").checked = notice.pinned;
+    document.getElementById("important").checked =
+        notice.important || false;
 
-document.getElementById("submitBtn").innerHTML =
-'<i class="fa fa-save"></i> Update Notice';
+    document.getElementById("pinned").checked =
+        notice.pinned || false;
 
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
+    document.getElementById("submitBtn").innerHTML = `
+        <i class="fa-solid fa-floppy-disk"></i>
+        Update Notice
+    `;
 
-}  
-// ======================================
-// Delete Notice
-// ======================================
-
-async function deleteNotice(id) {
-
-    const confirmDelete = confirm(
-        "আপনি কি নিশ্চিত এই Notice Delete করতে চান?"
-    );
-
-    if (!confirmDelete) return;
-
-    // Find Notice
-    const notice = notices.find(n => n.id == id);
-
-    if (!notice) {
-
-        alert("Notice পাওয়া যায়নি!");
-
-        return;
-
-    }
-
-    // Delete Image From Storage
-    if (notice.image_url) {
-
-        try {
-
-            const imagePath = decodeURIComponent(
-                notice.image_url.split("/notice-images/")[1]
-            );
-
-            await window.supabaseClient.storage
-                .from("notice-images")
-                .remove([imagePath]);
-
-        } catch (e) {
-
-            console.log("Image Delete Skip");
-
-        }
-
-    }
-
-    // Delete PDF From Storage
-    if (notice.pdf_url) {
-
-        try {
-
-            const pdfPath = decodeURIComponent(
-                notice.pdf_url.split("/notice-pdf/")[1]
-            );
-
-            await window.supabaseClient.storage
-                .from("notice-pdf")
-                .remove([pdfPath]);
-
-        } catch (e) {
-
-            console.log("PDF Delete Skip");
-
-        }
-
-    }
-
-    // Delete Database Row
-    const { error } = await window.supabaseClient
-
-        .from("notices")
-
-        .delete()
-
-        .eq("id", id);
-
-    if (error) {
-
-        alert("❌ " + error.message);
-
-        return;
-
-    }
-
-    alert("🗑️ Notice Deleted Successfully");
-
-    loadNotices();
-
-}
-// ======================================
-// Live Search
-// ======================================
-
-const searchBox = document.getElementById("searchNotice");
-
-if (searchBox) {
-
-    searchBox.addEventListener("input", function () {
-
-        const keyword = this.value.toLowerCase();
-
-        const filtered = notices.filter(notice => {
-
-            return notice.title
-                .toLowerCase()
-                .includes(keyword);
-
-        });
-
-        renderNoticeTable(filtered);
-
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
     });
 
 }
+
+
+
+
+
+
