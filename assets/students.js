@@ -1,5 +1,5 @@
 // ======================================
-// STUDENT MANAGEMENT V2
+// STUDENT MANAGEMENT V3 - PART 1
 // ======================================
 
 let students = [];
@@ -15,25 +15,20 @@ async function checkLogin() {
 
     if (error) {
         console.error(error);
+        alert(error.message);
         return;
     }
 
     if (!data.session) {
-
         alert("Please login first");
-
         window.location.href = "login.html";
-
         return;
-
     }
 
-    loadStudents();
-
+    await loadStudents();
 }
 
 checkLogin();
-
 
 // ======================================
 // LOAD STUDENTS
@@ -41,129 +36,112 @@ checkLogin();
 
 async function loadStudents() {
 
+    const table = document.getElementById("studentTable");
+
+    if (table) {
+        table.innerHTML = `
+        <tr>
+            <td colspan="7" class="text-center">
+                Loading Students...
+            </td>
+        </tr>`;
+    }
+
     const { data, error } =
         await window.supabaseClient
-        .from("students")
-        .select("*")
-        .order("created_at", { ascending:false });
+            .from("students")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-    if(error){
+    if (error) {
 
         console.error(error);
 
-        alert(error.message);
+        if (table) {
+            table.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-danger text-center">
+                    ${error.message}
+                </td>
+            </tr>`;
+        }
 
         return;
-
     }
 
     students = data || [];
 
-    document.getElementById("totalStudents").innerText =
-        students.length;
+    const total = document.getElementById("totalStudents");
+
+    if (total) {
+        total.innerText = students.length;
+    }
 
     renderStudentTable(students);
-
 }
-
 
 // ======================================
 // RENDER TABLE
 // ======================================
 
-function renderStudentTable(list){
+function renderStudentTable(list) {
 
-    const table =
-    document.getElementById("studentTable");
+    const table = document.getElementById("studentTable");
+
+    if (!table) return;
 
     table.innerHTML = "";
 
-    if(list.length===0){
+    if (list.length === 0) {
 
         table.innerHTML = `
         <tr>
             <td colspan="7" class="text-center">
                 No Students Found
             </td>
-        </tr>
-        `;
+        </tr>`;
 
         return;
-
     }
 
-    list.forEach(student=>{
+    list.forEach(student => {
 
         table.innerHTML += `
 
 <tr>
 
 <td>
-
 <img
-src="${student.photo_url || 'https://placehold.co/60x60?text=Photo'}"
-class="student-photo">
-
+src="${student.photo_url || "https://placehold.co/60x60?text=Photo"}"
+style="width:60px;height:60px;border-radius:50%;object-fit:cover;">
 </td>
 
-<td>
+<td>${student.student_id || "-"}</td>
 
-${student.student_id || "-"}
+<td>${student.full_name || "-"}</td>
 
-</td>
+<td>${student.class || "-"}</td>
 
-<td>
-
-${student.full_name}
-
-</td>
+<td>${student.mobile || "-"}</td>
 
 <td>
-
-${student.class || "-"}
-
-</td>
-
-<td>
-
-${student.mobile || "-"}
-
-</td>
-
-<td>
-
-<span class="badge bg-${student.status==="Approved"?"success":student.status==="Rejected"?"danger":"warning"}">
-
+<span class="badge bg-warning">
 ${student.status || "Pending"}
-
 </span>
-
 </td>
 
 <td>
 
-<button
-class="btn btn-info btn-sm"
-onclick="viewStudent('${student.id}')">
-
-<i class="fa fa-eye"></i>
-
+<button class="btn btn-info btn-sm" disabled>
+👁
 </button>
 
-<button
-class="btn btn-warning btn-sm"
-onclick="editStudent('${student.id}')">
-
-<i class="fa fa-edit"></i>
-
+<button class="btn btn-warning btn-sm" disabled>
+✏️
 </button>
 
-<button
-class="btn btn-danger btn-sm"
-onclick="deleteStudent('${student.id}')">
-
-<i class="fa fa-trash"></i>
-
+<button class="btn btn-danger btn-sm" disabled>
+🗑
 </button>
 
 </td>
@@ -174,162 +152,17 @@ onclick="deleteStudent('${student.id}')">
 
     });
 
-}
-// ======================================
-// LIVE SEARCH
-// ======================================
+} 
 
-const searchStudent =
-document.getElementById("searchStudent");
 
-if(searchStudent){
 
-searchStudent.addEventListener("input", function(){
 
-    const keyword =
-    this.value.toLowerCase();
 
-    const classValue =
-    document.getElementById("classFilter").value;
 
-    const filtered = students.filter(student=>{
 
-        const matchSearch =
 
-            (student.full_name || "")
-            .toLowerCase()
-            .includes(keyword)
 
-            ||
 
-            (student.student_id || "")
-            .toLowerCase()
-            .includes(keyword)
 
-            ||
 
-            (student.mobile || "")
-            .toLowerCase()
-            .includes(keyword);
-
-        const matchClass =
-
-            classValue === ""
-
-            ||
-
-            student.class === classValue;
-
-        return matchSearch && matchClass;
-
-    });
-
-    renderStudentTable(filtered);
-
-});
-
-}
-// ======================================
-// CLASS FILTER
-// ======================================
-
-const classFilter =
-document.getElementById("classFilter");
-
-if(classFilter){
-
-classFilter.addEventListener("change", function(){
-
-    const classValue =
-    this.value;
-
-    const keyword =
-    document
-    .getElementById("searchStudent")
-    .value
-    .toLowerCase();
-
-    const filtered = students.filter(student=>{
-
-        const matchSearch =
-
-            (student.full_name || "")
-            .toLowerCase()
-            .includes(keyword)
-
-            ||
-
-            (student.student_id || "")
-            .toLowerCase()
-            .includes(keyword)
-
-            ||
-
-            (student.mobile || "")
-            .toLowerCase()
-            .includes(keyword);
-
-        const matchClass =
-
-            classValue === ""
-
-            ||
-
-            student.class === classValue;
-
-        return matchSearch && matchClass;
-
-    });
-
-    renderStudentTable(filtered);
-
-});
-
-}
-// ======================================
-// VIEW STUDENT
-// ======================================
-function viewStudent(id) {
-    alert("View
-          }
-// ======================================
-// EDIT STUDENT
-// ======================================
-
-function editStudent(id){
-
-    window.location.href =
-    "index.html?edit=" + id;
-
-}
-// ======================================
-// DELETE STUDENT
-// ======================================
-
-async function deleteStudent(id){
-
-    const ok = confirm("এই শিক্ষার্থীকে Delete করতে চান?");
-
-    if(!ok) return;
-
-    const { error } =
-    await window.supabaseClient
-    .from("students")
-    .delete()
-    .eq("id", id);
-
-    if(error){
-
-        alert(error.message);
-
-        return;
-
-    }
-
-    alert("✅ Student Deleted Successfully");
-
-    loadStudents();
-
-}
-console.log("students.js loaded");
 
