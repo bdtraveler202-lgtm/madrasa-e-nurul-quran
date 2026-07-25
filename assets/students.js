@@ -144,7 +144,7 @@ ${student.status || "Pending"}
 
 <button
 class="btn btn-info btn-sm"
-disabled>
+onclick="viewStudent('${student.id}')">
 
 <i class="fa fa-eye"></i>
 
@@ -152,7 +152,7 @@ disabled>
 
 <button
 class="btn btn-warning btn-sm"
-disabled>
+onclick="editStudent('${student.id}')">
 
 <i class="fa fa-edit"></i>
 
@@ -160,7 +160,7 @@ disabled>
 
 <button
 class="btn btn-danger btn-sm"
-disabled>
+onclick="deleteStudent('${student.id}')">
 
 <i class="fa fa-trash"></i>
 
@@ -286,3 +286,54 @@ classFilter.addEventListener("change", function(){
 });
 
 }
+// ======================================
+// VIEW STUDENT
+// ======================================
+
+function viewStudent(id){
+
+    window.location.href =
+    "student-profile.html?id=" + id;
+
+} 
+// ======================================
+// EDIT STUDENT
+// ======================================
+
+function editStudent(id){
+
+    window.location.href =
+    "index.html?edit=" + id;
+
+}
+// ======================================
+// DELETE STUDENT
+// ======================================
+
+async function deleteStudent(id){
+
+    const ok = confirm("এই শিক্ষার্থীকে Delete করতে চান?");
+
+    if(!ok) return;
+
+    const { error } =
+    await window.supabaseClient
+    .from("students")
+    .delete()
+    .eq("id", id);
+
+    if(error){
+
+        alert(error.message);
+
+        return;
+
+    }
+
+    alert("✅ Student Deleted Successfully");
+
+    loadStudents();
+
+}
+
+
