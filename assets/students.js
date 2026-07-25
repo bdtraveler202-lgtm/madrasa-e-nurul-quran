@@ -289,13 +289,9 @@ classFilter.addEventListener("change", function(){
 // ======================================
 // VIEW STUDENT
 // ======================================
-
-function viewStudent(id){
-
-    window.location.href =
-    "student-profile.html?id=" + id;
-
-} 
+function viewStudent(id) {
+    alert("View
+          }
 // ======================================
 // EDIT STUDENT
 // ======================================
@@ -335,5 +331,5 @@ async function deleteStudent(id){
     loadStudents();
 
 }
-
+console.log("students.js loaded");
 
