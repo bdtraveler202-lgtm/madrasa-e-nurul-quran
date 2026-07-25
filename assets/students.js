@@ -132,15 +132,21 @@ ${student.status || "Pending"}
 
 <td>
 
-<button class="btn btn-info btn-sm" disabled>
+<button
+class="btn btn-info btn-sm"
+onclick="viewStudent(${student.id})">
 👁
 </button>
 
-<button class="btn btn-warning btn-sm" disabled>
+<button
+class="btn btn-warning btn-sm"
+onclick="editStudent(${student.id})">
 ✏️
 </button>
 
-<button class="btn btn-danger btn-sm" disabled>
+<button
+class="btn btn-danger btn-sm"
+onclick="deleteStudent(${student.id})">
 🗑
 </button>
 
@@ -153,8 +159,130 @@ ${student.status || "Pending"}
     });
 
 } 
+// ======================================
+// SEARCH STUDENT
+// ======================================
 
+const searchStudent = document.getElementById("searchStudent");
 
+if (searchStudent) {
+
+    searchStudent.addEventListener("input", filterStudents);
+
+}
+
+// ======================================
+// CLASS FILTER
+// ======================================
+
+const classFilter = document.getElementById("classFilter");
+
+if (classFilter) {
+
+    classFilter.addEventListener("change", filterStudents);
+
+}
+
+// ======================================
+// FILTER FUNCTION
+// ======================================
+
+function filterStudents() {
+
+    const keyword =
+        (document.getElementById("searchStudent")?.value || "")
+        .toLowerCase();
+
+    const classValue =
+        document.getElementById("classFilter")?.value || "";
+
+    const filtered = students.filter(student => {
+
+        const matchSearch =
+
+            (student.full_name || "")
+            .toLowerCase()
+            .includes(keyword)
+
+            ||
+
+            (student.student_id || "")
+            .toLowerCase()
+            .includes(keyword)
+
+            ||
+
+            (student.mobile || "")
+            .toLowerCase()
+            .includes(keyword);
+
+        const matchClass =
+
+            classValue === ""
+
+            ||
+
+            student.class === classValue;
+
+        return matchSearch && matchClass;
+
+    });
+
+    renderStudentTable(filtered);
+
+}
+// ======================================
+// VIEW STUDENT
+// ======================================
+
+window.viewStudent = function(id){
+
+    window.location.href =
+    "student-profile.html?id=" + id;
+
+};
+
+// ======================================
+// EDIT STUDENT
+// ======================================
+
+window.editStudent = function(id){
+
+    window.location.href =
+    "index.html?edit=" + id;
+
+};
+
+// ======================================
+// DELETE STUDENT
+// ======================================
+
+window.deleteStudent = async function(id){
+
+    const ok =
+    confirm("এই শিক্ষার্থীকে Delete করতে চান?");
+
+    if(!ok) return;
+
+    const { error } =
+    await window.supabaseClient
+    .from("students")
+    .delete()
+    .eq("id", id);
+
+    if(error){
+
+        alert(error.message);
+
+        return;
+
+    }
+
+    alert("✅ Student Deleted Successfully");
+
+    loadStudents();
+
+};
 
 
 
