@@ -229,3 +229,60 @@ searchStudent.addEventListener("input", function(){
 });
 
 }
+// ======================================
+// CLASS FILTER
+// ======================================
+
+const classFilter =
+document.getElementById("classFilter");
+
+if(classFilter){
+
+classFilter.addEventListener("change", function(){
+
+    const classValue =
+    this.value;
+
+    const keyword =
+    document
+    .getElementById("searchStudent")
+    .value
+    .toLowerCase();
+
+    const filtered = students.filter(student=>{
+
+        const matchSearch =
+
+            (student.full_name || "")
+            .toLowerCase()
+            .includes(keyword)
+
+            ||
+
+            (student.student_id || "")
+            .toLowerCase()
+            .includes(keyword)
+
+            ||
+
+            (student.mobile || "")
+            .toLowerCase()
+            .includes(keyword);
+
+        const matchClass =
+
+            classValue === ""
+
+            ||
+
+            student.class === classValue;
+
+        return matchSearch && matchClass;
+
+    });
+
+    renderStudentTable(filtered);
+
+});
+
+}
