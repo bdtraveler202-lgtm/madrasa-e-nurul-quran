@@ -1,43 +1,89 @@
+// ======================================
+// STUDENT MANAGEMENT V2
+// ======================================
+
 let students = [];
 
-// ===============================
-// Load Students
-// ===============================
+// ======================================
+// LOGIN CHECK
+// ======================================
+
+async function checkLogin() {
+
+    const { data, error } =
+        await window.supabaseClient.auth.getSession();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    if (!data.session) {
+
+        alert("Please login first");
+
+        window.location.href = "login.html";
+
+        return;
+
+    }
+
+    loadStudents();
+
+}
+
+checkLogin();
+
+
+// ======================================
+// LOAD STUDENTS
+// ======================================
 
 async function loadStudents() {
 
-    const { data, error } = await window.supabaseClient
+    const { data, error } =
+        await window.supabaseClient
         .from("students")
         .select("*")
-        .order("id", { ascending: true });
+        .order("created_at", { ascending:false });
 
-    if (error) {
+    if(error){
+
         console.error(error);
-        alert("ডেটা লোড করা যায়নি!");
+
+        alert(error.message);
+
         return;
+
     }
 
-    students = data;
-    renderStudents(students);
+    students = data || [];
+
+    document.getElementById("totalStudents").innerText =
+        students.length;
+
+    renderStudentTable(students);
 
 }
 
-// ===============================
-// Render Table
-// ===============================
 
-function renderStudents(list) {
+// ======================================
+// RENDER TABLE
+// ======================================
 
-    const table = document.getElementById("studentTable");
+function renderStudentTable(list){
+
+    const table =
+    document.getElementById("studentTable");
 
     table.innerHTML = "";
 
-    if (list.length === 0) {
+    if(list.length===0){
 
         table.innerHTML = `
         <tr>
-            <td colspan="9" class="text-center">
-                কোনো শিক্ষার্থী পাওয়া যায়নি
+            <td colspan="7" class="text-center">
+                No Students Found
             </td>
         </tr>
         `;
@@ -46,223 +92,86 @@ function renderStudents(list) {
 
     }
 
-    list.forEach(student => {
-
-        const photo = student.photo
-            ? student.photo
-            : "https://placehold.co/60x60?text=No+Photo";
+    list.forEach(student=>{
 
         table.innerHTML += `
 
-        <tr>
+<tr>
 
-            <td>${student.id}</td>
+<td>
 
-            <td>
+<img
+src="${student.photo_url || 'https://placehold.co/60x60?text=Photo'}"
+class="student-photo">
 
-                <img
-                    src="${photo}"
-                    width="60"
-                    height="60"
-                    style="
-                        object-fit:cover;
-                        border-radius:50%;
-                        border:2px solid #198754;
-                    ">
+</td>
 
-            </td>
+<td>
 
-            <td>${student.full_name}</td>
+${student.student_id || "-"}
 
-            <td>${student.father_name}</td>
+</td>
 
-            <td>${student.mother_name}</td>
+<td>
 
-            <td>${student.mobile}</td>
+${student.full_name}
 
-            <td>${student.class}</td>
+</td>
 
-            <td>${student.address}</td>
+<td>
 
-            <td>
+${student.class || "-"}
 
-                <button
-                    class="btn btn-primary btn-sm"
-                    onclick="editStudent(${student.id})">
+</td>
 
-                    <i class="fa-solid fa-pen"></i>
+<td>
 
-                    Edit
+${student.mobile || "-"}
 
-                </button>
+</td>
 
-                <button
-                    class="btn btn-danger btn-sm ms-2"
-                    onclick="deleteStudent(${student.id})">
+<td>
 
-                    <i class="fa-solid fa-trash"></i>
+<span class="badge bg-${student.status==="Approved"?"success":student.status==="Rejected"?"danger":"warning"}">
 
-                    Delete
+${student.status || "Pending"}
 
-                </button>
+</span>
 
-            </td>
+</td>
 
-        </tr>
+<td>
 
-        `;
+<button
+class="btn btn-info btn-sm"
+disabled>
 
-    });
+<i class="fa fa-eye"></i>
 
-}
+</button>
 
-// ===============================
-// Search & Filter
-// ===============================
+<button
+class="btn btn-warning btn-sm"
+disabled>
 
-function filterStudents() {
+<i class="fa fa-edit"></i>
 
-    const search = document
-        .getElementById("searchInput")
-        .value
-        .toLowerCase();
+</button>
 
-    const selectedClass = document
-        .getElementById("classFilter")
-        .value;
+<button
+class="btn btn-danger btn-sm"
+disabled>
 
-    const filtered = students.filter(student => {
+<i class="fa fa-trash"></i>
 
-        const matchName = student.full_name
-            .toLowerCase()
-            .includes(search);
+</button>
 
-        const matchClass =
-            selectedClass === "" ||
-            student.class === selectedClass;
+</td>
 
-        return matchName && matchClass;
+</tr>
+
+`;
 
     });
 
-    renderStudents(filtered);
-
 }
-
-document
-    .getElementById("searchInput")
-    .addEventListener("input", filterStudents);
-
-document
-    .getElementById("classFilter")
-    .addEventListener("change", filterStudents);
-
-// ===============================
-// Delete Student
-// ===============================
-
-async function deleteStudent(id) {
-
-    if (!confirm("আপনি কি এই শিক্ষার্থীকে Delete করতে চান?")) {
-        return;
-    }
-
-    const { error } = await window.supabaseClient
-        .from("students")
-        .delete()
-        .eq("id", id);
-
-    if (error) {
-
-        console.error(error);
-
-        alert("Delete করা যায়নি!");
-
-        return;
-
-    }
-
-    alert("✅ শিক্ষার্থী সফলভাবে Delete হয়েছে");
-
-    loadStudents();
-
-}
-
-// ===============================
-// Edit Student
-// ===============================
-
-async function editStudent(id) {
-
-    const student = students.find(s => s.id == id);
-
-    if (!student) return;
-
-    document.getElementById("edit_id").value = student.id;
-    document.getElementById("edit_name").value = student.full_name;
-    document.getElementById("edit_father").value = student.father_name;
-    document.getElementById("edit_mother").value = student.mother_name;
-    document.getElementById("edit_mobile").value = student.mobile;
-    document.getElementById("edit_class").value = student.class;
-    document.getElementById("edit_address").value = student.address;
-
-    const modal = new bootstrap.Modal(
-        document.getElementById("editModal")
-    );
-
-    modal.show();
-
-}
-
-// ===============================
-// Save Student
-// ===============================
-
-async function saveStudent() {
-
-    const id = document.getElementById("edit_id").value;
-
-    const { error } = await window.supabaseClient
-        .from("students")
-        .update({
-
-            full_name: document.getElementById("edit_name").value,
-
-            father_name: document.getElementById("edit_father").value,
-
-            mother_name: document.getElementById("edit_mother").value,
-
-            mobile: document.getElementById("edit_mobile").value,
-
-            class: document.getElementById("edit_class").value,
-
-            address: document.getElementById("edit_address").value
-
-        })
-        .eq("id", id);
-
-    if (error) {
-
-        console.error(error);
-
-        alert("Update করা যায়নি!");
-
-        return;
-
-    }
-
-    bootstrap.Modal
-        .getInstance(document.getElementById("editModal"))
-        .hide();
-
-    alert("✅ তথ্য সফলভাবে Update হয়েছে");
-
-    loadStudents();
-
-}
-
-// ===============================
-// Start
-// ===============================
-
-loadStudents();
