@@ -9,7 +9,13 @@ let oldPhoto = "";
 
 const params = new URLSearchParams(window.location.search);
 
-editStudentId = params.get("edit");
+editStudentId = Number(params.get("edit"));
+
+if (isNaN(editStudentId)) {
+
+    editStudentId = null;
+
+} 
 
 // ======================================
 // AUTO DATE
@@ -211,7 +217,12 @@ async function loadStudentForEdit(){
 
 }
 
-loadStudentForEdit();
+window.addEventListener("DOMContentLoaded", () => {
+
+    loadStudentForEdit();
+
+}); 
+
 // ======================================
 // SAVE / UPDATE STUDENT
 // ======================================
