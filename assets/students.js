@@ -249,9 +249,9 @@ window.viewStudent = function(id){
 window.editStudent = function(id){
 
     window.location.href =
-    "index.html?edit=" + id;
+    "index.html?edit=" + id + "#admissionForm";
 
-};
+}
 
 // ======================================
 // DELETE STUDENT
