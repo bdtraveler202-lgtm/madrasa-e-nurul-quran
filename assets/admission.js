@@ -220,7 +220,14 @@ async function loadStudentForEdit(){
 window.addEventListener("DOMContentLoaded", () => {
 
     loadStudentForEdit();
+const { data, error } =
+await window.supabaseClient
+.from("students")
+.select("*")
+.eq("id", editStudentId)
+.single();
 
+alert(JSON.stringify(data));
 }); 
 
 // ======================================
