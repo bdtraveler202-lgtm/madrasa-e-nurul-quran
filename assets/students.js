@@ -243,15 +243,14 @@ window.viewStudent = function(id){
 };
 
 // ======================================
-// EDIT STUDENT
+// EDIT STUDENT (TEMP DISABLED)
 // ======================================
 
 window.editStudent = function(id){
 
-    window.location.href =
-    "index.html?edit=" + id + "#admissionForm";
+    alert("⚠️ Edit Module সাময়িকভাবে বন্ধ রাখা হয়েছে।");
 
-}
+};
 
 // ======================================
 // DELETE STUDENT
