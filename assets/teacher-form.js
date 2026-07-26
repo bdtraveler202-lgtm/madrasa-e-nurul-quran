@@ -85,18 +85,8 @@ teacherForm.addEventListener("submit",async function(e){
 
     try{
 
-        let photo_url = "";
-
-        const photo =
-        document.getElementById("teacher_photo").files[0];
-
-        if(photo){
-
-            photo_url =
-            await uploadTeacherPhoto(photo);
-
-        }
-
+        let photo_url = ""; 
+        
         const { error } =
         await window.supabaseClient
         .from("teachers")
