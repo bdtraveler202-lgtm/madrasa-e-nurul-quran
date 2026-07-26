@@ -134,7 +134,7 @@ async function uploadStudentPhoto(file){
 // ======================================
 
 async function loadStudentForEdit(){
-
+console.log("Edit ID =", editStudentId);
     if(!editStudentId) return;
 
     const { data,error } =
@@ -143,7 +143,9 @@ async function loadStudentForEdit(){
     .select("*")
     .eq("id",editStudentId)
     .single();
+console.log(data);
 
+console.log(error);
     if(error){
 
         alert(error.message);
@@ -220,15 +222,8 @@ async function loadStudentForEdit(){
 window.addEventListener("DOMContentLoaded", () => {
 
     loadStudentForEdit();
-const { data, error } =
-await window.supabaseClient
-.from("students")
-.select("*")
-.eq("id", editStudentId)
-.single();
 
-alert(JSON.stringify(data));
-}); 
+});
 
 // ======================================
 // SAVE / UPDATE STUDENT
