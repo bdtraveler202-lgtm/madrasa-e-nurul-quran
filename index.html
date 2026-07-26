@@ -1006,6 +1006,134 @@ class="btn btn-secondary btn-lg px-5 ms-2">
 </div>
 
 </section>   
+
+<form id="teacherForm">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">শিক্ষকের নাম</label>
+
+<input
+type="text"
+id="teacher_name"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">পদবি</label>
+
+<input
+type="text"
+id="designation"
+class="form-control"
+placeholder="সহকারী শিক্ষক">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">মোবাইল</label>
+
+<input
+type="text"
+id="teacher_mobile"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">ইমেইল</label>
+
+<input
+type="email"
+id="teacher_email"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">যোগ্যতা</label>
+
+<input
+type="text"
+id="qualification"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">স্ট্যাটাস</label>
+
+<select
+id="teacher_status"
+class="form-select">
+
+<option value="Active">Active</option>
+
+<option value="Inactive">Inactive</option>
+
+</select>
+
+</div>
+
+<div class="col-12 mb-3">
+
+<label class="form-label">ঠিকানা</label>
+
+<textarea
+id="teacher_address"
+class="form-control"
+rows="3"></textarea>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">ছবি</label>
+
+<input
+type="file"
+id="teacher_photo"
+class="form-control"
+accept="image/*">
+
+</div>
+
+<div class="col-md-6 mb-3 text-center">
+
+<img
+id="teacherPreview"
+src="https://placehold.co/180x180?text=Teacher"
+class="img-thumbnail"
+style="max-height:180px;object-fit:cover;">
+
+</div>
+
+</div>
+
+<button
+type="submit"
+class="btn btn-success"
+id="teacherSubmit">
+
+<i class="fa fa-save"></i>
+
+Save Teacher
+
+</button>
+
+</form>
+
+    
 <!--=========================
 CONTACT
 ==========================-->
