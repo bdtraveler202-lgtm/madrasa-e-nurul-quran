@@ -529,7 +529,129 @@ class="gallery-img">
 `;
 
 }
+// ======================================
+// CONTACT SECTION
+// ======================================
 
+function loadContact(){
+
+document.getElementById("contact").innerHTML=`
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="row">
+
+<div class="col-lg-6">
+
+<h2 class="section-title">
+
+যোগাযোগ করুন
+
+</h2>
+
+<div class="contact-box">
+
+<p>
+
+<i class="fa-solid fa-location-dot text-success"></i>
+
+<strong>ঠিকানা:</strong><br>
+
+ভল্লভপুর, দিঘুলী, চন্দ্রগঞ্জ, লক্ষ্মীপুর
+
+</p>
+
+<hr>
+
+<p>
+
+<i class="fa-solid fa-phone text-success"></i>
+
+<strong>মোবাইল:</strong><br>
+
++8801XXXXXXXXX
+
+</p>
+
+<hr>
+
+<p>
+
+<i class="fa-solid fa-envelope text-success"></i>
+
+<strong>Email:</strong><br>
+
+info@madrasa.com
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<iframe
+
+src="https://maps.google.com/maps?q=Lakshmipur&t=&z=13&ie=UTF8&iwloc=&output=embed"
+
+width="100%"
+
+height="350"
+
+style="border:0;border-radius:15px;"
+
+loading="lazy">
+
+</iframe>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+`;
+
+}
+
+// ======================================
+// FOOTER
+// ======================================
+
+function loadFooter(){
+
+document.getElementById("footer").innerHTML=`
+
+<div class="container text-center">
+
+<h5 class="mb-3">
+
+🕌 মাদরাসায়ে নূরুল কুরআন
+
+</h5>
+
+<p>
+
+© 2026 All Rights Reserved.
+
+</p>
+
+<p>
+
+Developed by MZN Graphics Hub
+
+</p>
+
+</div>
+
+`;
+
+}
 
 
 
