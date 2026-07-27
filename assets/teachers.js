@@ -352,12 +352,6 @@ btn.innerText="Saving...";
 
 try{
 
-const photo=
-document.getElementById("teacher_photo").files[0];
-
-const photo_url=
-await uploadTeacherPhoto(photo);
-
 const {error}=await window.supabaseClient
 .from("teachers")
 .insert([{
