@@ -314,7 +314,91 @@ Cancel
 `;
 
 }); 
+// ======================================
+// SAVE TEACHER
+// ======================================
 
+async function uploadTeacherPhoto(file){
+
+if(!file) return "";
+
+const fileName=
+Date.now()+"_"+file.name.replace(/\s+/g,"_");
+
+const {error}=await window.supabaseClient.storage
+.from("teacher-images")
+.upload(fileName,file,{upsert:true});
+
+if(error) throw error;
+
+const {data}=window.supabaseClient.storage
+.from("teacher-images")
+.getPublicUrl(fileName);
+
+return data.publicUrl;
+
+}
+
+document.addEventListener("submit",async function(e){
+
+if(e.target.id!=="teacherForm") return;
+
+e.preventDefault();
+
+const btn=e.target.querySelector("button");
+
+btn.disabled=true;
+btn.innerText="Saving...";
+
+try{
+
+const photo=
+document.getElementById("teacher_photo").files[0];
+
+const photo_url=
+await uploadTeacherPhoto(photo);
+
+const {error}=await window.supabaseClient
+.from("teachers")
+.insert([{
+
+name:document.getElementById("teacher_name").value,
+
+designation:document.getElementById("designation").value,
+
+mobile:document.getElementById("mobile").value,
+
+status:document.getElementById("status").value,
+
+photo_url
+
+}]);
+
+btn.disabled=false;
+btn.innerText="Save Teacher";
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+alert("✅ Teacher Added Successfully");
+
+loadTeacherPage();
+
+}catch(err){
+
+btn.disabled=false;
+btn.innerText="Save Teacher";
+
+alert(err.message);
+
+}
+
+});
 
 
 
