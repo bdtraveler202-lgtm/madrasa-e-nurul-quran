@@ -1,5 +1,5 @@
 // ======================================
-// ADMIN DASHBOARD V1
+// ADMIN DASHBOARD V2
 // ======================================
 
 async function checkLogin(){
@@ -30,65 +30,59 @@ loadDashboard();
 checkLogin();
 
 // ======================================
-// DASHBOARD
+// LOAD DASHBOARD
 // ======================================
 
 async function loadDashboard(){
 
-// Total Students
+// Students
 
 const { count:students } =
 await window.supabaseClient
 .from("students")
-.select("*",{
-count:"exact",
-head:true
-});
+.select("*",{count:"exact",head:true});
 
-document.getElementById("totalStudents").innerText=
+document.getElementById("totalStudents").innerText =
 students || 0;
 
 
-// Total Teachers
+// Teachers
 
 const { count:teachers } =
 await window.supabaseClient
 .from("teachers")
-.select("*",{
-count:"exact",
-head:true
-});
+.select("*",{count:"exact",head:true});
 
-document.getElementById("totalTeachers").innerText=
+document.getElementById("totalTeachers").innerText =
 teachers || 0;
 
 
-// Total Donation
+// Donation
 
 const { data:donation } =
 await window.supabaseClient
 .from("donations")
 .select("amount");
 
-let donationTotal=0;
+let donationTotal = 0;
 
 if(donation){
 
 donation.forEach(item=>{
 
-donationTotal+=Number(item.amount||0);
+donationTotal += Number(item.amount || 0);
 
 });
 
 }
 
-document.getElementById("totalDonation").innerText=
+document.getElementById("totalDonation").innerText =
 donationTotal;
 
 
 // Today Income
 
-const today=
+const today =
 new Date().toISOString().split("T")[0];
 
 const { data:income } =
@@ -97,19 +91,19 @@ await window.supabaseClient
 .select("amount,date")
 .eq("date",today);
 
-let todayIncome=0;
+let todayIncome = 0;
 
 if(income){
 
 income.forEach(item=>{
 
-todayIncome+=Number(item.amount||0);
+todayIncome += Number(item.amount || 0);
 
 });
 
 }
 
-document.getElementById("todayIncome").innerText=
+document.getElementById("todayIncome").innerText =
 todayIncome;
 
 }
@@ -118,7 +112,7 @@ todayIncome;
 // LOGOUT
 // ======================================
 
-const logoutBtn=
+const logoutBtn =
 document.getElementById("logoutBtn");
 
 if(logoutBtn){
@@ -132,80 +126,3 @@ window.location.href="login.html";
 });
 
 }
-// ======================================
-// LOAD MODULES
-// ======================================
-
-const contentArea = document.getElementById("contentArea");
-
-// ======================================
-// STUDENT ADMISSION
-// ======================================
-
-document
-.getElementById("menuAdmission")
-.addEventListener("click", function(e){
-
-e.preventDefault();
-
-contentArea.innerHTML = `
-
-<h2 class="mb-4">
-
-🎓 Student Admission
-
-</h2>
-
-<div class="card shadow">
-
-<div class="card-body">
-
-<p class="text-muted">
-
-Student Admission Form এখানে থাকবে।
-
-</p>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-// ======================================
-// STUDENT LIST
-// ======================================
-
-document
-.getElementById("menuStudents")
-.addEventListener("click", function(e){
-
-e.preventDefault();
-
-contentArea.innerHTML = `
-
-<h2 class="mb-4">
-
-📋 Student List
-
-</h2>
-
-<div class="card shadow">
-
-<div class="card-body">
-
-<p class="text-muted">
-
-Student List এখানে দেখানো হবে।
-
-</p>
-
-</div>
-
-</div>
-
-`;
-
-});
