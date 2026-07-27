@@ -1,1 +1,184 @@
+<!DOCTYPE html>
+<html lang="bn">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-success">
+
+<div class="container-fluid">
+
+<span class="navbar-brand">
+
+🕌 Madrasa Admin Dashboard
+
+</span>
+
+<button
+class="btn btn-light"
+id="logoutBtn">
+
+Logout
+
+</button>
+
+</div>
+
+</nav>
+
+<div class="container-fluid">
+
+<div class="row">
+
+<!-- Sidebar -->
+
+<div class="col-lg-3 col-xl-2 bg-dark text-white min-vh-100 p-3">
+
+<h4 class="mb-4">
+
+Menu
+
+</h4>
+
+<div class="list-group">
+
+<a href="#" class="list-group-item list-group-item-action">
+🏠 Dashboard
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+🎓 Student Admission
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+📋 Student List
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+👨‍🏫 Teacher List
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+📰 Notice
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+🖼 Gallery
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+📅 Attendance
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+📝 Result
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+💰 Donation
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+💸 Income & Expense
+</a>
+
+<a href="#" class="list-group-item list-group-item-action">
+⚙ Settings
+</a>
+
+</div>
+
+</div>
+
+<!-- Main -->
+
+<div class="col-lg-9 col-xl-10 p-4">
+
+<h2 class="mb-4">
+
+Dashboard
+
+</h2>
+
+<div class="row g-4">
+
+<div class="col-md-3">
+
+<div class="dashboard-card bg-blue">
+
+<h5>Total Students</h5>
+
+<h2 id="totalStudents">0</h2>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="dashboard-card bg-green">
+
+<h5>Total Teachers</h5>
+
+<h2 id="totalTeachers">0</h2>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="dashboard-card bg-orange">
+
+<h5>Total Donation</h5>
+
+<h2 id="totalDonation">0</h2>
+
+</div>
+
+</div>
+
+<div class="col-md-3">
+
+<div class="dashboard-card bg-red">
+
+<h5>Today's Income</h5>
+
+<h2 id="todayIncome">0</h2>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="assets/supabase.js"></script>
+
+<script src="assets/admin.js"></script>
+
+</body>
+
+</html>
