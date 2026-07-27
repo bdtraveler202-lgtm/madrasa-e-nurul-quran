@@ -196,3 +196,126 @@ Delete
 });
 
 }
+// ======================================
+// ADD TEACHER FORM
+// ======================================
+
+document.addEventListener("click",function(e){
+
+if(e.target.id!=="addTeacher") return;
+
+document.getElementById("contentArea").innerHTML=`
+
+<h2 class="mb-4">
+
+👨‍🏫 Add Teacher
+
+</h2>
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<form id="teacherForm">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>Teacher Name</label>
+
+<input
+type="text"
+id="teacher_name"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Designation</label>
+
+<input
+type="text"
+id="designation"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Mobile</label>
+
+<input
+type="text"
+id="mobile"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Status</label>
+
+<select
+id="status"
+class="form-select">
+
+<option>Active</option>
+
+<option>Inactive</option>
+
+</select>
+
+</div>
+
+<div class="col-md-12 mb-3">
+
+<label>Photo</label>
+
+<input
+type="file"
+id="teacher_photo"
+class="form-control"
+accept="image/*">
+
+</div>
+
+<div class="col-12">
+
+<button
+class="btn btn-success">
+
+Save Teacher
+
+</button>
+
+<button
+type="button"
+class="btn btn-secondary ms-2"
+onclick="loadTeacherPage()">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+`;
+
+}); 
+
+
+
+
+
