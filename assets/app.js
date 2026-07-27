@@ -253,4 +253,283 @@ class="principal-img shadow">
 `;
 
 }
+// ======================================
+// LATEST NOTICE
+// ======================================
+
+function loadLatestNotice(){
+
+document.getElementById("latestNotice").innerHTML=`
+
+<section class="py-5">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+সর্বশেষ নোটিশ
+
+</h2>
+
+<p class="text-muted">
+
+মাদরাসার সর্বশেষ গুরুত্বপূর্ণ নোটিশসমূহ
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4">
+
+<div class="card h-100">
+
+<div class="card-body">
+
+<h5 class="fw-bold">
+
+📢 ভর্তি বিজ্ঞপ্তি ২০২৬
+
+</h5>
+
+<p>
+
+২০২৬ শিক্ষাবর্ষে ভর্তি কার্যক্রম শুরু হয়েছে।
+
+</p>
+
+<a href="#" class="btn btn-primary">
+
+বিস্তারিত
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card h-100">
+
+<div class="card-body">
+
+<h5 class="fw-bold">
+
+🕌 মাসিক পরীক্ষা
+
+</h5>
+
+<p>
+
+আগামী শুক্রবার মাসিক পরীক্ষা অনুষ্ঠিত হবে।
+
+</p>
+
+<a href="#" class="btn btn-primary">
+
+বিস্তারিত
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="card h-100">
+
+<div class="card-body">
+
+<h5 class="fw-bold">
+
+🎉 বার্ষিক অনুষ্ঠান
+
+</h5>
+
+<p>
+
+বার্ষিক পুরস্কার বিতরণী অনুষ্ঠান আগামী মাসে অনুষ্ঠিত হবে।
+
+</p>
+
+<a href="#" class="btn btn-primary">
+
+বিস্তারিত
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+`;
+
+}
+// ======================================
+// GALLERY SECTION
+// ======================================
+
+function loadGallery(){
+
+document.getElementById("gallery").innerHTML=`
+
+<section class="py-5 bg-light">
+
+<div class="container">
+
+<div class="text-center mb-5">
+
+<h2 class="section-title">
+
+আমাদের গ্যালারি
+
+</h2>
+
+<p class="text-muted">
+
+মাদরাসার বিভিন্ন কার্যক্রমের কিছু ছবি
+
+</p>
+
+</div>
+
+<div class="row g-4">
+
+<div class="col-lg-4 col-md-6">
+
+<div class="card">
+
+<img
+src="images/gallery1.jpg"
+class="gallery-img">
+
+<div class="card-body text-center">
+
+<h5>কুরআন ক্লাস</h5>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4 col-md-6">
+
+<div class="card">
+
+<img
+src="images/gallery2.jpg"
+class="gallery-img">
+
+<div class="card-body text-center">
+
+<h5>হিফজ বিভাগ</h5>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4 col-md-6">
+
+<div class="card">
+
+<img
+src="images/gallery3.jpg"
+class="gallery-img">
+
+<div class="card-body text-center">
+
+<h5>বার্ষিক অনুষ্ঠান</h5>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4 col-md-6">
+
+<div class="card">
+
+<img
+src="images/gallery4.jpg"
+class="gallery-img">
+
+<div class="card-body text-center">
+
+<h5>পরীক্ষা</h5>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4 col-md-6">
+
+<div class="card">
+
+<img
+src="images/gallery5.jpg"
+class="gallery-img">
+
+<div class="card-body text-center">
+
+<h5>পুরস্কার বিতরণ</h5>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-4 col-md-6">
+
+<div class="card">
+
+<img
+src="images/gallery6.jpg"
+class="gallery-img">
+
+<div class="card-body text-center">
+
+<h5>দোয়া মাহফিল</h5>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+`;
+
+}
+
+
+
 
