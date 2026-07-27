@@ -130,3 +130,54 @@ Save Student
 `;
 
 });
+// ================================
+// SAVE STUDENT
+// ================================
+
+document.addEventListener("submit", async function(e){
+
+if(e.target.id!=="admissionForm") return;
+
+e.preventDefault();
+
+const btn=document.querySelector("#admissionForm button");
+
+btn.disabled=true;
+btn.innerText="Saving...";
+
+const student={
+
+full_name:document.getElementById("full_name").value,
+
+father_name:document.getElementById("father_name").value,
+
+mother_name:document.getElementById("mother_name").value,
+
+mobile:document.getElementById("mobile").value,
+
+class:document.getElementById("student_class").value,
+
+admission_date:document.getElementById("admission_date").value
+
+};
+
+const {error}=await window.supabaseClient
+.from("students")
+.insert([student]);
+
+btn.disabled=false;
+btn.innerText="Save Student";
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+alert("✅ Student Saved");
+
+document.getElementById("admissionForm").reset();
+
+});
