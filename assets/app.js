@@ -124,3 +124,73 @@ document.getElementById("ticker").innerHTML=`
 `;
 
 }
+// ======================================
+// HERO SECTION
+// ======================================
+
+function loadHero(){
+
+document.getElementById("hero").innerHTML=`
+
+<section class="hero">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<h1>
+
+মাদরাসায়ে নূরুল কুরআন
+
+</h1>
+
+<p>
+
+বিশুদ্ধ কুরআন শিক্ষা, ইসলামিক আদর্শ ও আধুনিক শিক্ষার সমন্বয়ে একটি নির্ভরযোগ্য শিক্ষা প্রতিষ্ঠান।
+
+</p>
+
+<div class="mt-4">
+
+<a
+href="#contact"
+class="btn btn-light btn-lg">
+
+যোগাযোগ করুন
+
+</a>
+
+<a
+href="login.html"
+class="btn btn-success btn-lg ms-2">
+
+Admin Login
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-6 text-center">
+
+<img
+src="images/hero.png"
+class="img-fluid"
+style="max-height:420px;">
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+`;
+
+} 
+
+
