@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Admin Dashboard</title>
@@ -24,17 +23,11 @@
 <div class="container-fluid">
 
 <span class="navbar-brand">
-
 🕌 Madrasa Admin Dashboard
-
 </span>
 
-<button
-class="btn btn-light"
-id="logoutBtn">
-
+<button id="logoutBtn" class="btn btn-light">
 Logout
-
 </button>
 
 </div>
@@ -50,9 +43,7 @@ Logout
 <div class="col-lg-3 col-xl-2 bg-dark text-white min-vh-100 p-3">
 
 <h4 class="mb-4">
-
 Menu
-
 </h4>
 
 <div class="list-group">
@@ -69,35 +60,35 @@ Menu
 📋 Student List
 </a>
 
-<a href="#" class="list-group-item list-group-item-action">
+<a href="#" id="menuTeachers" class="list-group-item list-group-item-action">
 👨‍🏫 Teacher List
 </a>
 
-<a href="#" class="list-group-item list-group-item-action">
+<a href="#" id="menuNotice" class="list-group-item list-group-item-action">
 📰 Notice
 </a>
 
-<a href="#" class="list-group-item list-group-item-action">
+<a href="#" id="menuGallery" class="list-group-item list-group-item-action">
 🖼 Gallery
 </a>
 
-<a href="#" class="list-group-item list-group-item-action">
+<a href="#" id="menuAttendance" class="list-group-item list-group-item-action">
 📅 Attendance
 </a>
 
-<a href="#" class="list-group-item list-group-item-action">
+<a href="#" id="menuResult" class="list-group-item list-group-item-action">
 📝 Result
 </a>
 
-<a href="#" class="list-group-item list-group-item-action">
+<a href="#" id="menuDonation" class="list-group-item list-group-item-action">
 💰 Donation
 </a>
 
-<a href="#" class="list-group-item list-group-item-action">
+<a href="#" id="menuIncome" class="list-group-item list-group-item-action">
 💸 Income & Expense
 </a>
 
-<a href="#" class="list-group-item list-group-item-action">
+<a href="#" id="menuSettings" class="list-group-item list-group-item-action">
 ⚙ Settings
 </a>
 
@@ -106,14 +97,13 @@ Menu
 </div>
 
 <!-- Main -->
+
 <div class="col-lg-9 col-xl-10 p-4">
 
 <div id="contentArea">
 
 <h2 class="mb-4">
-
 Dashboard
-
 </h2>
 
 <div class="row g-4">
@@ -163,6 +153,14 @@ Dashboard
 <h2 id="todayIncome">0</h2>
 
 </div>
+
+</div>
+
+</div>
+
+<!-- এখানেই সব Module Load হবে -->
+
+<div id="moduleContent" class="mt-4"></div>
 
 </div>
 
