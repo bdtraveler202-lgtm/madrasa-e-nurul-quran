@@ -132,3 +132,80 @@ window.location.href="login.html";
 });
 
 }
+// ======================================
+// LOAD MODULES
+// ======================================
+
+const contentArea = document.getElementById("contentArea");
+
+// ======================================
+// STUDENT ADMISSION
+// ======================================
+
+document
+.getElementById("menuAdmission")
+.addEventListener("click", function(e){
+
+e.preventDefault();
+
+contentArea.innerHTML = `
+
+<h2 class="mb-4">
+
+🎓 Student Admission
+
+</h2>
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<p class="text-muted">
+
+Student Admission Form এখানে থাকবে।
+
+</p>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+// ======================================
+// STUDENT LIST
+// ======================================
+
+document
+.getElementById("menuStudents")
+.addEventListener("click", function(e){
+
+e.preventDefault();
+
+contentArea.innerHTML = `
+
+<h2 class="mb-4">
+
+📋 Student List
+
+</h2>
+
+<div class="card shadow">
+
+<div class="card-body">
+
+<p class="text-muted">
+
+Student List এখানে দেখানো হবে।
+
+</p>
+
+</div>
+
+</div>
+
+`;
+
+});
