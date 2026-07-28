@@ -472,4 +472,234 @@ alert(err.message);
 }
 
 });
+// ======================================
+// VIEW + EDIT + DELETE TEACHER
+// assets/js/teachers.js
+// নিচে Paste করো
+// ======================================
 
+// VIEW
+
+window.viewTeacher=function(id){
+
+const teacher=teachers.find(x=>x.id===id);
+
+if(!teacher) return;
+
+alert(
+
+"Name : "+teacher.name+
+
+"\nDesignation : "+teacher.designation+
+
+"\nMobile : "+teacher.mobile+
+
+"\nEmail : "+teacher.email
+
+);
+
+};
+
+// DELETE
+
+window.deleteTeacher=async function(id){
+
+if(!confirm("Delete Teacher?")) return;
+
+const {error}=await window.supabaseClient
+
+.from("teachers")
+
+.delete()
+
+.eq("id",id);
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+loadTeachers();
+
+};
+
+// EDIT
+
+window.editTeacher=async function(id){
+
+const {data,error}=await window.supabaseClient
+
+.from("teachers")
+
+.select("*")
+
+.eq("id",id)
+
+.single();
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+document.getElementById("pageTitle").innerText="Edit Teacher";
+
+document.getElementById("contentArea").innerHTML=`
+
+<div class="card">
+
+<div class="card-body">
+
+<form id="updateTeacherForm">
+
+<input
+type="hidden"
+id="teacher_id"
+value="${data.id}">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>Name</label>
+
+<input
+type="text"
+id="edit_teacher_name"
+class="form-control"
+value="${data.name||""}"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Designation</label>
+
+<input
+type="text"
+id="edit_designation"
+class="form-control"
+value="${data.designation||""}">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Mobile</label>
+
+<input
+type="text"
+id="edit_mobile"
+class="form-control"
+value="${data.mobile||""}">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Email</label>
+
+<input
+type="email"
+id="edit_email"
+class="form-control"
+value="${data.email||""}">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Status</label>
+
+<select
+id="edit_status"
+class="form-select">
+
+<option ${data.status=="Active"?"selected":""}>Active</option>
+
+<option ${data.status=="Inactive"?"selected":""}>Inactive</option>
+
+</select>
+
+</div>
+
+<div class="col-12">
+
+<button
+class="btn-green">
+
+Update Teacher
+
+</button>
+
+<button
+type="button"
+class="btn btn-secondary ms-2"
+onclick="teacherPage()">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+`;
+
+};
+
+// UPDATE
+
+document.addEventListener("submit",async function(e){
+
+if(e.target.id!=="updateTeacherForm") return;
+
+e.preventDefault();
+
+const {error}=await window.supabaseClient
+
+.from("teachers")
+
+.update({
+
+name:document.getElementById("edit_teacher_name").value,
+
+designation:document.getElementById("edit_designation").value,
+
+mobile:document.getElementById("edit_mobile").value,
+
+email:document.getElementById("edit_email").value,
+
+status:document.getElementById("edit_status").value
+
+})
+
+.eq("id",document.getElementById("teacher_id").value);
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+alert("Teacher Updated Successfully");
+
+teacherPage();
+
+});
