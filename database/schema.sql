@@ -127,3 +127,142 @@ for each row
 when (new.student_id is null)
 
 execute function generate_student_id();
+-- ==========================================
+-- TEACHERS
+-- ==========================================
+
+create table if not exists teachers (
+
+id uuid primary key default gen_random_uuid(),
+
+teacher_id text unique not null,
+
+full_name text not null,
+
+designation text,
+
+department text,
+
+qualification text,
+
+mobile text,
+
+email text,
+
+gender text,
+
+date_of_birth date,
+
+joining_date date,
+
+salary numeric default 0,
+
+photo_url text,
+
+nid text,
+
+address text,
+
+status text default 'Active',
+
+created_at timestamptz default now(),
+
+updated_at timestamptz default now()
+
+);
+
+create sequence if not exists teacher_serial_seq start 1;
+
+create or replace function generate_teacher_id()
+
+returns trigger
+language plpgsql
+as $$
+
+declare
+
+serial_no bigint;
+
+year_part text;
+
+begin
+
+serial_no:=nextval('teacher_serial_seq');
+
+year_part:=to_char(current_date,'YYYY');
+
+new.teacher_id:=
+'MTR-'||
+year_part||
+'-'||
+lpad(serial_no::text,6,'0');
+
+return new;
+
+end;
+
+$$;
+
+drop trigger if exists trg_teacher_id on teachers;
+
+create trigger trg_teacher_id
+
+before insert
+
+on teachers
+
+for each row
+
+when (new.teacher_id is null)
+
+execute function generate_teacher_id();
+
+-- ==========================================
+-- EMPLOYEES
+-- ==========================================
+
+create table if not exists employees (
+
+id uuid primary key default gen_random_uuid(),
+
+employee_id text unique,
+
+full_name text not null,
+
+designation text,
+
+mobile text,
+
+salary numeric default 0,
+
+joining_date date,
+
+photo_url text,
+
+status text default 'Active',
+
+created_at timestamptz default now()
+
+);
+
+-- ==========================================
+-- USERS
+-- ==========================================
+
+create table if not exists users (
+
+id uuid primary key default gen_random_uuid(),
+
+full_name text,
+
+email text unique,
+
+role text,
+
+status text default 'Active',
+
+created_at timestamptz default now()
+
+); 
+
+
