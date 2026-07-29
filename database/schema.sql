@@ -264,5 +264,109 @@ status text default 'Active',
 created_at timestamptz default now()
 
 ); 
+-- ==========================================
+-- STUDENT ATTENDANCE
+-- ==========================================
 
+create table if not exists attendance_students (
+
+id uuid primary key default gen_random_uuid(),
+
+student_id text not null,
+
+attendance_date date not null,
+
+status text not null check (status in ('Present','Absent','Late','Leave')),
+
+remarks text,
+
+created_at timestamptz default now()
+
+);
+
+-- ==========================================
+-- FEES
+-- ==========================================
+
+create table if not exists fees (
+
+id uuid primary key default gen_random_uuid(),
+
+student_id text not null,
+
+fee_month text not null,
+
+fee_year integer not null,
+
+admission_fee numeric default 0,
+
+monthly_fee numeric default 0,
+
+exam_fee numeric default 0,
+
+other_fee numeric default 0,
+
+discount numeric default 0,
+
+paid_amount numeric default 0,
+
+due_amount numeric default 0,
+
+payment_date date,
+
+payment_method text,
+
+receipt_no text,
+
+status text default 'Due',
+
+created_at timestamptz default now()
+
+);
+
+-- ==========================================
+-- SMS QUEUE
+-- ==========================================
+
+create table if not exists sms_queue (
+
+id uuid primary key default gen_random_uuid(),
+
+student_id text,
+
+mobile text not null,
+
+message text not null,
+
+sms_type text,
+
+status text default 'Pending',
+
+provider_response text,
+
+sent_at timestamptz,
+
+created_at timestamptz default now()
+
+);
+
+-- ==========================================
+-- NOTICES
+-- ==========================================
+
+create table if not exists notices (
+
+id uuid primary key default gen_random_uuid(),
+
+title text not null,
+
+details text,
+
+notice_date date,
+
+status text default 'Published',
+
+created_at timestamptz default now()
+
+);
 
