@@ -484,7 +484,360 @@ async function loadStatistics() {
         employee.count ?? 0;
 
 }
+/* ===========================================
+   HOME DATA LOADER
+=========================================== */
 
+document.addEventListener("DOMContentLoaded", async () => {
 
+    await loadTeachers();
+
+    await loadStudents();
+
+    await loadGallery();
+
+    await loadVideos();
+
+});
+
+/* ===========================================
+   TEACHERS
+=========================================== */
+
+async function loadTeachers(){
+
+const container=document.getElementById("teacherHomeList");
+
+if(!container) return;
+
+const {data,error}=await supabase
+
+.from("teachers")
+
+.select("*")
+
+.eq("status","Active")
+
+.order("created_at",{ascending:false})
+
+.limit(4);
+
+if(error){
+
+console.error(error);
+
+return;
+
+}
+
+container.innerHTML="";
+
+data.forEach(item=>{
+
+container.innerHTML+=`
+
+<div class="col-lg-3 col-md-6 mb-4">
+
+<div class="teacher-card">
+
+<img src="${item.photo_url || 'assets/img/default-user.png'}">
+
+<div class="teacher-content">
+
+<h4>${item.full_name}</h4>
+
+<p>${item.designation ?? ''}</p>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* ===========================================
+   STUDENTS
+=========================================== */
+
+async function loadStudents(){
+
+const container=document.getElementById("studentHomeList");
+
+if(!container) return;
+
+const {data,error}=await supabase
+
+.from("students")
+
+.select("*")
+
+.eq("status","Active")
+
+.order("created_at",{ascending:false})
+
+.limit(8);
+
+if(error){
+
+console.error(error);
+
+return;
+
+}
+
+container.innerHTML="";
+
+data.forEach(item=>{
+
+container.innerHTML+=`
+
+<div class="col-lg-3 col-md-6 mb-4">
+
+<div class="student-card">
+
+<img src="${item.photo_url || 'assets/img/default-user.png'}">
+
+<div class="student-content">
+
+<h4>${item.full_name}</h4>
+
+<p>${item.student_id}</p>
+
+<p>${item.class_name}</p>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* ===========================================
+   PHOTO GALLERY
+=========================================== */
+
+async function loadGallery(){
+
+const container=document.getElementById("galleryHome");
+
+if(!container) return;
+
+const {data,error}=await supabase
+
+.from("gallery")
+
+.select("*")
+
+.order("created_at",{ascending:false})
+
+.limit(8);
+
+if(error){
+
+console.error(error);
+
+return;
+
+}
+
+container.innerHTML="";
+
+data.forEach(item=>{
+
+container.innerHTML+=`
+
+<div class="col-lg-3 col-md-6 mb-4">
+
+<div class="gallery-item">
+
+<img
+
+src="${item.image_url}"
+
+alt="${item.title}">
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* ===========================================
+   VIDEO GALLERY
+=========================================== */
+
+async function loadVideos(){
+
+const container=document.getElementById("videoHome");
+
+if(!container) return;
+
+const {data,error}=await supabase
+
+.from("videos")
+
+.select("*")
+
+.order("created_at",{ascending:false})
+
+.limit(3);
+
+if(error){
+
+console.error(error);
+
+return;
+
+}
+
+container.innerHTML="";
+
+data.forEach(item=>{
+
+container.innerHTML+=`
+
+<div class="col-lg-4 mb-4">
+
+<div class="video-card">
+
+<iframe
+
+src="${item.video_url}"
+
+allowfullscreen>
+
+</iframe>
+
+<div class="video-content">
+
+<h4>${item.title}</h4>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+/* ===========================================
+   DONATION PROGRESS
+=========================================== */
+
+async function loadDonationProgress() {
+
+    const { data, error } = await supabase
+        .from("donations")
+        .select("amount,target_amount");
+
+    if (error || !data) return;
+
+    let collected = 0;
+    let target = 0;
+
+    data.forEach(item => {
+        collected += Number(item.amount || 0);
+        target = Number(item.target_amount || target);
+    });
+
+    const percent = target > 0
+        ? Math.min((collected / target) * 100, 100)
+        : 0;
+
+    document.getElementById("targetAmount").textContent =
+        "৳ " + target.toLocaleString();
+
+    document.getElementById("collectedAmount").textContent =
+        "৳ " + collected.toLocaleString();
+
+    document.getElementById("remainingAmount").textContent =
+        "৳ " + (target - collected).toLocaleString();
+
+    const bar = document.getElementById("donationProgressBar");
+
+    if (bar) {
+
+        bar.style.width = percent + "%";
+        bar.textContent = percent.toFixed(0) + "%";
+
+    }
+
+}
+
+/* ===========================================
+   WEBSITE SETTINGS
+=========================================== */
+
+async function loadWebsiteSettings() {
+
+    const { data } = await supabase
+
+        .from("settings")
+
+        .select("*")
+
+        .limit(1)
+
+        .single();
+
+    if (!data) return;
+
+    document.title = data.website_name || document.title;
+
+    document.getElementById("addressText").textContent =
+        data.address || "";
+
+    document.getElementById("phoneText").textContent =
+        data.phone || "";
+
+    document.getElementById("emailText").textContent =
+        data.email || "";
+
+}
+
+/* ===========================================
+   SIMPLE SEARCH
+=========================================== */
+
+const searchInput = document.getElementById("globalSearch");
+
+if (searchInput) {
+
+    searchInput.addEventListener("keyup", function () {
+
+        console.log("Search:", this.value);
+
+    });
+
+}
+
+/* ===========================================
+   INITIALIZE
+=========================================== */
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    await loadDonationProgress();
+
+    await loadWebsiteSettings();
+
+});
 
 
