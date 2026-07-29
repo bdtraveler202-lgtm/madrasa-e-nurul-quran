@@ -1,1 +1,435 @@
+/* =========================================
+MADRASA ERP ADMIN PANEL
+========================================= */
 
+:root{
+
+--primary:#198754;
+
+--primary-dark:#146c43;
+
+--white:#ffffff;
+
+--bg:#f5f7fa;
+
+--sidebar:#114232;
+
+--text:#222;
+
+--border:#e6e6e6;
+
+--shadow:0 8px 30px rgba(0,0,0,.08);
+
+}
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+}
+
+body{
+
+font-family:"Poppins","Hind Siliguri",sans-serif;
+
+background:var(--bg);
+
+overflow-x:hidden;
+
+color:var(--text);
+
+}
+
+.dashboard{
+
+display:flex;
+
+min-height:100vh;
+
+}
+
+/* ==========================
+SIDEBAR
+========================== */
+
+.sidebar{
+
+width:280px;
+
+background:var(--sidebar);
+
+color:#fff;
+
+position:fixed;
+
+left:0;
+
+top:0;
+
+bottom:0;
+
+overflow-y:auto;
+
+}
+
+.brand{
+
+padding:30px;
+
+text-align:center;
+
+border-bottom:1px solid rgba(255,255,255,.12);
+
+}
+
+.brand img{
+
+width:75px;
+
+height:75px;
+
+object-fit:contain;
+
+margin-bottom:12px;
+
+}
+
+.brand h3{
+
+font-size:24px;
+
+font-weight:700;
+
+margin:0;
+
+}
+
+.sidebar ul{
+
+list-style:none;
+
+padding:20px 0;
+
+margin:0;
+
+}
+
+.sidebar ul li{
+
+margin:4px 0;
+
+}
+
+.sidebar ul li a{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+padding:15px 28px;
+
+color:#d8f0df;
+
+text-decoration:none;
+
+transition:.3s;
+
+font-size:15px;
+
+font-weight:500;
+
+}
+
+.sidebar ul li a:hover,
+
+.sidebar ul li a.active{
+
+background:rgba(255,255,255,.12);
+
+color:#fff;
+
+}
+
+.sidebar i{
+
+width:22px;
+
+text-align:center;
+
+}
+
+/* ==========================
+MAIN
+========================== */
+
+.main-content{
+
+margin-left:280px;
+
+width:calc(100% - 280px);
+
+padding:30px;
+
+}
+
+/* ==========================
+TOPBAR
+========================== */
+
+.topbar{
+
+background:#fff;
+
+border-radius:14px;
+
+padding:20px 25px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+box-shadow:var(--shadow);
+
+margin-bottom:30px;
+
+}
+
+.topbar h2{
+
+font-size:28px;
+
+font-weight:700;
+
+margin:0;
+
+color:var(--primary);
+
+}
+
+.topbar-right{
+
+display:flex;
+
+align-items:center;
+
+gap:18px;
+
+}
+
+.topbar-right input{
+
+width:260px;
+
+height:46px;
+
+border:1px solid var(--border);
+
+border-radius:10px;
+
+padding:0 15px;
+
+outline:none;
+
+}
+
+#adminName{
+
+font-weight:600;
+
+}
+
+/* ==========================
+CARDS
+========================== */
+
+.cards{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:20px;
+
+}
+
+.card-box{
+
+background:#fff;
+
+padding:30px;
+
+border-radius:14px;
+
+box-shadow:var(--shadow);
+
+border-left:5px solid var(--primary);
+
+}
+
+.card-box h5{
+
+font-size:15px;
+
+color:#777;
+
+margin-bottom:12px;
+
+}
+
+.card-box h2{
+
+font-size:34px;
+
+font-weight:700;
+
+color:var(--primary);
+
+margin:0;
+
+}
+
+/* ==========================
+DASHBOARD CARD
+========================== */
+
+.dashboard-card{
+
+background:#fff;
+
+padding:25px;
+
+border-radius:14px;
+
+box-shadow:var(--shadow);
+
+margin-bottom:25px;
+
+}
+
+.dashboard-card h4{
+
+margin-bottom:20px;
+
+font-size:22px;
+
+font-weight:700;
+
+color:var(--primary);
+
+}
+
+/* ==========================
+NOTICE LIST
+========================== */
+
+.notice-item{
+
+padding:15px 0;
+
+border-bottom:1px solid #eee;
+
+}
+
+.notice-item:last-child{
+
+border-bottom:none;
+
+}
+
+.notice-item h6{
+
+font-size:16px;
+
+margin-bottom:6px;
+
+font-weight:600;
+
+}
+
+.notice-item small{
+
+color:#888;
+
+}
+
+/* ==========================
+RESPONSIVE
+========================== */
+
+@media(max-width:1200px){
+
+.cards{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:992px){
+
+.sidebar{
+
+left:-280px;
+
+transition:.3s;
+
+}
+
+.sidebar.show{
+
+left:0;
+
+}
+
+.main-content{
+
+margin-left:0;
+
+width:100%;
+
+padding:20px;
+
+}
+
+.topbar{
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.cards{
+
+grid-template-columns:1fr;
+
+}
+
+.topbar-right{
+
+width:100%;
+
+flex-direction:column;
+
+}
+
+.topbar-right input{
+
+width:100%;
+
+}
+
+}
