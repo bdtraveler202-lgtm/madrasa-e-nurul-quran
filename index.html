@@ -1,1 +1,1274 @@
+<!DOCTYPE html>
+<html lang="bn" data-language="bn">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta http-equiv="X-UA-Compatible"
+content="IE=edge">
+
+<title>মাদরাসা ইআরপি | Madrasa ERP</title>
+
+<meta name="description"
+content="Professional Madrasa ERP & Management System">
+
+<meta name="keywords"
+content="Madrasa ERP, School ERP, Education Management">
+
+<meta name="author"
+content="Madrasa ERP">
+
+<meta name="theme-color"
+content="#198754">
+
+<link rel="icon"
+href="assets/img/logo.png">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="assets/css/style.css">
+
+<link rel="stylesheet"
+href="assets/css/responsive.css">
+
+</head>
+
+<body>
+
+<div id="loader">
+
+<div class="loader-circle"></div>
+
+</div>
+
+<header>
+
+<div class="top-header">
+
+<div class="container">
+
+<div class="top-left">
+
+<span id="todayBangla"></span>
+
+<span>|</span>
+
+<span id="todayEnglish"></span>
+
+<span>|</span>
+
+<span id="todayHijri"></span>
+
+</div>
+
+<div class="top-right">
+
+<span id="liveClock"></span>
+
+<button
+id="btnBangla"
+class="lang-btn active">
+
+বাংলা
+
+</button>
+
+<button
+id="btnEnglish"
+class="lang-btn">
+
+English
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="notice-bar">
+
+<div class="notice-title">
+
+NOTICE
+
+</div>
+
+<div class="notice-marquee">
+
+<marquee
+id="noticeTicker"
+behavior="scroll"
+direction="left"
+scrollamount="5">
+
+Loading Latest Notices...
+
+</marquee>
+
+</div>
+
+</div>
+
+<nav class="navbar navbar-expand-lg">
+
+<div class="container">
+
+<a
+class="navbar-brand"
+href="#">
+
+<img
+src="assets/img/logo.png"
+alt="Logo">
+
+<div>
+
+<h3>
+
+মাদরাসার নাম
+
+</h3>
+
+<p>
+
+Madrasa Management System
+
+</p>
+
+</div>
+
+</a>
+
+<button
+class="navbar-toggler"
+data-bs-toggle="collapse"
+data-bs-target="#mainMenu">
+
+<span>
+
+<i class="fa-solid fa-bars"></i>
+
+</span>
+
+</button>
+
+<div
+class="collapse navbar-collapse"
+id="mainMenu">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+
+<a
+class="nav-link active"
+href="#">
+
+হোম
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+href="#about">
+
+প্রতিষ্ঠান
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+href="#teachers">
+
+শিক্ষকবৃন্দ
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+href="#students">
+
+শিক্ষার্থীবৃন্দ
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+href="#notice">
+
+নোটিশ
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+href="#gallery">
+
+গ্যালারী
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="nav-link"
+href="#contact">
+
+যোগাযোগ
+
+</a>
+
+</li>
+
+<li class="nav-item">
+
+<a
+class="btn btn-success px-4"
+href="login.html">
+
+Login
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</nav>
+
+<section class="hero">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<h1>
+
+আধুনিক মাদরাসা ব্যবস্থাপনা
+
+</h1>
+
+<p>
+
+একটি পূর্ণাঙ্গ ডিজিটাল মাদরাসা ম্যানেজমেন্ট সিস্টেম যেখানে ভর্তি, ফলাফল, উপস্থিতি, হিসাব, দান, নোটিশ এবং প্রশাসনিক কার্যক্রম একটি প্ল্যাটফর্ম থেকেই পরিচালনা করা যায়।
+
+</p>
+
+<div class="hero-buttons">
+
+<a
+href="#admission"
+class="btn btn-success">
+
+অনলাইন ভর্তি
+
+</a>
+
+<a
+href="#about"
+class="btn btn-outline-success">
+
+বিস্তারিত
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<img
+src="assets/img/hero.png"
+class="img-fluid"
+alt="Hero">
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<!-- ========================================= -->
+<!-- ABOUT -->
+<!-- ========================================= -->
+
+<section class="about-section" id="about">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>প্রতিষ্ঠান পরিচিতি</h2>
+
+<p>
+আধুনিক ইসলামিক শিক্ষা, নৈতিকতা ও প্রযুক্তিনির্ভর শিক্ষাব্যবস্থার সমন্বয়ে পরিচালিত একটি পূর্ণাঙ্গ শিক্ষা প্রতিষ্ঠান।
+</p>
+
+</div>
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<img
+src="assets/img/about.jpg"
+class="img-fluid rounded shadow"
+alt="About">
+
+</div>
+
+<div class="col-lg-6">
+
+<h3>আমাদের লক্ষ্য</h3>
+
+<p>
+
+কুরআন ও সুন্নাহর আলোকে একজন আদর্শ, দক্ষ ও নৈতিক নাগরিক গড়ে তোলা।
+
+</p>
+
+<ul class="about-list">
+
+<li>দক্ষ ও অভিজ্ঞ শিক্ষক মণ্ডলী</li>
+
+<li>আধুনিক ডিজিটাল ম্যানেজমেন্ট</li>
+
+<li>স্মার্ট ক্লাসরুম</li>
+
+<li>অনলাইন ফলাফল ও ভর্তি</li>
+
+<li>ERP ভিত্তিক প্রশাসন</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- FOUNDER -->
+<!-- ========================================= -->
+
+<section class="founder-section">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<div class="col-lg-4 text-center">
+
+<img
+src="assets/img/founder.jpg"
+class="founder-img"
+alt="Founder">
+
+</div>
+
+<div class="col-lg-8">
+
+<h2>প্রতিষ্ঠাতা</h2>
+
+<h4>হযরত ...</h4>
+
+<p>
+
+এখানে প্রতিষ্ঠাতার বিস্তারিত পরিচিতি, লক্ষ্য, উদ্দেশ্য এবং প্রতিষ্ঠানের ইতিহাস থাকবে।
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- PRINCIPAL -->
+<!-- ========================================= -->
+
+<section class="principal-section">
+
+<div class="container">
+
+<div class="row align-items-center flex-lg-row-reverse">
+
+<div class="col-lg-4 text-center">
+
+<img
+src="assets/img/principal.jpg"
+class="founder-img"
+alt="Principal">
+
+</div>
+
+<div class="col-lg-8">
+
+<h2>প্রিন্সিপালের বক্তব্য</h2>
+
+<p>
+
+প্রিয় শিক্ষার্থী, অভিভাবক ও শুভানুধ্যায়ীগণ, আমাদের প্রতিষ্ঠানে আপনাদের স্বাগতম। আমরা আধুনিক প্রযুক্তির মাধ্যমে একটি সুন্দর শিক্ষাব্যবস্থা গড়ে তুলতে কাজ করছি।
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- STATISTICS -->
+<!-- ========================================= -->
+
+<section class="statistics-section">
+
+<div class="container">
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+
+<div class="stat-card">
+
+<h3 id="totalStudents">0</h3>
+
+<p>মোট শিক্ষার্থী</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="stat-card">
+
+<h3 id="totalTeachers">0</h3>
+
+<p>মোট শিক্ষক</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="stat-card">
+
+<h3 id="totalStaff">0</h3>
+
+<p>কর্মচারী</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="stat-card">
+
+<h3 id="totalDonation">৳0</h3>
+
+<p>মোট অনুদান</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- LATEST NOTICE -->
+<!-- ========================================= -->
+
+<section id="notice" class="notice-section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>সর্বশেষ নোটিশ</h2>
+
+</div>
+
+<div id="latestNoticeList">
+
+</div>
+
+<div class="text-center mt-4">
+
+<a href="notice.html" class="btn btn-success">
+
+সকল নোটিশ
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- TEACHERS -->
+<!-- ========================================= -->
+
+<section id="teachers" class="teacher-section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>শিক্ষকমণ্ডলী</h2>
+
+</div>
+
+<div class="row" id="teacherHomeList">
+
+</div>
+
+<div class="text-center mt-4">
+
+<a href="teachers.html" class="btn btn-success">
+
+সকল শিক্ষক
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- STUDENTS -->
+<!-- ========================================= -->
+
+<section id="students" class="student-section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>শিক্ষার্থীবৃন্দ</h2>
+
+</div>
+
+<div class="row" id="studentHomeList">
+
+</div>
+
+<div class="text-center mt-4">
+
+<a href="students.html" class="btn btn-success">
+
+সকল শিক্ষার্থী
+
+</a>
+
+</div>
+
+</div>
+
+</section> 
+<!-- ========================================= -->
+<!-- DONATION -->
+<!-- ========================================= -->
+
+<section class="donation-section" id="donation">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>দান ও সহযোগিতা</h2>
+
+<p>
+
+আপনার অনুদান দ্বীনি শিক্ষা বিস্তারে গুরুত্বপূর্ণ ভূমিকা রাখে।
+
+</p>
+
+</div>
+
+<div class="row align-items-center">
+
+<div class="col-lg-6">
+
+<h4>Donation Progress</h4>
+
+<div class="progress donation-progress">
+
+<div
+id="donationProgressBar"
+class="progress-bar bg-success"
+style="width:0%">
+
+0%
+
+</div>
+
+</div>
+
+<div class="donation-info mt-4">
+
+<div class="d-flex justify-content-between">
+
+<span>Target</span>
+
+<strong id="targetAmount">
+
+৳ 0
+
+</strong>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>Collected</span>
+
+<strong id="collectedAmount">
+
+৳ 0
+
+</strong>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>Remaining</span>
+
+<strong id="remainingAmount">
+
+৳ 0
+
+</strong>
+
+</div>
+
+</div>
+
+<div class="mt-4">
+
+<a
+href="donation.html"
+class="btn btn-success">
+
+অনুদান করুন
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<img
+src="assets/img/donation.jpg"
+class="img-fluid rounded shadow"
+alt="Donation">
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- PHOTO GALLERY -->
+<!-- ========================================= -->
+
+<section id="gallery" class="gallery-section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>ফটো গ্যালারী</h2>
+
+</div>
+
+<div
+class="row g-4"
+id="galleryHome">
+
+</div>
+
+<div class="text-center mt-4">
+
+<a
+href="gallery.html"
+class="btn btn-success">
+
+সকল ছবি
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- VIDEO GALLERY -->
+<!-- ========================================= -->
+
+<section class="video-section">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>ভিডিও গ্যালারী</h2>
+
+</div>
+
+<div
+class="row g-4"
+id="videoHome">
+
+</div>
+
+<div class="text-center mt-4">
+
+<a
+href="videos.html"
+class="btn btn-success">
+
+সকল ভিডিও
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+<!-- ========================================= -->
+<!-- DOWNLOAD CENTER -->
+<!-- ========================================= -->
+
+<section class="download-section" id="downloads">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>ডাউনলোড সেন্টার</h2>
+
+<p>
+
+প্রয়োজনীয় ফাইলসমূহ এখান থেকে ডাউনলোড করুন
+
+</p>
+
+</div>
+
+<div class="row g-4" id="downloadList">
+
+<div class="col-lg-4">
+
+<div class="download-card">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+<h4>ভর্তি ফরম</h4>
+
+<p>Admission Form PDF</p>
+
+<a href="#" class="btn btn-success">
+
+ডাউনলোড
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="download-card">
+
+<i class="fa-solid fa-file-lines"></i>
+
+<h4>একাডেমিক ক্যালেন্ডার</h4>
+
+<p>Academic Calendar</p>
+
+<a href="#" class="btn btn-success">
+
+ডাউনলোড
+
+</a>
+
+</div>
+
+</div>
+
+<div class="col-lg-4">
+
+<div class="download-card">
+
+<i class="fa-solid fa-file-arrow-down"></i>
+
+<h4>রুটিন</h4>
+
+<p>Class Routine</p>
+
+<a href="#" class="btn btn-success">
+
+ডাউনলোড
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- COMPLAINT BOX -->
+<!-- ========================================= -->
+
+<section class="complaint-section" id="complaint">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>অভিযোগ বক্স</h2>
+
+</div>
+
+<form id="complaintForm">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+class="form-control"
+placeholder="আপনার নাম"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+class="form-control"
+placeholder="মোবাইল নম্বর"
+required>
+
+</div>
+
+<div class="col-12 mb-3">
+
+<input
+type="text"
+class="form-control"
+placeholder="বিষয়"
+required>
+
+</div>
+
+<div class="col-12 mb-3">
+
+<textarea
+rows="6"
+class="form-control"
+placeholder="আপনার অভিযোগ লিখুন"
+required>
+
+</textarea>
+
+</div>
+
+<div class="col-12">
+
+<button
+class="btn btn-success">
+
+জমা দিন
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- CONTACT -->
+<!-- ========================================= -->
+
+<section class="contact-section" id="contact">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>যোগাযোগ</h2>
+
+</div>
+
+<div class="row">
+
+<div class="col-lg-5">
+
+<div class="contact-card">
+
+<h4>ঠিকানা</h4>
+
+<p id="addressText">
+
+আপনার প্রতিষ্ঠানের ঠিকানা
+
+</p>
+
+<hr>
+
+<h4>মোবাইল</h4>
+
+<p id="phoneText">
+
++8801XXXXXXXXX
+
+</p>
+
+<hr>
+
+<h4>ইমেইল</h4>
+
+<p id="emailText">
+
+info@example.com
+
+</p>
+
+<hr>
+
+<h4>অফিস সময়</h4>
+
+<p>
+
+শনিবার - বৃহস্পতিবার
+
+সকাল ৮:০০ - বিকাল ৪:০০
+
+</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-7">
+
+<form id="contactForm">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<input
+type="text"
+class="form-control"
+placeholder="নাম"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<input
+type="email"
+class="form-control"
+placeholder="ইমেইল"
+required>
+
+</div>
+
+<div class="col-12 mb-3">
+
+<input
+type="text"
+class="form-control"
+placeholder="বিষয়"
+required>
+
+</div>
+
+<div class="col-12 mb-3">
+
+<textarea
+rows="6"
+class="form-control"
+placeholder="বার্তা লিখুন"
+required>
+
+</textarea>
+
+</div>
+
+<div class="col-12">
+
+<button
+class="btn btn-success">
+
+বার্তা পাঠান
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- GOOGLE MAP -->
+<!-- ========================================= -->
+
+<section class="map-section">
+
+<iframe
+
+src="https://www.google.com/maps?q=Dhaka&output=embed"
+
+loading="lazy"
+
+allowfullscreen>
+
+</iframe>
+
+</section>
+<!-- ========================================= -->
+<!-- FOOTER -->
+<!-- ========================================= -->
+
+<footer class="footer">
+
+<div class="container">
+
+<div class="row">
+
+<div class="col-lg-4">
+
+<img
+src="assets/img/logo.png"
+class="footer-logo"
+alt="Logo">
+
+<h4>
+
+মাদরাসার নাম
+
+</h4>
+
+<p>
+
+একটি আধুনিক ইসলামিক শিক্ষা প্রতিষ্ঠান যেখানে দ্বীনি ও আধুনিক শিক্ষার সমন্বয় করা হয়েছে।
+
+</p>
+
+</div>
+
+<div class="col-lg-2">
+
+<h5>দ্রুত লিংক</h5>
+
+<ul>
+
+<li><a href="#">হোম</a></li>
+
+<li><a href="#about">প্রতিষ্ঠান</a></li>
+
+<li><a href="#teachers">শিক্ষকবৃন্দ</a></li>
+
+<li><a href="#gallery">গ্যালারী</a></li>
+
+<li><a href="#contact">যোগাযোগ</a></li>
+
+</ul>
+
+</div>
+
+<div class="col-lg-3">
+
+<h5>যোগাযোগ</h5>
+
+<p>
+
+ঠিকানা
+
+</p>
+
+<p>
+
++8801XXXXXXXXX
+
+</p>
+
+<p>
+
+info@example.com
+
+</p>
+
+</div>
+
+<div class="col-lg-3">
+
+<h5>অনুসরণ করুন</h5>
+
+<div class="social-icons">
+
+<a href="#"><i class="fab fa-facebook-f"></i></a>
+
+<a href="#"><i class="fab fa-youtube"></i></a>
+
+<a href="#"><i class="fab fa-instagram"></i></a>
+
+<a href="#"><i class="fab fa-linkedin-in"></i></a>
+
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="copyright">
+
+<p>
+
+© 2026 Madrasa ERP. All Rights Reserved.
+
+</p>
+
+</div>
+
+</div>
+
+</footer>
+
+<!-- Scroll Top -->
+
+<button id="scrollTop">
+
+<i class="fa-solid fa-arrow-up"></i>
+
+</button>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Chart -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Supabase -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="assets/js/supabase.js"></script>
+
+<script src="assets/js/home.js"></script>
+
+</body>
+
+</html>
+  
