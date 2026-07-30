@@ -10,26 +10,29 @@ const remember = document.getElementById("remember");
 const togglePassword = document.getElementById("togglePassword");
 
 /* ===========================================
+   CHECK SUPABASE
+=========================================== */
+
+if (typeof supabase === "undefined") {
+    alert("Supabase is not loaded. Please check assets/js/supabase.js");
+    throw new Error("Supabase not loaded");
+}
+
+/* ===========================================
    SHOW / HIDE PASSWORD
 =========================================== */
 
 togglePassword.addEventListener("click", () => {
 
-    if (password.type === "password") {
+    password.type =
+        password.type === "password"
+            ? "text"
+            : "password";
 
-        password.type = "text";
-
-        togglePassword.innerHTML =
-            '<i class="fa-solid fa-eye-slash"></i>';
-
-    } else {
-
-        password.type = "password";
-
-        togglePassword.innerHTML =
-            '<i class="fa-solid fa-eye"></i>';
-
-    }
+    togglePassword.innerHTML =
+        password.type === "password"
+            ? '<i class="fa-solid fa-eye"></i>'
+            : '<i class="fa-solid fa-eye-slash"></i>';
 
 });
 
@@ -42,7 +45,6 @@ const savedEmail = localStorage.getItem("remember_email");
 if (savedEmail) {
 
     email.value = savedEmail;
-
     remember.checked = true;
 
 }
@@ -57,68 +59,78 @@ loginForm.addEventListener("submit", async (e) => {
 
     const btn = loginForm.querySelector("button");
 
-    const oldText = btn.innerHTML;
-
     btn.disabled = true;
-
     btn.innerHTML = "Signing In...";
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    try {
 
-        email: email.value.trim(),
+        const { error } =
+            await supabase.auth.signInWithPassword({
 
-        password: password.value
+                email: email.value.trim(),
 
-    });
+                password: password.value
 
-    btn.disabled = false;
+            });
 
-    btn.innerHTML = oldText;
+        if (error) {
 
-    if (error) {
+            alert(error.message);
 
-        alert(error.message);
+            return;
 
-        return;
+        }
+
+        if (remember.checked) {
+
+            localStorage.setItem(
+                "remember_email",
+                email.value.trim()
+            );
+
+        } else {
+
+            localStorage.removeItem("remember_email");
+
+        }
+
+        window.location.href = "admin.html";
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert(err.message);
+
+    } finally {
+
+        btn.disabled = false;
+        btn.innerHTML = "Login";
 
     }
-
-    if (remember.checked) {
-
-        localStorage.setItem(
-            "remember_email",
-            email.value.trim()
-        );
-
-    } else {
-
-        localStorage.removeItem("remember_email");
-
-    }
-
-    window.location.href = "admin.html";
 
 });
 
 /* ===========================================
-   AUTO SESSION CHECK
+   AUTO LOGIN
 =========================================== */
 
 (async () => {
 
-    const {
+    try {
 
-        data: {
+        const { data } =
+            await supabase.auth.getSession();
 
-            session
+        if (data.session) {
+
+            window.location.href = "admin.html";
 
         }
 
-    } = await supabase.auth.getSession();
+    } catch (err) {
 
-    if (session) {
-
-        window.location.href = "admin.html";
+        console.error(err);
 
     }
 
