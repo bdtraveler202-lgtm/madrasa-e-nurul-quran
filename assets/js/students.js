@@ -1,103 +1,202 @@
-/* ===========================================
-   STUDENT MANAGEMENT
-=========================================== */
+/* ==========================================
+   Madrasa-E Nurul Quran
+   Student Management System
+   students.js (Final)
+========================================== */
+
+/* ==========================
+   GLOBAL ELEMENTS
+========================== */
+
+const studentForm = document.getElementById("studentForm");
+const studentTable = document.getElementById("studentTable");
+
+const departmentSelect = document.getElementById("department");
+const classSelect = document.getElementById("studentClass");
+
+const searchInput = document.getElementById("searchStudent");
+const searchButton = document.getElementById("searchBtn");
+
+const departmentFilter = document.getElementById("departmentFilter");
+const classFilter = document.getElementById("classFilter");
+const statusFilter = document.getElementById("statusFilter");
+
+/* ==========================
+   CLASS DATA
+========================== */
+
+const CLASS_DATA = {
+
+    Nurani: [
+        "শিশু",
+        "প্রথম",
+        "দ্বিতীয়",
+        "তৃতীয়",
+        "চতুর্থ",
+        "পঞ্চম"
+    ],
+
+    Nazera: [
+        "১ম বর্ষ",
+        "২য় বর্ষ",
+        "৩য় বর্ষ",
+        "৪র্থ বর্ষ",
+        "সমাপনী"
+    ],
+
+    Hifz: [
+        "প্রস্তুতি",
+        "১ম বর্ষ",
+        "২য় বর্ষ",
+        "৩য় বর্ষ",
+        "৪র্থ বর্ষ",
+        "৫ম বর্ষ",
+        "সম্পন্ন"
+    ]
+
+};
+
+/* ==========================
+   SESSION
+========================== */
 
 async function checkSession() {
 
     const {
-
-        data: {
-
-            session
-
-        }
-
+        data: { session }
     } = await supabase.auth.getSession();
 
     if (!session) {
 
-        location.href = "login.html";
-
-        return;
+        window.location.href = "login.html";
+        return false;
 
     }
 
+    return true;
+
 }
 
-checkSession();
+/* ==========================
+   LOAD CLASS
+========================== */
 
-/* ===========================================
-AUTO STUDENT ID
+function loadDepartmentClasses(selectBox, department) {
 
-FORMAT:
-MDR-2026-000001
-=========================================== */
+    selectBox.innerHTML = "";
+
+    const first = document.createElement("option");
+
+    first.value = "";
+    first.textContent = "Select Class";
+
+    selectBox.appendChild(first);
+
+    if (!CLASS_DATA[department]) return;
+
+    CLASS_DATA[department].forEach(item => {
+
+        const option = document.createElement("option");
+
+        option.value = item;
+        option.textContent = item;
+
+        selectBox.appendChild(option);
+
+    });
+
+}
+
+/* Registration Form */
+
+if (departmentSelect) {
+
+    departmentSelect.addEventListener("change", () => {
+
+        loadDepartmentClasses(
+            classSelect,
+            departmentSelect.value
+        );
+
+    });
+
+}
+
+/* Search Filter */
+
+if (departmentFilter) {
+
+    departmentFilter.addEventListener("change", () => {
+
+        loadDepartmentClasses(
+            classFilter,
+            departmentFilter.value
+        );
+
+    });
+
+}
+
+/* ==========================
+   AUTO STUDENT ID
+========================== */
 
 async function generateStudentID() {
 
     const year = new Date().getFullYear();
 
-    const {
-
-        count
-
-    } = await supabase
+    const { count } = await supabase
 
         .from("students")
 
         .select("*", {
 
             count: "exact",
-
             head: true
 
         });
 
-    const next = String((count || 0) + 1)
+    const next = String(
+        (count || 0) + 1
+    ).padStart(6, "0");
 
-        .padStart(6, "0");
+    const studentID = `MDR-${year}-${next}`;
 
-    return `MDR-${year}-${next}`;
+    const idBox =
+        document.getElementById("studentID");
+
+    if (idBox) {
+
+        idBox.value = studentID;
+
+    }
+
+    return studentID;
 
 }
 
-/* ===========================================
-PHOTO UPLOAD
-=========================================== */
+/* ==========================
+   PHOTO UPLOAD
+========================== */
 
-async function uploadPhoto(file) {
+async function uploadStudentPhoto(file) {
 
     if (!file) return "";
 
     const fileName =
+        Date.now() + "_" + file.name;
 
-        Date.now() +
-
-        "_" +
-
-        file.name;
-
-    const {
-
-        error
-
-    } = await supabase.storage
+    const { error } =
+        await supabase.storage
 
         .from("students")
 
         .upload(fileName, file);
 
-    if (error) {
+    if (error) throw error;
 
-        throw error;
-
-    }
-
-    const {
-
-        data
-
-    } = supabase.storage
+    const { data } =
+        supabase.storage
 
         .from("students")
 
@@ -107,97 +206,164 @@ async function uploadPhoto(file) {
 
 }
 
-/* ===========================================
-SAVE STUDENT
-=========================================== */
+/* ==========================
+   INIT
+========================== */
 
-const studentForm =
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
 
-document.getElementById("studentForm");
+        const ok = await checkSession();
 
-studentForm.addEventListener(
+        if (!ok) return;
 
-"submit",
+        await generateStudentID();
 
-async e => {
+    }
+); 
+/* ==========================================
+   SAVE STUDENT
+========================================== */
+
+studentForm?.addEventListener("submit", saveStudent);
+
+async function saveStudent(e){
 
 e.preventDefault();
 
 try{
 
-const id=
+const studentID = await generateStudentID();
 
-await generateStudentID();
-
-const image=
-
+const imageFile =
 document.getElementById("studentPhoto").files[0];
 
-const photo=
+const photo =
+await uploadStudentPhoto(imageFile);
 
-await uploadPhoto(image);
+const student = {
 
-const{
+student_id:studentID,
 
-error
+admission_date:document.getElementById("admissionDate").value,
 
-}=await supabase
+department:document.getElementById("department").value,
 
-.from("students")
+class_name:document.getElementById("studentClass").value,
 
-.insert({
+section:document.getElementById("section").value,
 
-student_id:id,
+roll:document.getElementById("roll").value,
 
-full_name:
+session:document.getElementById("session").value,
 
-document.getElementById("studentName").value,
+status:document.getElementById("studentStatus").value,
 
-father_name:
+student_name_bn:document.getElementById("studentNameBn").value,
 
-document.getElementById("fatherName").value,
+student_name_en:document.getElementById("studentNameEn").value,
 
-mother_name:
+student_name_ar:document.getElementById("studentNameAr").value,
 
-document.getElementById("motherName").value,
+dob:document.getElementById("dob").value,
 
-mobile:
+gender:document.getElementById("gender").value,
 
-document.getElementById("studentMobile").value,
+blood_group:document.getElementById("bloodGroup").value,
 
-class_name:
+religion:document.getElementById("religion").value,
 
-document.getElementById("studentClass").value,
+birth_certificate:document.getElementById("birthCertificate").value,
+
+nid:document.getElementById("nid").value,
 
 photo_url:photo,
 
-status:"Active"
+father_name:document.getElementById("fatherName").value,
 
-});
+father_occupation:document.getElementById("fatherOccupation").value,
 
-if(error) throw error;
+father_mobile:document.getElementById("fatherMobile").value,
 
-alert(
+mother_name:document.getElementById("motherName").value,
 
-"Student Registered Successfully"
+mother_occupation:document.getElementById("motherOccupation").value,
 
-);
+mother_mobile:document.getElementById("motherMobile").value,
+
+guardian_name:document.getElementById("guardianName").value,
+
+guardian_relation:document.getElementById("guardianRelation").value,
+
+guardian_mobile:document.getElementById("guardianMobile").value,
+
+present_address:document.getElementById("presentAddress").value,
+
+permanent_address:document.getElementById("permanentAddress").value,
+
+village:document.getElementById("village").value,
+
+post_office:document.getElementById("postOffice").value,
+
+upazila:document.getElementById("upazila").value,
+
+district:document.getElementById("district").value,
+
+previous_institute:document.getElementById("previousInstitute").value,
+
+admission_fee:Number(document.getElementById("admissionFee").value||0),
+
+monthly_fee:Number(document.getElementById("monthlyFee").value||0),
+
+scholarship:Number(document.getElementById("scholarship").value||0),
+
+emergency_contact:document.getElementById("emergencyContact").value,
+
+sms_number:document.getElementById("smsNumber").value,
+
+email:document.getElementById("studentEmail").value,
+
+remarks:document.getElementById("remarks").value
+
+};
+
+if(editingStudentId){
+
+const ok = await updateStudent(student);
+
+if(ok){
+
+bootstrap.Modal
+.getInstance(document.getElementById("studentModal"))
+.hide();
 
 studentForm.reset();
 
-loadStudents();
+}
+
+return;
+
+}
+
+const {error}=await supabase
+
+.from("students")
+
+.insert(student);
+
+if(error) throw error;
+alert("Student Registered Successfully");
+
+studentForm.reset();
 
 bootstrap.Modal
+.getInstance(document.getElementById("studentModal"))
+.hide();
 
-.getInstance(
+await generateStudentID();
 
-document.getElementById(
-
-"studentModal"
-
-)
-
-).hide();
+loadStudents();
 
 }catch(err){
 
@@ -205,32 +371,34 @@ alert(err.message);
 
 }
 
-});
-/* ===========================================
-   LOAD STUDENT LIST
-=========================================== */
+}
+/* ==========================================
+   LOAD STUDENTS
+========================================== */
 
 async function loadStudents() {
 
-    const table = document.getElementById("studentTable");
+const { data, error } = await supabase
 
-    if (!table) return;
+.from("students")
 
-    const { data, error } = await supabase
-        .from("students")
-        .select("*")
-        .order("created_at", { ascending: false });
+.select("*")
 
-    if (error) {
-        console.error(error);
-        return;
-    }
+.order("created_at",{ascending:false});
 
-    table.innerHTML = "";
+if(error){
 
-    data.forEach(student => {
+console.error(error);
 
-        table.innerHTML += `
+return;
+
+}
+
+studentTable.innerHTML="";
+
+data.forEach(student=>{
+
+studentTable.innerHTML+=`
 
 <tr>
 
@@ -244,17 +412,25 @@ class="student-photo">
 
 </td>
 
-<td>${student.full_name}</td>
+<td>${student.student_name_bn || student.student_name_en || ""}</td>
 
-<td>${student.class_name}</td>
+<td>${student.department || ""}</td>
 
-<td>${student.mobile || ""}</td>
+<td>${student.class_name || ""}</td>
+
+<td>${student.roll || ""}</td>
+
+<td>${student.father_mobile || student.guardian_mobile || ""}</td>
 
 <td>
 
-<span class="${student.status === "Active"
-? "badge-active"
-: "badge-inactive"}">
+<span class="${
+student.status==="Active"
+?
+"badge-active"
+:
+"badge-inactive"
+}">
 
 ${student.status}
 
@@ -293,348 +469,348 @@ onclick="deleteStudent('${student.id}')">
 </tr>
 
 `;
-
-    });
-
-}
-
-/* ===========================================
-SEARCH STUDENT
-=========================================== */
-
-const searchInput = document.getElementById("searchStudent");
-const classFilter = document.getElementById("classFilter");
-
-async function searchStudents() {
-
-    let keyword = searchInput.value.trim();
-    let className = classFilter.value;
-
-    let query = supabase
-        .from("students")
-        .select("*");
-
-    if (keyword) {
-
-        query = query.or(
-            `student_id.ilike.%${keyword}%,full_name.ilike.%${keyword}%,mobile.ilike.%${keyword}%`
-        );
-
-    }
-
-    if (className) {
-
-        query = query.eq("class_name", className);
-
-    }
-
-    const { data, error } = await query.order(
-        "created_at",
-        { ascending: false }
-    );
-
-    if (error) {
-
-        console.error(error);
-
-        return;
-
-    }
-
-    const table = document.getElementById("studentTable");
-
-    table.innerHTML = "";
-
-    data.forEach(student => {
-
-        table.innerHTML += `
-
-<tr>
-
-<td>${student.student_id}</td>
-
-<td>
-
-<img
-src="${student.photo_url || 'assets/img/default-user.png'}"
-class="student-photo">
-
-</td>
-
-<td>${student.full_name}</td>
-
-<td>${student.class_name}</td>
-
-<td>${student.mobile || ""}</td>
-
-<td>
-
-<span class="${student.status === "Active"
-? "badge-active"
-: "badge-inactive"}">
-
-${student.status}
-
-</span>
-
-</td>
-
-<td>
-
-<button
-class="action-btn view-btn"
-onclick="viewStudent('${student.student_id}')">
-
-<i class="fa-solid fa-eye"></i>
-
-</button>
-
-<button
-class="action-btn edit-btn"
-onclick="editStudent('${student.id}')">
-
-<i class="fa-solid fa-pen"></i>
-
-</button>
-
-<button
-class="action-btn delete-btn"
-onclick="deleteStudent('${student.id}')">
-
-<i class="fa-solid fa-trash"></i>
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-    });
-
-}
-
-document.getElementById("searchBtn")
-.addEventListener("click", searchStudents);
-
-searchInput.addEventListener("keyup", e => {
-
-    if (e.key === "Enter") {
-
-        searchStudents();
-
-    }
 
 });
 
-classFilter.addEventListener("change", searchStudents);
+}
 
-/* ===========================================
-DELETE STUDENT
-=========================================== */
+/* ==========================================
+SEARCH
+========================================== */
 
-async function deleteStudent(id) {
+searchButton?.addEventListener("click",searchStudents);
 
-    if (!confirm("Delete this student?")) return;
+async function searchStudents(){
 
-    const { error } = await supabase
-        .from("students")
-        .delete()
-        .eq("id", id);
+let query=supabase.from("students").select("*");
 
-    if (error) {
+if(searchInput.value.trim()){
 
-        alert(error.message);
+const k=searchInput.value.trim();
 
-        return;
+query=query.or(
 
-    }
+`student_id.ilike.%${k}%,
+student_name_bn.ilike.%${k}%,
+student_name_en.ilike.%${k}%,
+father_mobile.ilike.%${k}%,
+guardian_mobile.ilike.%${k}%`
 
-    loadStudents();
+);
 
 }
 
-/* ===========================================
-VIEW PROFILE
-=========================================== */
+if(departmentFilter.value){
 
-function viewStudent(studentID) {
-
-    window.location.href =
-        "student-profile.html?id=" +
-        encodeURIComponent(studentID);
+query=query.eq("department",departmentFilter.value);
 
 }
 
-/* ===========================================
-EDIT (Placeholder)
-=========================================== */
+if(classFilter.value){
 
-function editStudent(id) {
-
-    alert("Edit Module will be added in the next part.");
+query=query.eq("class_name",classFilter.value);
 
 }
 
-/* ===========================================
-INIT
-=========================================== */
+if(statusFilter.value){
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    loadStudents();
-
-}); 
-/* ===========================================
-   GET STUDENT BY ID
-=========================================== */
-
-async function getStudent(id) {
-
-    const { data, error } = await supabase
-        .from("students")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-    if (error) {
-
-        alert(error.message);
-
-        return null;
-
-    }
-
-    return data;
+query=query.eq("status",statusFilter.value);
 
 }
 
-/* ===========================================
-   UPDATE STUDENT
-=========================================== */
+const {data,error}=await query.order("created_at",{ascending:false});
 
-async function updateStudent(id, values) {
+if(error){
 
-    const { error } = await supabase
-        .from("students")
-        .update(values)
-        .eq("id", id);
+alert(error.message);
 
-    if (error) {
-
-        alert(error.message);
-
-        return false;
-
-    }
-
-    loadStudents();
-
-    return true;
+return;
 
 }
 
-/* ===========================================
-   EDIT STUDENT
-=========================================== */
+studentTable.innerHTML="";
 
-async function editStudent(id) {
+data.forEach(student=>{
 
-    const student = await getStudent(id);
+studentTable.innerHTML+=`
 
-    if (!student) return;
+<tr>
 
-    document.getElementById("studentName").value =
-        student.full_name || "";
+<td>${student.student_id}</td>
 
-    document.getElementById("fatherName").value =
-        student.father_name || "";
+<td>
 
-    document.getElementById("motherName").value =
-        student.mother_name || "";
+<img
+src="${student.photo_url || 'assets/img/default-user.png'}"
+class="student-photo">
 
-    document.getElementById("studentMobile").value =
-        student.mobile || "";
+</td>
 
-    document.getElementById("studentClass").value =
-        student.class_name || "";
+<td>${student.student_name_bn || ""}</td>
 
-    const modal = new bootstrap.Modal(
-        document.getElementById("studentModal")
-    );
+<td>${student.department || ""}</td>
 
-    modal.show();
+<td>${student.class_name || ""}</td>
 
-    studentForm.onsubmit = async function (e) {
+<td>${student.roll || ""}</td>
 
-        e.preventDefault();
+<td>${student.guardian_mobile || ""}</td>
 
-        const values = {
+<td>${student.status}</td>
 
-            full_name:
-                document.getElementById("studentName").value,
+<td>
 
-            father_name:
-                document.getElementById("fatherName").value,
+<button
+class="action-btn view-btn"
+onclick="viewStudent('${student.student_id}')">
 
-            mother_name:
-                document.getElementById("motherName").value,
+<i class="fa-solid fa-eye"></i>
 
-            mobile:
-                document.getElementById("studentMobile").value,
+</button>
 
-            class_name:
-                document.getElementById("studentClass").value
+<button
+class="action-btn edit-btn"
+onclick="editStudent('${student.id}')">
 
-        };
+<i class="fa-solid fa-pen"></i>
 
-        const ok = await updateStudent(id, values);
+</button>
 
-        if (ok) {
+<button
+class="action-btn delete-btn"
+onclick="deleteStudent('${student.id}')">
 
-            modal.hide();
+<i class="fa-solid fa-trash"></i>
 
-            studentForm.reset();
+</button>
 
-            studentForm.onsubmit = null;
+</td>
 
-        }
+</tr>
 
-    };
+`;
+
+});
 
 }
 
-/* ===========================================
-   PRINT ID CARD
-=========================================== */
+/* ==========================================
+DELETE
+========================================== */
+
+async function deleteStudent(id){
+
+if(!confirm("Delete this student?")) return;
+
+const {error}=await supabase
+
+.from("students")
+
+.delete()
+
+.eq("id",id);
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+loadStudents();
+
+}
+
+/* ==========================================
+PROFILE
+========================================== */
+
+function viewStudent(studentID){
+
+location.href=
+
+"student-profile.html?id="+
+
+encodeURIComponent(studentID);
+
+}
+
+/* ==========================================
+INIT TABLE
+========================================== */
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+loadStudents
+
+);
+/* ==========================================
+   EDIT + UPDATE + PRINT
+========================================== */
+
+let editingStudentId = null;
+
+/* ---------- EDIT ---------- */
+
+async function editStudent(id){
+
+const {data,error}=await supabase
+
+.from("students")
+
+.select("*")
+
+.eq("id",id)
+
+.single();
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+editingStudentId=id;
+
+document.getElementById("studentID").value=data.student_id||"";
+document.getElementById("admissionDate").value=data.admission_date||"";
+
+document.getElementById("department").value=data.department||"";
+loadDepartmentClasses(
+document.getElementById("studentClass"),
+data.department
+);
+
+document.getElementById("studentClass").value=data.class_name||"";
+
+document.getElementById("section").value=data.section||"";
+document.getElementById("roll").value=data.roll||"";
+document.getElementById("session").value=data.session||"";
+document.getElementById("studentStatus").value=data.status||"Active";
+
+document.getElementById("studentNameBn").value=data.student_name_bn||"";
+document.getElementById("studentNameEn").value=data.student_name_en||"";
+document.getElementById("studentNameAr").value=data.student_name_ar||"";
+
+document.getElementById("dob").value=data.dob||"";
+document.getElementById("gender").value=data.gender||"";
+document.getElementById("bloodGroup").value=data.blood_group||"";
+document.getElementById("religion").value=data.religion||"";
+
+document.getElementById("birthCertificate").value=data.birth_certificate||"";
+document.getElementById("nid").value=data.nid||"";
+
+document.getElementById("fatherName").value=data.father_name||"";
+document.getElementById("fatherOccupation").value=data.father_occupation||"";
+document.getElementById("fatherMobile").value=data.father_mobile||"";
+
+document.getElementById("motherName").value=data.mother_name||"";
+document.getElementById("motherOccupation").value=data.mother_occupation||"";
+document.getElementById("motherMobile").value=data.mother_mobile||"";
+
+document.getElementById("guardianName").value=data.guardian_name||"";
+document.getElementById("guardianRelation").value=data.guardian_relation||"";
+document.getElementById("guardianMobile").value=data.guardian_mobile||"";
+
+document.getElementById("presentAddress").value=data.present_address||"";
+document.getElementById("permanentAddress").value=data.permanent_address||"";
+
+document.getElementById("village").value=data.village||"";
+document.getElementById("postOffice").value=data.post_office||"";
+document.getElementById("upazila").value=data.upazila||"";
+document.getElementById("district").value=data.district||"";
+
+document.getElementById("previousInstitute").value=data.previous_institute||"";
+
+document.getElementById("admissionFee").value=data.admission_fee||0;
+document.getElementById("monthlyFee").value=data.monthly_fee||0;
+document.getElementById("scholarship").value=data.scholarship||0;
+
+document.getElementById("emergencyContact").value=data.emergency_contact||"";
+document.getElementById("smsNumber").value=data.sms_number||"";
+document.getElementById("studentEmail").value=data.email||"";
+document.getElementById("remarks").value=data.remarks||"";
+
+new bootstrap.Modal(
+document.getElementById("studentModal")
+).show();
+
+}
+
+/* ---------- UPDATE ---------- */
+
+async function updateStudent(values){
+
+const {error}=await supabase
+
+.from("students")
+
+.update(values)
+
+.eq("id",editingStudentId);
+
+if(error){
+
+alert(error.message);
+
+return false;
+
+}
+
+editingStudentId=null;
+
+loadStudents();
+
+alert("Student Updated Successfully");
+
+return true;
+
+}
+
+/* ---------- PRINT ---------- */
 
 function printIDCard(studentID){
 
-    window.open(
-        "id-card.html?id=" +
-        encodeURIComponent(studentID),
-        "_blank"
-    );
+window.open(
+
+"id-card.html?id="+
+encodeURIComponent(studentID),
+
+"_blank"
+
+);
 
 }
-
-/* ===========================================
-   PRINT ADMIT CARD
-=========================================== */
 
 function printAdmitCard(studentID){
 
-    window.open(
-        "admit-card.html?id=" +
-        encodeURIComponent(studentID),
-        "_blank"
-    );
+window.open(
+
+"admit-card.html?id="+
+encodeURIComponent(studentID),
+
+"_blank"
+
+);
 
 }
 
+/* ---------- QR ---------- */
 
+function generateQR(studentID){
 
+return
+
+"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="
+
++encodeURIComponent(studentID);
+
+}
 
 
 
