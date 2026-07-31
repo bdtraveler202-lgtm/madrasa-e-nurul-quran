@@ -343,8 +343,9 @@ async function initDashboard() {
 
     await loadRecentNotices();
     await loadNoticeTicker();
+    await loadAttendanceSummary(); 
    
-    financeChart();
+    financeChart(); 
 
 }
 
@@ -388,6 +389,49 @@ async function loadNoticeTicker() {
         console.error(err);
 
         ticker.textContent = "নোটিশ লোড করা যায়নি";
+
+    }
+
+}
+/* ===========================================
+   TODAY ATTENDANCE
+=========================================== */
+
+async function loadAttendanceSummary() {
+
+    try {
+
+        const today = new Date().toISOString().split("T")[0];
+
+        const { data } = await db
+            .from("attendance")
+            .select("status")
+            .eq("attendance_date", today);
+
+        let present = 0;
+        let absent = 0;
+
+        (data || []).forEach(item => {
+
+            if (item.status === "Present") {
+
+                present++;
+
+            } else {
+
+                absent++;
+
+            }
+
+        });
+
+        document.getElementById("presentCount").textContent = present;
+
+        document.getElementById("absentCount").textContent = absent;
+
+    } catch (err) {
+
+        console.error(err);
 
     }
 
