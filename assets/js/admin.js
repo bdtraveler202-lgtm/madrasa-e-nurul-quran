@@ -342,7 +342,8 @@ async function initDashboard() {
     await loadTodayCollection();
 
     await loadRecentNotices();
-
+    await loadNoticeTicker();
+   
     financeChart();
 
 }
@@ -351,4 +352,43 @@ document.addEventListener(
     "DOMContentLoaded",
     initDashboard
 );
+/* ===========================================
+   LIVE NOTICE TICKER
+=========================================== */
 
+async function loadNoticeTicker() {
+
+    const ticker = document.getElementById("noticeTicker");
+
+    if (!ticker) return;
+
+    try {
+
+        const { data, error } = await db
+            .from("notices")
+            .select("title")
+            .order("notice_date", { ascending: false })
+            .limit(10);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+
+            ticker.textContent = "কোনো নোটিশ পাওয়া যায়নি";
+            return;
+
+        }
+
+        ticker.textContent = data
+            .map(item => item.title)
+            .join("  •  ");
+
+    } catch (err) {
+
+        console.error(err);
+
+        ticker.textContent = "নোটিশ লোড করা যায়নি";
+
+    }
+
+}
