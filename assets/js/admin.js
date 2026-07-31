@@ -177,36 +177,63 @@ async function loadRecentNotices() {
 
 }
 /* ===========================================
-   FINANCE CHART
+   MONTHLY FINANCE CHART
 =========================================== */
 
-function financeChart() {
+async function financeChart() {
 
     const canvas = document.getElementById("financeChart");
 
     if (!canvas) return;
 
+    const months = [
+        "Jan","Feb","Mar","Apr","May","Jun",
+        "Jul","Aug","Sep","Oct","Nov","Dec"
+    ];
+
+    const income = new Array(12).fill(0);
+
+    try {
+
+        const { data } = await db
+            .from("fees")
+            .select("amount,payment_date");
+
+        (data || []).forEach(item => {
+
+            if (!item.payment_date) return;
+
+            const month = new Date(item.payment_date).getMonth();
+
+            income[month] += Number(item.amount || 0);
+
+        });
+
+    } catch(err){
+
+        console.error(err);
+
+    }
+
     new Chart(canvas, {
 
-        type: "bar",
+        type: "line",
 
         data: {
 
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            labels: months,
 
-            datasets: [
+            datasets: [{
 
-                {
-                    label: "Income",
-                    data: [0, 0, 0, 0, 0, 0]
-                },
+                label: "Monthly Collection",
 
-                {
-                    label: "Expense",
-                    data: [0, 0, 0, 0, 0, 0]
-                }
+                data: income,
 
-            ]
+                fill: true,
+
+                tension: .35
+
+            }]
 
         },
 
