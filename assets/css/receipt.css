@@ -1,1 +1,55 @@
+/* ===========================================
+   MONEY RECEIPT
+=========================================== */
 
+body{
+background:#f4f6f9;
+font-family:Arial,sans-serif;
+}
+
+.receipt-card{
+max-width:900px;
+margin:auto;
+background:#fff;
+padding:40px;
+border-radius:16px;
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+#logo{
+width:90px;
+height:90px;
+object-fit:contain;
+}
+
+.table th{
+background:#198754;
+color:#fff;
+text-align:center;
+}
+
+.table td{
+text-align:center;
+}
+
+h2{
+font-weight:700;
+}
+
+@media print{
+
+body{
+background:#fff;
+}
+
+.receipt-card{
+box-shadow:none;
+border:none;
+padding:20px;
+}
+
+.no-print{
+display:none!important;
+}
+
+}
