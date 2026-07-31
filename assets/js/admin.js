@@ -344,6 +344,7 @@ async function initDashboard() {
     await loadRecentNotices();
     await loadNoticeTicker();
     await loadAttendanceSummary(); 
+    await loadRecentStudents(); 
    
     financeChart(); 
 
@@ -428,6 +429,75 @@ async function loadAttendanceSummary() {
         document.getElementById("presentCount").textContent = present;
 
         document.getElementById("absentCount").textContent = absent;
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
+}
+/* ===========================================
+   RECENT STUDENTS
+=========================================== */
+
+async function loadRecentStudents() {
+
+    try {
+
+        const tbody = document.getElementById("recentStudents");
+
+        if (!tbody) return;
+
+        const { data, error } = await db
+            .from("students")
+            .select("id,name,class,mobile,photo")
+            .order("created_at", { ascending: false })
+            .limit(5);
+
+        if (error) throw error;
+
+        tbody.innerHTML = "";
+
+        if (!data || data.length === 0) {
+
+            tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center">
+                    No Student Found
+                </td>
+            </tr>
+            `;
+
+            return;
+
+        }
+
+        data.forEach(student => {
+
+            tbody.innerHTML += `
+
+            <tr>
+
+                <td>
+
+                    <img
+                    src="${student.photo || 'assets/img/avatar.png'}"
+                    style="width:45px;height:45px;border-radius:50%;object-fit:cover;">
+
+                </td>
+
+                <td>${student.name}</td>
+
+                <td>${student.class}</td>
+
+                <td>${student.mobile}</td>
+
+            </tr>
+
+            `;
+
+        });
 
     } catch (err) {
 
