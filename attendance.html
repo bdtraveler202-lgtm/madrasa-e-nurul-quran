@@ -1,1 +1,215 @@
+<!DOCTYPE html>
+<html lang="bn">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Attendance | Madrasa-E Nurul Quran</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/admin.css">
+
+<link rel="stylesheet" href="assets/css/attendance.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<img src="assets/img/logo.png" alt="Logo">
+
+<h3>মাদরাসায়ে নূরুল কুরআন</h3>
+
+</div>
+
+<ul class="sidebar-menu">
+
+<li><a href="admin.html"><i class="fa-solid fa-house"></i> ড্যাশবোর্ড</a></li>
+
+<li><a href="students.html"><i class="fa-solid fa-user-graduate"></i> শিক্ষার্থী</a></li>
+
+<li><a href="teachers.html"><i class="fa-solid fa-chalkboard-user"></i> শিক্ষক</a></li>
+
+<li><a class="active" href="attendance.html"><i class="fa-solid fa-calendar-check"></i> উপস্থিতি</a></li>
+
+<li><a href="results.html"><i class="fa-solid fa-square-poll-vertical"></i> ফলাফল</a></li>
+
+<li><a href="fees.html"><i class="fa-solid fa-money-bill-wave"></i> ফি</a></li>
+
+<li><a href="notices.html"><i class="fa-solid fa-bullhorn"></i> নোটিশ</a></li>
+
+<li><a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> লগআউট</a></li>
+
+</ul>
+
+</aside>
+
+<!-- Main -->
+
+<main class="main-content">
+
+<div class="topbar">
+
+<h2>Attendance Management</h2>
+
+<button class="btn btn-success" id="saveAttendance">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Attendance
+
+</button>
+
+</div>
+
+<div class="dashboard-card mb-4">
+
+<div class="row g-3">
+
+<div class="col-lg-3">
+
+<label>Date</label>
+
+<input
+type="date"
+id="attendanceDate"
+class="form-control">
+
+</div>
+
+<div class="col-lg-3">
+
+<label>Class</label>
+
+<select
+id="classFilter"
+class="form-select">
+
+<option value="">All Classes</option>
+
+<optgroup label="নূরানী">
+
+<option>শিশু</option>
+<option>প্রথম</option>
+<option>দ্বিতীয়</option>
+<option>তৃতীয়</option>
+<option>চতুর্থ</option>
+<option>পঞ্চম</option>
+
+</optgroup>
+
+<optgroup label="নাজেরা">
+
+<option>নাজেরা-১</option>
+<option>নাজেরা-২</option>
+<option>নাজেরা-৩</option>
+
+</optgroup>
+
+<optgroup label="হিফজ">
+
+<option>হিফজ-১</option>
+<option>হিফজ-২</option>
+
+</optgroup>
+
+</select>
+
+</div>
+
+<div class="col-lg-4">
+
+<label>Search Student</label>
+
+<input
+type="text"
+id="searchStudent"
+class="form-control"
+placeholder="Student ID / Name">
+
+</div>
+
+<div class="col-lg-2 d-grid">
+
+<label>&nbsp;</label>
+
+<button
+class="btn btn-primary"
+id="loadStudents">
+
+Load Students
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="dashboard-card">
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th width="70">Photo</th>
+
+<th>Student ID</th>
+
+<th>Name</th>
+
+<th>Class</th>
+
+<th>Present</th>
+
+<th>Absent</th>
+
+<th>Leave</th>
+
+</tr>
+
+</thead>
+
+<tbody id="attendanceTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="assets/js/supabase.js"></script>
+
+<script src="assets/js/attendance.js"></script>
+
+</body>
+
+</html>
