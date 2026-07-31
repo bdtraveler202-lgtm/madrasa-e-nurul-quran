@@ -1,33 +1,54 @@
 /* ===========================================
-   MADRASA ERP
+   MADRASA-E NURUL QURAN
    ADMIN.JS
 =========================================== */
 
-/* ==========================
+const db = window.supabaseClient;
+
+/* ===========================================
    SESSION CHECK
-========================== */
+=========================================== */
 
 async function checkSession() {
 
-    const {
-        data: { session }
-    } = await supabase.auth.getSession();
+    try {
 
-    if (!session) {
+        const {
+            data: { session }
+        } = await db.auth.getSession();
+
+        if (!session) {
+
+            window.location.href = "login.html";
+            return false;
+
+        }
+
+        const adminName = document.getElementById("adminName");
+
+        if (adminName) {
+
+            adminName.textContent = session.user.email;
+
+        }
+
+        return true;
+
+    } catch (err) {
+
+        console.error(err);
 
         window.location.href = "login.html";
-        return;
+
+        return false;
 
     }
 
-    document.getElementById("adminName").textContent =
-        session.user.email;
-
 }
 
-/* ==========================
+/* ===========================================
    LOGOUT
-========================== */
+=========================================== */
 
 const logoutBtn = document.getElementById("logoutBtn");
 
@@ -37,162 +58,152 @@ if (logoutBtn) {
 
         e.preventDefault();
 
-        const ok = confirm("Are you sure you want to logout?");
+        if (!confirm("Logout করবেন?")) return;
 
-        if (!ok) return;
-
-        await supabase.auth.signOut();
+        await db.auth.signOut();
 
         window.location.href = "login.html";
 
     });
 
-}
-
-/* ==========================
-   DASHBOARD COUNTS
-========================== */
+} 
+/* ===========================================
+   DASHBOARD CARDS
+=========================================== */
 
 async function loadDashboardCards() {
 
-    const students = await supabase
-        .from("students")
-        .select("*", { count: "exact", head: true });
+    try {
 
-    const teachers = await supabase
-        .from("teachers")
-        .select("*", { count: "exact", head: true });
+        const students = await db
+            .from("students")
+            .select("*", { count: "exact", head: true });
 
-    const employees = await supabase
-        .from("employees")
-        .select("*", { count: "exact", head: true });
+        const teachers = await db
+            .from("teachers")
+            .select("*", { count: "exact", head: true });
 
-    document.getElementById("cardStudents").textContent =
-        students.count || 0;
+        const employees = await db
+            .from("employees")
+            .select("*", { count: "exact", head: true });
 
-    document.getElementById("cardTeachers").textContent =
-        teachers.count || 0;
+        document.getElementById("cardStudents").textContent =
+            students.count ?? 0;
 
-    document.getElementById("cardEmployees").textContent =
-        employees.count || 0;
+        document.getElementById("cardTeachers").textContent =
+            teachers.count ?? 0;
+
+        document.getElementById("cardEmployees").textContent =
+            employees.count ?? 0;
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
 
 }
 
-/* ==========================
+/* ===========================================
    TODAY COLLECTION
-========================== */
+=========================================== */
 
 async function loadTodayCollection() {
 
-    const today = new Date().toISOString().split("T")[0];
+    try {
 
-    const { data } = await supabase
+        const today = new Date().toISOString().split("T")[0];
 
-        .from("fees")
+        const { data } = await db
+            .from("fees")
+            .select("amount")
+            .eq("payment_date", today);
 
-        .select("amount")
+        let total = 0;
 
-        .eq("payment_date", today);
-
-    let total = 0;
-
-    if (data) {
-
-        data.forEach(item => {
+        (data || []).forEach(item => {
 
             total += Number(item.amount || 0);
 
         });
 
-    }
+        document.getElementById("todayCollection").textContent =
+            "৳ " + total.toLocaleString();
 
-    document.getElementById("todayCollection").textContent =
-        "৳ " + total.toLocaleString();
+    } catch (err) {
+
+        console.error(err);
+
+    }
 
 }
 
-/* ==========================
-   RECENT NOTICE
-========================== */
+/* ===========================================
+   RECENT NOTICES
+=========================================== */
 
 async function loadRecentNotices() {
 
-    const box = document.getElementById("recentNoticeList");
+    try {
 
-    const { data } = await supabase
+        const box = document.getElementById("recentNoticeList");
 
-        .from("notices")
+        if (!box) return;
 
-        .select("*")
+        const { data } = await db
+            .from("notices")
+            .select("*")
+            .order("notice_date", { ascending: false })
+            .limit(5);
 
-        .order("notice_date", { ascending: false })
+        box.innerHTML = "";
 
-        .limit(5);
+        (data || []).forEach(item => {
 
-    if (!data) return;
+            box.innerHTML += `
+            <div class="notice-item">
+                <h6>${item.title}</h6>
+                <small>${item.notice_date || ""}</small>
+            </div>
+            `;
 
-    box.innerHTML = "";
+        });
 
-    data.forEach(item => {
+    } catch (err) {
 
-        box.innerHTML += `
+        console.error(err);
 
-<div class="notice-item">
-
-<h6>${item.title}</h6>
-
-<small>${item.notice_date ?? ""}</small>
-
-</div>
-
-`;
-
-    });
+    }
 
 }
-
-/* ==========================
+/* ===========================================
    FINANCE CHART
-========================== */
+=========================================== */
 
 function financeChart() {
 
-    const ctx = document
-        .getElementById("financeChart");
+    const canvas = document.getElementById("financeChart");
 
-    if (!ctx) return;
+    if (!canvas) return;
 
-    new Chart(ctx, {
+    new Chart(canvas, {
 
         type: "bar",
 
         data: {
 
-            labels: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun"
-            ],
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
 
             datasets: [
 
                 {
-
                     label: "Income",
-
                     data: [0, 0, 0, 0, 0, 0]
-
                 },
 
                 {
-
                     label: "Expense",
-
                     data: [0, 0, 0, 0, 0, 0]
-
                 }
 
             ]
@@ -211,9 +222,9 @@ function financeChart() {
 
 }
 
-/* ==========================
+/* ===========================================
    GLOBAL SEARCH
-========================== */
+=========================================== */
 
 const search = document.getElementById("globalSearch");
 
@@ -235,13 +246,96 @@ if (search) {
 
 }
 
-/* ==========================
+/* ===========================================
+   LIVE CLOCK & DATE
+=========================================== */
+
+const todayDate = document.getElementById("todayDate");
+const liveClock = document.getElementById("liveClock");
+const languageSwitcher = document.getElementById("languageSwitcher");
+
+let currentLang =
+    localStorage.getItem("language") || "bn";
+
+function updateClock() {
+
+    const now = new Date();
+
+    if (todayDate) {
+
+        todayDate.textContent =
+            now.toLocaleDateString(
+                currentLang === "bn"
+                    ? "bn-BD"
+                    : "en-GB",
+                {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                }
+            );
+
+    }
+
+    if (liveClock) {
+
+        liveClock.textContent =
+            now.toLocaleTimeString(
+                currentLang === "bn"
+                    ? "bn-BD"
+                    : "en-GB"
+            );
+
+    }
+
+}
+
+setInterval(updateClock, 1000);
+
+updateClock();
+
+/* ===========================================
+   LANGUAGE SWITCHER
+=========================================== */
+
+if (languageSwitcher) {
+
+    languageSwitcher.value = currentLang;
+
+    languageSwitcher.addEventListener("change", () => {
+
+        currentLang = languageSwitcher.value;
+
+        localStorage.setItem(
+            "language",
+            currentLang
+        );
+
+        document.querySelectorAll("[data-bn]").forEach(el => {
+
+            el.textContent =
+                currentLang === "bn"
+                    ? el.dataset.bn
+                    : el.dataset.en;
+
+        });
+
+        updateClock();
+
+    });
+
+}
+
+/* ===========================================
    INIT
-========================== */
+=========================================== */
 
 async function initDashboard() {
 
-    await checkSession();
+    const loggedIn = await checkSession();
+
+    if (!loggedIn) return;
 
     await loadDashboardCards();
 
@@ -257,3 +351,4 @@ document.addEventListener(
     "DOMContentLoaded",
     initDashboard
 );
+
