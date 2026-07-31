@@ -65,8 +65,7 @@ loginForm.addEventListener("submit", async (e) => {
     try {
 
         const { error } =
-            await supabase.auth.signInWithPassword({
-
+           await window.supabaseClient.auth.signInWithPassword({
                 email: email.value.trim(),
 
                 password: password.value
@@ -120,7 +119,7 @@ loginForm.addEventListener("submit", async (e) => {
     try {
 
         const { data } =
-            await supabase.auth.getSession();
+            await window.supabaseClient.auth.getSession();
 
         if (data.session) {
 
