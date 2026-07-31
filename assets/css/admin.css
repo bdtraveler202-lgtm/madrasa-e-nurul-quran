@@ -1,5 +1,5 @@
 /* =========================================
-MADRASA ERP ADMIN PANEL
+MADRASA-E Nurul Quran ADMIN PANEL
 ========================================= */
 
 :root{
@@ -432,4 +432,60 @@ width:100%;
 
 }
 
+}
+/* Dashboard Cards */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.card-box{
+padding:25px;
+border-radius:16px;
+color:#fff;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 8px 25px rgba(0,0,0,.15);
+transition:.3s;
+}
+
+.card-box:hover{
+transform:translateY(-5px);
+}
+
+.card-box h6{
+font-size:15px;
+opacity:.9;
+margin-bottom:8px;
+}
+
+.card-box h2{
+font-size:34px;
+font-weight:700;
+margin:0;
+}
+
+.card-box i{
+font-size:42px;
+opacity:.3;
+}
+
+.primary{
+background:linear-gradient(135deg,#2563eb,#1d4ed8);
+}
+
+.success{
+background:linear-gradient(135deg,#16a34a,#15803d);
+}
+
+.warning{
+background:linear-gradient(135deg,#f59e0b,#d97706);
+}
+
+.danger{
+background:linear-gradient(135deg,#dc2626,#b91c1c);
 }
