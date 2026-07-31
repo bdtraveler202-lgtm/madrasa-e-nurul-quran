@@ -1,70 +1,115 @@
-/* ==========================================
-   ID Card
-   Madrasa-E Nurul Quran
-========================================== */
+/* ===========================================
+   MADRASA ERP
+   ID CARD
+=========================================== */
 
-const params = new URLSearchParams(window.location.search);
-const studentID = params.get("id");
+const db = window.supabaseClient;
 
-async function loadIDCard(){
+/* ==========================
+SESSION
+========================== */
 
-    if(!studentID){
+async function checkSession() {
+
+    const { data: { session } } = await db.auth.getSession();
+
+    if (!session) {
+
+        location.href = "login.html";
+        return false;
+
+    }
+
+    return true;
+
+}
+
+/* ==========================
+LOAD STUDENT
+========================== */
+
+async function loadStudent() {
+
+    const id = new URLSearchParams(location.search).get("id");
+
+    if (!id) {
 
         alert("Student ID Missing");
-
         return;
 
     }
 
-    const {data,error}=await supabase
+    const { data, error } = await db
 
-    .from("students")
+        .from("students")
 
-    .select("*")
+        .select("*")
 
-    .eq("student_id",studentID)
+        .eq("id", id)
 
-    .single();
+        .single();
 
-    if(error){
+    if (error || !data) {
 
-        alert(error.message);
-
+        alert("Student Not Found");
         return;
 
     }
 
     document.getElementById("photo").src =
-    data.photo_url || "assets/img/default-user.png";
+        data.photo || "assets/img/default-user.png";
 
     document.getElementById("studentID").textContent =
-    data.student_id;
+        data.id || "-";
 
     document.getElementById("studentName").textContent =
-    data.student_name_bn || data.student_name_en || "";
-
-    document.getElementById("department").textContent =
-    data.department || "";
+        data.name || "-";
 
     document.getElementById("studentClass").textContent =
-    data.class_name || "";
+        data.class || "-";
 
     document.getElementById("roll").textContent =
-    data.roll || "";
+        data.roll || "-";
+
+    document.getElementById("department").textContent =
+        data.department || "-";
 
     document.getElementById("session").textContent =
-    data.session || "";
+        data.session || "-";
 
     document.getElementById("mobile").textContent =
-    data.guardian_mobile || data.father_mobile || "";
+        data.mobile || "-";
 
-    document.getElementById("qrCode").src =
-    "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" +
-    encodeURIComponent(data.student_id);
+    document.getElementById("bloodGroup").textContent =
+        data.blood_group || "-";
+
+    const qrText =
+        location.origin +
+        "/student-profile.html?id=" +
+        data.id;
+
+    QRCode.toDataURL(qrText, function (err, url) {
+
+        if (!err) {
+
+            document.getElementById("qrCode").src = url;
+
+        }
+
+    });
 
 }
 
-document.addEventListener(
-    "DOMContentLoaded",
-    loadIDCard
-);
+/* ==========================
+INIT
+========================== */
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const ok = await checkSession();
+
+    if (!ok) return;
+
+    await loadStudent();
+
+});
