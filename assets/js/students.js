@@ -1,25 +1,44 @@
 /* ==========================================
-   Madrasa-E Nurul Quran
-   Student Management System
-   students.js (Final)
+   MADRASA ERP
+   STUDENTS.JS
+   PROFESSIONAL VERSION
 ========================================== */
 
 /* ==========================
-   GLOBAL ELEMENTS
+   SUPABASE
+========================== */
+
+const db = window.supabaseClient;
+
+/* ==========================
+   GLOBAL
 ========================== */
 
 const studentForm = document.getElementById("studentForm");
 const studentTable = document.getElementById("studentTable");
 
-const departmentSelect = document.getElementById("department");
-const classSelect = document.getElementById("studentClass");
+const departmentSelect =
+document.getElementById("department");
 
-const searchInput = document.getElementById("searchStudent");
-const searchButton = document.getElementById("searchBtn");
+const classSelect =
+document.getElementById("studentClass");
 
-const departmentFilter = document.getElementById("departmentFilter");
-const classFilter = document.getElementById("classFilter");
-const statusFilter = document.getElementById("statusFilter");
+const searchInput =
+document.getElementById("searchStudent");
+
+const searchButton =
+document.getElementById("searchBtn");
+
+const departmentFilter =
+document.getElementById("departmentFilter");
+
+const classFilter =
+document.getElementById("classFilter");
+
+const statusFilter =
+document.getElementById("statusFilter");
+
+let editingStudentId = null;
 
 /* ==========================
    CLASS DATA
@@ -27,206 +46,229 @@ const statusFilter = document.getElementById("statusFilter");
 
 const CLASS_DATA = {
 
-    Nurani: [
-        "শিশু",
-        "প্রথম",
-        "দ্বিতীয়",
-        "তৃতীয়",
-        "চতুর্থ",
-        "পঞ্চম"
-    ],
+Nurani:[
 
-    Nazera: [
-        "১ম বর্ষ",
-        "২য় বর্ষ",
-        "৩য় বর্ষ",
-        "৪র্থ বর্ষ",
-        "সমাপনী"
-    ],
+"শিশু",
+"প্রথম",
+"দ্বিতীয়",
+"তৃতীয়",
+"চতুর্থ",
+"পঞ্চম"
 
-    Hifz: [
-        "প্রস্তুতি",
-        "১ম বর্ষ",
-        "২য় বর্ষ",
-        "৩য় বর্ষ",
-        "৪র্থ বর্ষ",
-        "৫ম বর্ষ",
-        "সম্পন্ন"
-    ]
+],
+
+Nazera:[
+
+"১ম বর্ষ",
+"২য় বর্ষ",
+"৩য় বর্ষ",
+"৪র্থ বর্ষ",
+"সমাপনী"
+
+],
+
+Hifz:[
+
+"প্রস্তুতি",
+"১ম বর্ষ",
+"২য় বর্ষ",
+"৩য় বর্ষ",
+"৪র্থ বর্ষ",
+"৫ম বর্ষ",
+"সম্পন্ন"
+
+]
 
 };
 
 /* ==========================
-   SESSION
+SESSION
 ========================== */
 
-async function checkSession() {
+async function checkSession(){
 
-    const {
-        data: { session }
-    } = await supabase.auth.getSession();
+const {
 
-    if (!session) {
+data:{session}
 
-        window.location.href = "login.html";
-        return false;
+}
 
-    }
+=
 
-    return true;
+await db.auth.getSession();
+
+if(!session){
+
+location.href="login.html";
+
+return false;
+
+}
+
+return true;
 
 }
 
 /* ==========================
-   LOAD CLASS
+LOAD CLASS
 ========================== */
 
-function loadDepartmentClasses(selectBox, department) {
+function loadDepartmentClasses(box,dept){
 
-    selectBox.innerHTML = "";
+box.innerHTML="";
 
-    const first = document.createElement("option");
+const first=document.createElement("option");
 
-    first.value = "";
-    first.textContent = "Select Class";
+first.value="";
 
-    selectBox.appendChild(first);
+first.textContent="Select Class";
 
-    if (!CLASS_DATA[department]) return;
+box.appendChild(first);
 
-    CLASS_DATA[department].forEach(item => {
+if(!CLASS_DATA[dept]) return;
 
-        const option = document.createElement("option");
+CLASS_DATA[dept].forEach(cls=>{
 
-        option.value = item;
-        option.textContent = item;
+const option=document.createElement("option");
 
-        selectBox.appendChild(option);
+option.value=cls;
 
-    });
+option.textContent=cls;
 
-}
+box.appendChild(option);
 
-/* Registration Form */
-
-if (departmentSelect) {
-
-    departmentSelect.addEventListener("change", () => {
-
-        loadDepartmentClasses(
-            classSelect,
-            departmentSelect.value
-        );
-
-    });
+});
 
 }
 
-/* Search Filter */
+departmentSelect?.addEventListener(
 
-if (departmentFilter) {
+"change",
 
-    departmentFilter.addEventListener("change", () => {
+()=>{
 
-        loadDepartmentClasses(
-            classFilter,
-            departmentFilter.value
-        );
+loadDepartmentClasses(
 
-    });
+classSelect,
+
+departmentSelect.value
+
+);
+
+}
+
+);
+
+departmentFilter?.addEventListener(
+
+"change",
+
+()=>{
+
+loadDepartmentClasses(
+
+classFilter,
+
+departmentFilter.value
+
+);
+
+}
+
+);
+
+/* ==========================
+AUTO ID
+========================== */
+
+async function generateStudentID(){
+
+const year=new Date().getFullYear();
+
+const {count,error}=await db
+
+.from("students")
+
+.select("*",{
+
+count:"exact",
+
+head:true
+
+});
+
+if(error){
+
+console.error(error);
+
+return "";
+
+}
+
+const serial=
+
+String((count||0)+1)
+
+.padStart(6,"0");
+
+const id=
+
+`MDR-${year}-${serial}`;
+
+const box=
+
+document.getElementById("studentID");
+
+if(box){
+
+box.value=id;
+
+}
+
+return id;
+
+} 
+/* ==========================
+PHOTO UPLOAD
+========================== */
+
+async function uploadStudentPhoto(file){
+
+if(!file) return "";
+
+const fileName=
+
+Date.now()+"_"+file.name;
+
+const {error}=await db.storage
+
+.from("students")
+
+.upload(fileName,file);
+
+if(error) throw error;
+
+const {data}=db.storage
+
+.from("students")
+
+.getPublicUrl(fileName);
+
+return data.publicUrl;
 
 }
 
 /* ==========================
-   AUTO STUDENT ID
+SAVE STUDENT
 ========================== */
 
-async function generateStudentID() {
+studentForm?.addEventListener(
 
-    const year = new Date().getFullYear();
+"submit",
 
-    const { count } = await supabase
+saveStudent
 
-        .from("students")
-
-        .select("*", {
-
-            count: "exact",
-            head: true
-
-        });
-
-    const next = String(
-        (count || 0) + 1
-    ).padStart(6, "0");
-
-    const studentID = `MDR-${year}-${next}`;
-
-    const idBox =
-        document.getElementById("studentID");
-
-    if (idBox) {
-
-        idBox.value = studentID;
-
-    }
-
-    return studentID;
-
-}
-
-/* ==========================
-   PHOTO UPLOAD
-========================== */
-
-async function uploadStudentPhoto(file) {
-
-    if (!file) return "";
-
-    const fileName =
-        Date.now() + "_" + file.name;
-
-    const { error } =
-        await supabase.storage
-
-        .from("students")
-
-        .upload(fileName, file);
-
-    if (error) throw error;
-
-    const { data } =
-        supabase.storage
-
-        .from("students")
-
-        .getPublicUrl(fileName);
-
-    return data.publicUrl;
-
-}
-
-/* ==========================
-   INIT
-========================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-
-        const ok = await checkSession();
-
-        if (!ok) return;
-
-        await generateStudentID();
-
-    }
-); 
-/* ==========================================
-   SAVE STUDENT
-========================================== */
-
-studentForm?.addEventListener("submit", saveStudent);
+);
 
 async function saveStudent(e){
 
@@ -234,171 +276,341 @@ e.preventDefault();
 
 try{
 
-const studentID = await generateStudentID();
+const btn=
 
-const imageFile =
-document.getElementById("studentPhoto").files[0];
+studentForm.querySelector(
 
-const photo =
-await uploadStudentPhoto(imageFile);
+'button[type="submit"]'
 
-const student = {
+);
+
+const oldText=btn.innerHTML;
+
+btn.disabled=true;
+
+btn.innerHTML="Saving...";
+
+let studentID=
+
+document.getElementById("studentID").value;
+
+if(!studentID){
+
+studentID=
+
+await generateStudentID();
+
+}
+
+let photo="";
+
+const file=
+
+document.getElementById("studentPhoto")?.files[0];
+
+if(file){
+
+photo=
+
+await uploadStudentPhoto(file);
+
+}
+
+const student={
 
 student_id:studentID,
 
-admission_date:document.getElementById("admissionDate").value,
+admission_date:
 
-department:document.getElementById("department").value,
+document.getElementById("admissionDate").value,
 
-class_name:document.getElementById("studentClass").value,
+department:
 
-section:document.getElementById("section").value,
+document.getElementById("department").value,
 
-roll:document.getElementById("roll").value,
+class_name:
 
-session:document.getElementById("session").value,
+document.getElementById("studentClass").value,
 
-status:document.getElementById("studentStatus").value,
+section:
 
-student_name_bn:document.getElementById("studentNameBn").value,
+document.getElementById("section").value,
 
-student_name_en:document.getElementById("studentNameEn").value,
+roll:
 
-student_name_ar:document.getElementById("studentNameAr").value,
+document.getElementById("roll").value,
 
-dob:document.getElementById("dob").value,
+session:
 
-gender:document.getElementById("gender").value,
+document.getElementById("session").value,
 
-blood_group:document.getElementById("bloodGroup").value,
+status:
 
-religion:document.getElementById("religion").value,
+document.getElementById("studentStatus").value,
 
-birth_certificate:document.getElementById("birthCertificate").value,
+student_name_bn:
 
-nid:document.getElementById("nid").value,
+document.getElementById("studentNameBn").value,
+
+student_name_en:
+
+document.getElementById("studentNameEn").value,
+
+student_name_ar:
+
+document.getElementById("studentNameAr").value,
+
+dob:
+
+document.getElementById("dob").value,
+
+gender:
+
+document.getElementById("gender").value,
+
+blood_group:
+
+document.getElementById("bloodGroup").value,
+
+religion:
+
+document.getElementById("religion").value,
+
+birth_certificate:
+
+document.getElementById("birthCertificate").value,
+
+nid:
+
+document.getElementById("nid").value,
 
 photo_url:photo,
 
-father_name:document.getElementById("fatherName").value,
+father_name:
 
-father_occupation:document.getElementById("fatherOccupation").value,
+document.getElementById("fatherName").value,
 
-father_mobile:document.getElementById("fatherMobile").value,
+father_occupation:
 
-mother_name:document.getElementById("motherName").value,
+document.getElementById("fatherOccupation").value,
 
-mother_occupation:document.getElementById("motherOccupation").value,
+father_mobile:
 
-mother_mobile:document.getElementById("motherMobile").value,
+document.getElementById("fatherMobile").value,
 
-guardian_name:document.getElementById("guardianName").value,
+mother_name:
 
-guardian_relation:document.getElementById("guardianRelation").value,
+document.getElementById("motherName").value,
 
-guardian_mobile:document.getElementById("guardianMobile").value,
+mother_occupation:
 
-present_address:document.getElementById("presentAddress").value,
+document.getElementById("motherOccupation").value,
 
-permanent_address:document.getElementById("permanentAddress").value,
+mother_mobile:
 
-village:document.getElementById("village").value,
+document.getElementById("motherMobile").value,
 
-post_office:document.getElementById("postOffice").value,
+guardian_name:
 
-upazila:document.getElementById("upazila").value,
+document.getElementById("guardianName").value,
 
-district:document.getElementById("district").value,
+guardian_relation:
 
-previous_institute:document.getElementById("previousInstitute").value,
+document.getElementById("guardianRelation").value,
 
-admission_fee:Number(document.getElementById("admissionFee").value||0),
+guardian_mobile:
 
-monthly_fee:Number(document.getElementById("monthlyFee").value||0),
+document.getElementById("guardianMobile").value,
 
-scholarship:Number(document.getElementById("scholarship").value||0),
+present_address:
 
-emergency_contact:document.getElementById("emergencyContact").value,
+document.getElementById("presentAddress").value,
 
-sms_number:document.getElementById("smsNumber").value,
+permanent_address:
 
-email:document.getElementById("studentEmail").value,
+document.getElementById("permanentAddress").value,
 
-remarks:document.getElementById("remarks").value
+village:
+
+document.getElementById("village").value,
+
+post_office:
+
+document.getElementById("postOffice").value,
+
+upazila:
+
+document.getElementById("upazila").value,
+
+district:
+
+document.getElementById("district").value,
+
+previous_institute:
+
+document.getElementById("previousInstitute").value,
+
+admission_fee:Number(
+
+document.getElementById("admissionFee").value||0
+
+),
+
+monthly_fee:Number(
+
+document.getElementById("monthlyFee").value||0
+
+),
+
+scholarship:Number(
+
+document.getElementById("scholarship").value||0
+
+),
+
+emergency_contact:
+
+document.getElementById("emergencyContact").value,
+
+sms_number:
+
+document.getElementById("smsNumber").value,
+
+email:
+
+document.getElementById("studentEmail").value,
+
+remarks:
+
+document.getElementById("remarks").value
 
 };
 
 if(editingStudentId){
 
-const ok = await updateStudent(student);
+const {error}=await db
 
-if(ok){
+.from("students")
 
-bootstrap.Modal
-.getInstance(document.getElementById("studentModal"))
-.hide();
+.update(student)
 
-studentForm.reset();
+.eq("id",editingStudentId);
 
-}
+if(error) throw error;
 
-return;
+editingStudentId=null;
 
-}
+alert("Student Updated Successfully");
 
-const {error}=await supabase
+}else{
+
+const {error}=await db
 
 .from("students")
 
 .insert(student);
 
 if(error) throw error;
+
 alert("Student Registered Successfully");
+
+}
 
 studentForm.reset();
 
-bootstrap.Modal
-.getInstance(document.getElementById("studentModal"))
-.hide();
-
 await generateStudentID();
 
-loadStudents();
+await loadStudents();
+
+bootstrap.Modal
+
+.getInstance(
+
+document.getElementById("studentModal")
+
+)?.hide();
+
+btn.disabled=false;
+
+btn.innerHTML=oldText;
 
 }catch(err){
 
 alert(err.message);
 
+console.error(err);
+
 }
 
 }
-/* ==========================================
+/* ==========================
    LOAD STUDENTS
-========================================== */
+========================== */
 
 async function loadStudents() {
 
-const { data, error } = await supabase
+    try {
 
-.from("students")
+        let query = db
+            .from("students")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-.select("*")
+        if (departmentFilter?.value) {
+            query = query.eq("department", departmentFilter.value);
+        }
 
-.order("created_at",{ascending:false});
+        if (classFilter?.value) {
+            query = query.eq("class_name", classFilter.value);
+        }
 
-if(error){
+        if (statusFilter?.value) {
+            query = query.eq("status", statusFilter.value);
+        }
 
-console.error(error);
+        if (searchInput?.value.trim()) {
 
-return;
+            const k = searchInput.value.trim();
 
-}
+            query = query.or(
+                `student_id.ilike.%${k}%,
+                student_name_bn.ilike.%${k}%,
+                student_name_en.ilike.%${k}%,
+                father_mobile.ilike.%${k}%,
+                guardian_mobile.ilike.%${k}%`
+            );
 
-studentTable.innerHTML="";
+        }
 
-data.forEach(student=>{
+        const { data, error } = await query;
 
-studentTable.innerHTML+=`
+        if (error) throw error;
+
+        studentTable.innerHTML = "";
+
+        if (!data.length) {
+
+            studentTable.innerHTML = `
+
+<tr>
+
+<td colspan="9" class="text-center">
+
+No Student Found
+
+</td>
+
+</tr>
+
+`;
+
+            return;
+
+        }
+
+        data.forEach(student => {
+
+            studentTable.innerHTML += `
 
 <tr>
 
@@ -407,7 +619,7 @@ studentTable.innerHTML+=`
 <td>
 
 <img
-src="${student.photo_url || 'assets/img/default-user.png'}"
+src="${student.photo_url || "assets/img/default-user.png"}"
 class="student-photo">
 
 </td>
@@ -420,17 +632,11 @@ class="student-photo">
 
 <td>${student.roll || ""}</td>
 
-<td>${student.father_mobile || student.guardian_mobile || ""}</td>
+<td>${student.guardian_mobile || student.father_mobile || ""}</td>
 
 <td>
 
-<span class="${
-student.status==="Active"
-?
-"badge-active"
-:
-"badge-inactive"
-}">
+<span class="badge ${student.status === "Active" ? "bg-success" : "bg-danger"}">
 
 ${student.status}
 
@@ -441,7 +647,7 @@ ${student.status}
 <td>
 
 <button
-class="action-btn view-btn"
+class="btn btn-sm btn-info"
 onclick="viewStudent('${student.student_id}')">
 
 <i class="fa-solid fa-eye"></i>
@@ -449,7 +655,7 @@ onclick="viewStudent('${student.student_id}')">
 </button>
 
 <button
-class="action-btn edit-btn"
+class="btn btn-sm btn-warning"
 onclick="editStudent('${student.id}')">
 
 <i class="fa-solid fa-pen"></i>
@@ -457,10 +663,18 @@ onclick="editStudent('${student.id}')">
 </button>
 
 <button
-class="action-btn delete-btn"
+class="btn btn-sm btn-danger"
 onclick="deleteStudent('${student.id}')">
 
 <i class="fa-solid fa-trash"></i>
+
+</button>
+
+<button
+class="btn btn-sm btn-success"
+onclick="printIDCard('${student.student_id}')">
+
+<i class="fa-solid fa-id-card"></i>
 
 </button>
 
@@ -470,139 +684,65 @@ onclick="deleteStudent('${student.id}')">
 
 `;
 
-});
+        });
+
+    } catch (err) {
+
+        console.error(err);
+        alert(err.message);
+
+    }
 
 }
 
-/* ==========================================
+/* ==========================
 SEARCH
-========================================== */
+========================== */
 
-searchButton?.addEventListener("click",searchStudents);
-
-async function searchStudents(){
-
-let query=supabase.from("students").select("*");
-
-if(searchInput.value.trim()){
-
-const k=searchInput.value.trim();
-
-query=query.or(
-
-`student_id.ilike.%${k}%,
-student_name_bn.ilike.%${k}%,
-student_name_en.ilike.%${k}%,
-father_mobile.ilike.%${k}%,
-guardian_mobile.ilike.%${k}%`
-
+searchButton?.addEventListener(
+    "click",
+    loadStudents
 );
 
-}
+searchInput?.addEventListener(
+    "keypress",
+    e => {
 
-if(departmentFilter.value){
+        if (e.key === "Enter") {
 
-query=query.eq("department",departmentFilter.value);
+            e.preventDefault();
 
-}
+            loadStudents();
 
-if(classFilter.value){
+        }
 
-query=query.eq("class_name",classFilter.value);
+    }
+);
 
-}
+departmentFilter?.addEventListener(
+    "change",
+    loadStudents
+);
 
-if(statusFilter.value){
+classFilter?.addEventListener(
+    "change",
+    loadStudents
+);
 
-query=query.eq("status",statusFilter.value);
+statusFilter?.addEventListener(
+    "change",
+    loadStudents
+);
 
-}
-
-const {data,error}=await query.order("created_at",{ascending:false});
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-studentTable.innerHTML="";
-
-data.forEach(student=>{
-
-studentTable.innerHTML+=`
-
-<tr>
-
-<td>${student.student_id}</td>
-
-<td>
-
-<img
-src="${student.photo_url || 'assets/img/default-user.png'}"
-class="student-photo">
-
-</td>
-
-<td>${student.student_name_bn || ""}</td>
-
-<td>${student.department || ""}</td>
-
-<td>${student.class_name || ""}</td>
-
-<td>${student.roll || ""}</td>
-
-<td>${student.guardian_mobile || ""}</td>
-
-<td>${student.status}</td>
-
-<td>
-
-<button
-class="action-btn view-btn"
-onclick="viewStudent('${student.student_id}')">
-
-<i class="fa-solid fa-eye"></i>
-
-</button>
-
-<button
-class="action-btn edit-btn"
-onclick="editStudent('${student.id}')">
-
-<i class="fa-solid fa-pen"></i>
-
-</button>
-
-<button
-class="action-btn delete-btn"
-onclick="deleteStudent('${student.id}')">
-
-<i class="fa-solid fa-trash"></i>
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-}
-
-/* ==========================================
+/* ==========================
 DELETE
-========================================== */
+========================== */
 
 async function deleteStudent(id){
 
 if(!confirm("Delete this student?")) return;
 
-const {error}=await supabase
+const {error}=await db
 
 .from("students")
 
@@ -618,13 +758,13 @@ return;
 
 }
 
-loadStudents();
+await loadStudents();
 
 }
 
-/* ==========================================
-PROFILE
-========================================== */
+/* ==========================
+VIEW PROFILE
+========================== */
 
 function viewStudent(studentID){
 
@@ -636,143 +776,9 @@ encodeURIComponent(studentID);
 
 }
 
-/* ==========================================
-INIT TABLE
-========================================== */
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-loadStudents
-
-);
-/* ==========================================
-   EDIT + UPDATE + PRINT
-========================================== */
-
-let editingStudentId = null;
-
-/* ---------- EDIT ---------- */
-
-async function editStudent(id){
-
-const {data,error}=await supabase
-
-.from("students")
-
-.select("*")
-
-.eq("id",id)
-
-.single();
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-editingStudentId=id;
-
-document.getElementById("studentID").value=data.student_id||"";
-document.getElementById("admissionDate").value=data.admission_date||"";
-
-document.getElementById("department").value=data.department||"";
-loadDepartmentClasses(
-document.getElementById("studentClass"),
-data.department
-);
-
-document.getElementById("studentClass").value=data.class_name||"";
-
-document.getElementById("section").value=data.section||"";
-document.getElementById("roll").value=data.roll||"";
-document.getElementById("session").value=data.session||"";
-document.getElementById("studentStatus").value=data.status||"Active";
-
-document.getElementById("studentNameBn").value=data.student_name_bn||"";
-document.getElementById("studentNameEn").value=data.student_name_en||"";
-document.getElementById("studentNameAr").value=data.student_name_ar||"";
-
-document.getElementById("dob").value=data.dob||"";
-document.getElementById("gender").value=data.gender||"";
-document.getElementById("bloodGroup").value=data.blood_group||"";
-document.getElementById("religion").value=data.religion||"";
-
-document.getElementById("birthCertificate").value=data.birth_certificate||"";
-document.getElementById("nid").value=data.nid||"";
-
-document.getElementById("fatherName").value=data.father_name||"";
-document.getElementById("fatherOccupation").value=data.father_occupation||"";
-document.getElementById("fatherMobile").value=data.father_mobile||"";
-
-document.getElementById("motherName").value=data.mother_name||"";
-document.getElementById("motherOccupation").value=data.mother_occupation||"";
-document.getElementById("motherMobile").value=data.mother_mobile||"";
-
-document.getElementById("guardianName").value=data.guardian_name||"";
-document.getElementById("guardianRelation").value=data.guardian_relation||"";
-document.getElementById("guardianMobile").value=data.guardian_mobile||"";
-
-document.getElementById("presentAddress").value=data.present_address||"";
-document.getElementById("permanentAddress").value=data.permanent_address||"";
-
-document.getElementById("village").value=data.village||"";
-document.getElementById("postOffice").value=data.post_office||"";
-document.getElementById("upazila").value=data.upazila||"";
-document.getElementById("district").value=data.district||"";
-
-document.getElementById("previousInstitute").value=data.previous_institute||"";
-
-document.getElementById("admissionFee").value=data.admission_fee||0;
-document.getElementById("monthlyFee").value=data.monthly_fee||0;
-document.getElementById("scholarship").value=data.scholarship||0;
-
-document.getElementById("emergencyContact").value=data.emergency_contact||"";
-document.getElementById("smsNumber").value=data.sms_number||"";
-document.getElementById("studentEmail").value=data.email||"";
-document.getElementById("remarks").value=data.remarks||"";
-
-new bootstrap.Modal(
-document.getElementById("studentModal")
-).show();
-
-}
-
-/* ---------- UPDATE ---------- */
-
-async function updateStudent(values){
-
-const {error}=await supabase
-
-.from("students")
-
-.update(values)
-
-.eq("id",editingStudentId);
-
-if(error){
-
-alert(error.message);
-
-return false;
-
-}
-
-editingStudentId=null;
-
-loadStudents();
-
-alert("Student Updated Successfully");
-
-return true;
-
-}
-
-/* ---------- PRINT ---------- */
+/* ==========================
+PRINT
+========================== */
 
 function printIDCard(studentID){
 
@@ -800,17 +806,148 @@ encodeURIComponent(studentID),
 
 }
 
-/* ---------- QR ---------- */
+/* ==========================
+INIT
+========================== */
 
-function generateQR(studentID){
+document.addEventListener("DOMContentLoaded", async () => {
 
-return
+    const ok = await checkSession();
 
-"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data="
+    if (!ok) return;
 
-+encodeURIComponent(studentID);
+    await generateStudentID();
+
+    await loadStudents();
+
+});
+/* ==========================
+   EDIT STUDENT
+========================== */
+
+async function editStudent(id) {
+
+    try {
+
+        const { data, error } = await db
+            .from("students")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+        if (error) throw error;
+
+        editingStudentId = id;
+
+        const set = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.value = value ?? "";
+        };
+
+        set("studentID", data.student_id);
+        set("admissionDate", data.admission_date);
+        set("department", data.department);
+
+        loadDepartmentClasses(
+            document.getElementById("studentClass"),
+            data.department
+        );
+
+        set("studentClass", data.class_name);
+        set("section", data.section);
+        set("roll", data.roll);
+        set("session", data.session);
+        set("studentStatus", data.status);
+
+        set("studentNameBn", data.student_name_bn);
+        set("studentNameEn", data.student_name_en);
+        set("studentNameAr", data.student_name_ar);
+
+        set("dob", data.dob);
+        set("gender", data.gender);
+        set("bloodGroup", data.blood_group);
+        set("religion", data.religion);
+
+        set("birthCertificate", data.birth_certificate);
+        set("nid", data.nid);
+
+        set("fatherName", data.father_name);
+        set("fatherOccupation", data.father_occupation);
+        set("fatherMobile", data.father_mobile);
+
+        set("motherName", data.mother_name);
+        set("motherOccupation", data.mother_occupation);
+        set("motherMobile", data.mother_mobile);
+
+        set("guardianName", data.guardian_name);
+        set("guardianRelation", data.guardian_relation);
+        set("guardianMobile", data.guardian_mobile);
+
+        set("presentAddress", data.present_address);
+        set("permanentAddress", data.permanent_address);
+
+        set("village", data.village);
+        set("postOffice", data.post_office);
+        set("upazila", data.upazila);
+        set("district", data.district);
+
+        set("previousInstitute", data.previous_institute);
+
+        set("admissionFee", data.admission_fee);
+        set("monthlyFee", data.monthly_fee);
+        set("scholarship", data.scholarship);
+
+        set("emergencyContact", data.emergency_contact);
+        set("smsNumber", data.sms_number);
+        set("studentEmail", data.email);
+        set("remarks", data.remarks);
+
+        new bootstrap.Modal(
+            document.getElementById("studentModal")
+        ).show();
+
+    } catch (err) {
+
+        console.error(err);
+        alert(err.message);
+
+    }
 
 }
 
+/* ==========================
+QR CODE URL
+========================== */
 
+function generateQR(studentID) {
+
+    return "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+        encodeURIComponent(studentID);
+
+}
+
+/* ==========================
+RESET FORM
+========================== */
+
+function resetStudentForm() {
+
+    editingStudentId = null;
+
+    studentForm?.reset();
+
+    generateStudentID();
+
+}
+
+/* ==========================
+EXPORT
+========================== */
+
+window.loadStudents = loadStudents;
+window.editStudent = editStudent;
+window.deleteStudent = deleteStudent;
+window.viewStudent = viewStudent;
+window.printIDCard = printIDCard;
+window.printAdmitCard = printAdmitCard;
 
