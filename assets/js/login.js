@@ -13,9 +13,9 @@ const togglePassword = document.getElementById("togglePassword");
    CHECK SUPABASE
 =========================================== */
 
-if (typeof supabase === "undefined") {
-    alert("Supabase is not loaded. Please check assets/js/supabase.js");
-    throw new Error("Supabase not loaded");
+if (!window.supabaseClient) {
+    alert("Supabase Client is not loaded!");
+    throw new Error("Supabase Client not loaded");
 }
 
 /* ===========================================
