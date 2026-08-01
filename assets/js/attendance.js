@@ -53,21 +53,20 @@ async function loadStudents() {
     let query = db
         .from("students")
         .select("*")
-        .order("name");
+        .order("student_name_bn");
 
     if (classFilter.value) {
 
-        query = query.eq("class", classFilter.value);
+        query = query.eq("class_name", classFilter.value);
 
     }
 
     if (searchStudent.value.trim()) {
 
-        query = query.ilike(
-            "name",
-            `%${searchStudent.value.trim()}%`
-        );
-
+       query = query.or(
+`student_name_bn.ilike.%${searchStudent.value.trim()}%,
+student_name_en.ilike.%${searchStudent.value.trim()}%`
+);
     }
 
     const { data, error } = await query;
@@ -104,16 +103,16 @@ async function loadStudents() {
 <td>
 
 <img
-src="${student.photo || "assets/img/avatar.png"}"
+src="${student.photo_url || "assets/img/avatar.png"}"
 class="student-photo">
 
 </td>
 
 <td>${student.id}</td>
 
-<td>${student.name}</td>
+<td>${student.student_name_bn || student.student_name_en}</td>
 
-<td>${student.class}</td>
+<td>${student.class_name}</td>
 
 <td>
 
