@@ -33,20 +33,19 @@ const historyTable = document.getElementById("paymentHistory");
    SESSION
 =========================================== */
 
-async function checkSession() {
+async function checkSession(){
 
-    const {
-        data: { session }
-    } = await db.auth.getSession();
+const {data:{session}}=await db.auth.getSession();
 
-    if (!session) {
+if(!session){
 
-        location.href = "login.html";
-        return false;
+location.href="login.html";
 
-    }
+return false;
 
-    return true;
+}
+
+return true;
 
 }
 
@@ -54,105 +53,110 @@ async function checkSession() {
    SEARCH STUDENT
 =========================================== */
 
-async function searchStudent() {
+async function searchStudent(){
 
-    const keyword = searchInput.value.trim();
+const keyword=searchInput.value.trim();
 
-    if (!keyword) {
+if(!keyword){
 
-        alert("Student ID / Name লিখুন");
-        return;
+alert("Student ID / Name লিখুন");
 
-    }
-
-    const { data, error } = await db
-        .from("students")
-        .select("*")
-        .or(
-            `id.eq.${keyword},name.ilike.%${keyword}%,mobile.ilike.%${keyword}%`
-        )
-        .limit(1);
-
-    if (error) {
-
-        console.error(error);
-        return;
-
-    }
-
-    if (!data.length) {
-
-        alert("Student পাওয়া যায়নি");
-        return;
-
-    }
-
-    currentStudent = data[0];
-
-    studentPhoto.src =
-        currentStudent.photo ||
-        "assets/img/avatar.png";
-
-    studentName.textContent =
-        currentStudent.name;
-
-    studentId.textContent =
-        currentStudent.id;
-
-    fatherName.textContent =
-        currentStudent.father_name || "-";
-
-    studentClass.textContent =
-        currentStudent.class;
-
-    studentMobile.textContent =
-        currentStudent.mobile || "-";
-
-    loadPaymentHistory();
+return;
 
 }
 
-searchBtn.addEventListener(
-    "click",
-    searchStudent
-);
+const {data,error}=await db
+
+.from("students")
+
+.select("*")
+
+.or(
+
+`student_id.eq.${keyword},
+student_name_bn.ilike.%${keyword}%,
+student_name_en.ilike.%${keyword}%,
+father_mobile.ilike.%${keyword}%,
+guardian_mobile.ilike.%${keyword}%`
+
+)
+
+.limit(1);
+
+if(error){
+
+console.error(error);
+
+return;
+
+}
+
+if(!data || data.length===0){
+
+alert("Student পাওয়া যায়নি");
+
+return;
+
+}
+
+currentStudent=data[0];
+
+studentPhoto.src=currentStudent.photo_url || "assets/img/avatar.png";
+
+studentName.textContent=currentStudent.student_name_bn || currentStudent.student_name_en;
+
+studentId.textContent=currentStudent.student_id;
+
+fatherName.textContent=currentStudent.father_name || "-";
+
+studentClass.textContent=currentStudent.class_name;
+
+studentMobile.textContent=currentStudent.guardian_mobile || currentStudent.father_mobile || "-";
+
+loadPaymentHistory();
+
+}
+
+searchBtn?.addEventListener("click",searchStudent); 
 /* ===========================================
    DUE CALCULATION
 =========================================== */
 
-function calculateDue() {
+function calculateDue(){
 
-    const totalAmount = Number(amount.value) || 0;
-    const totalDiscount = Number(discount.value) || 0;
-    const totalPaid = Number(paid.value) || 0;
+const totalAmount=Number(amount.value)||0;
+const totalDiscount=Number(discount.value)||0;
+const totalPaid=Number(paid.value)||0;
 
-    const totalDue = totalAmount - totalDiscount - totalPaid;
+const totalDue=totalAmount-totalDiscount-totalPaid;
 
-    due.value = totalDue > 0 ? totalDue : 0;
+due.value=totalDue>0?totalDue:0;
 
 }
 
-amount.addEventListener("input", calculateDue);
-discount.addEventListener("input", calculateDue);
-paid.addEventListener("input", calculateDue);
+amount?.addEventListener("input",calculateDue);
+discount?.addEventListener("input",calculateDue);
+paid?.addEventListener("input",calculateDue);
 
 /* ===========================================
-   GENERATE RECEIPT
+   RECEIPT NO
 =========================================== */
 
-async function generateReceiptNo() {
+async function generateReceiptNo(){
 
-    const { data, error } = await db.rpc("generate_receipt_no");
+try{
 
-    if (error) {
+const {data,error}=await db.rpc("generate_receipt_no");
 
-        console.error(error);
+if(error) throw error;
 
-        return "RCP-" + Date.now();
+return data;
 
-    }
+}catch{
 
-    return data;
+return "RCP-"+Date.now();
+
+}
 
 }
 
@@ -160,117 +164,127 @@ async function generateReceiptNo() {
    SAVE PAYMENT
 =========================================== */
 
-feeForm.addEventListener("submit", async (e) => {
+feeForm?.addEventListener("submit",async(e)=>{
 
-    e.preventDefault();
+e.preventDefault();
 
-    if (!currentStudent) {
+if(!currentStudent){
 
-        alert("প্রথমে Student Search করুন।");
-        return;
+alert("প্রথমে Student Search করুন");
 
-    }
+return;
 
-    const receiptNo = await generateReceiptNo();
+}
 
-    const feeData = {
+const receiptNo=await generateReceiptNo();
 
-        student_id: currentStudent.id,
+const feeData={
 
-        receipt_no: receiptNo,
+student_id:currentStudent.student_id,
 
-        payment_date: new Date().toISOString().split("T")[0],
+receipt_no:receiptNo,
 
-        month: document.getElementById("feeMonth").value,
+payment_date:new Date().toISOString().split("T")[0],
 
-        fee_type: document.getElementById("feeType").value,
+month:document.getElementById("feeMonth").value,
 
-        amount: Number(amount.value) || 0,
+fee_type:document.getElementById("feeType").value,
 
-        discount: Number(discount.value) || 0,
+amount:Number(amount.value)||0,
 
-        paid: Number(paid.value) || 0,
+discount:Number(discount.value)||0,
 
-        due: Number(due.value) || 0,
+paid:Number(paid.value)||0,
 
-        payment_method: document.getElementById("paymentMethod").value,
+due:Number(due.value)||0,
 
-        remarks: document.getElementById("remarks").value
+payment_method:document.getElementById("paymentMethod").value,
 
-    };
+remarks:document.getElementById("remarks").value
 
-    const { error } = await db
-        .from("fees")
-        .insert(feeData);
+};
 
-    if (error) {
+const {error}=await db
 
-        console.error(error);
+.from("fees")
 
-        alert(error.message);
+.insert(feeData);
 
-        return;
+if(error){
 
-    }
+alert(error.message);
 
-    alert("Payment Saved Successfully");
+return;
 
-    feeForm.reset();
+}
 
-    discount.value = 0;
-    due.value = "";
+alert("Payment Saved Successfully");
 
-    loadPaymentHistory();
+feeForm.reset();
 
-}); 
+discount.value=0;
+due.value="";
+
+loadPaymentHistory();
+
+});
 /* ===========================================
    PAYMENT HISTORY
 =========================================== */
 
-async function loadPaymentHistory() {
+async function loadPaymentHistory(){
 
-    if (!currentStudent) {
+if(!currentStudent){
 
-        historyTable.innerHTML = `
-        <tr>
-            <td colspan="10" class="text-center">
-                Search a student first
-            </td>
-        </tr>`;
-        return;
+historyTable.innerHTML=`
+<tr>
+<td colspan="10" class="text-center">
+Search a student first
+</td>
+</tr>
+`;
 
-    }
+return;
 
-    const { data, error } = await db
-        .from("fees")
-        .select("*")
-        .eq("student_id", currentStudent.id)
-        .order("payment_date", { ascending: false });
+}
 
-    if (error) {
+const {data,error}=await db
 
-        console.error(error);
-        return;
+.from("fees")
 
-    }
+.select("*")
 
-    historyTable.innerHTML = "";
+.eq("student_id",currentStudent.student_id)
 
-    if (!data || data.length === 0) {
+.order("payment_date",{ascending:false});
 
-        historyTable.innerHTML = `
-        <tr>
-            <td colspan="10" class="text-center">
-                No Payment History Found
-            </td>
-        </tr>`;
-        return;
+if(error){
 
-    }
+console.error(error);
 
-    data.forEach(item => {
+return;
 
-        historyTable.innerHTML += `
+}
+
+historyTable.innerHTML="";
+
+if(!data || data.length===0){
+
+historyTable.innerHTML=`
+<tr>
+<td colspan="10" class="text-center">
+No Payment History Found
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+data.forEach(item=>{
+
+historyTable.innerHTML+=`
 
 <tr>
 
@@ -308,7 +322,7 @@ onclick="printReceipt('${item.receipt_no}')">
 
 `;
 
-    });
+});
 
 }
 
@@ -316,62 +330,54 @@ onclick="printReceipt('${item.receipt_no}')">
    PRINT RECEIPT
 =========================================== */
 
-function printReceipt(receiptNo) {
+function printReceipt(receiptNo){
 
-    window.open(
-        "receipt.html?receipt=" +
-        encodeURIComponent(receiptNo),
-        "_blank"
-    );
+window.open(
+
+"receipt.html?receipt="+
+encodeURIComponent(receiptNo),
+
+"_blank"
+
+);
 
 }
 
 /* ===========================================
-   REFRESH HISTORY
+   REFRESH
 =========================================== */
 
-const refreshBtn = document.getElementById("refreshHistory");
+const refreshBtn=document.getElementById("refreshHistory");
 
-if (refreshBtn) {
-
-    refreshBtn.addEventListener("click", () => {
-
-        loadPaymentHistory();
-
-    });
-
-}
+refreshBtn?.addEventListener("click",loadPaymentHistory);
 
 /* ===========================================
    LOGOUT
 =========================================== */
 
-const logoutBtn = document.getElementById("logoutBtn");
+const logoutBtn=document.getElementById("logoutBtn");
 
-if (logoutBtn) {
+logoutBtn?.addEventListener("click",async(e)=>{
 
-    logoutBtn.addEventListener("click", async (e) => {
+e.preventDefault();
 
-        e.preventDefault();
+if(!confirm("Logout করবেন?")) return;
 
-        if (!confirm("Logout করবেন?")) return;
+await db.auth.signOut();
 
-        await db.auth.signOut();
+location.href="login.html";
 
-        location.href = "login.html";
-
-    });
-
-}
+});
 
 /* ===========================================
    INIT
 =========================================== */
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded",async()=>{
 
-    const ok = await checkSession();
+const ok=await checkSession();
 
-    if (!ok) return;
+if(!ok) return;
 
 });
+
