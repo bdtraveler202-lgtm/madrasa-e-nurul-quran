@@ -3,6 +3,8 @@
    Madrasa-E Nurul Quran
 ========================================== */
 
+const db = window.supabaseClient;
+
 const params = new URLSearchParams(window.location.search);
 const studentID = params.get("id");
 
@@ -15,12 +17,11 @@ async function loadProfile() {
     if (!studentID) {
 
         alert("Student ID not found.");
-
         return;
 
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await db
 
         .from("students")
 
@@ -33,12 +34,13 @@ async function loadProfile() {
     if (error) {
 
         alert(error.message);
-
         return;
 
     }
 
-    /* Basic */
+    /* ==========================
+       BASIC INFO
+    ========================== */
 
     document.getElementById("profilePhoto").src =
         data.photo_url || "assets/img/default-user.png";
@@ -47,7 +49,7 @@ async function loadProfile() {
         data.student_name_bn || data.student_name_en || "";
 
     document.getElementById("studentID").textContent =
-        data.student_id;
+        data.student_id || "";
 
     document.getElementById("department").textContent =
         data.department || "";
@@ -73,7 +75,9 @@ async function loadProfile() {
     document.getElementById("bloodGroup").textContent =
         data.blood_group || "";
 
-    /* Parents */
+    /* ==========================
+       FATHER
+    ========================== */
 
     document.getElementById("fatherName").textContent =
         data.father_name || "";
@@ -84,6 +88,10 @@ async function loadProfile() {
     document.getElementById("fatherOccupation").textContent =
         data.father_occupation || "";
 
+    /* ==========================
+       MOTHER
+    ========================== */
+
     document.getElementById("motherName").textContent =
         data.mother_name || "";
 
@@ -93,7 +101,9 @@ async function loadProfile() {
     document.getElementById("motherOccupation").textContent =
         data.mother_occupation || "";
 
-    /* Guardian */
+    /* ==========================
+       GUARDIAN
+    ========================== */
 
     document.getElementById("guardianName").textContent =
         data.guardian_name || "";
@@ -107,7 +117,9 @@ async function loadProfile() {
     document.getElementById("emergencyContact").textContent =
         data.emergency_contact || "";
 
-    /* Address */
+    /* ==========================
+       ADDRESS
+    ========================== */
 
     document.getElementById("presentAddress").textContent =
         data.present_address || "";
@@ -127,7 +139,9 @@ async function loadProfile() {
     document.getElementById("district").textContent =
         data.district || "";
 
-    /* QR */
+    /* ==========================
+       QR CODE
+    ========================== */
 
     document.getElementById("qrCode").src =
         "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
@@ -136,15 +150,18 @@ async function loadProfile() {
 }
 
 /* ==========================
-   PRINT
+   PRINT FUNCTIONS
 ========================== */
 
 function printIDCard() {
 
     window.open(
+
         "id-card.html?id=" +
         encodeURIComponent(studentID),
+
         "_blank"
+
     );
 
 }
@@ -152,18 +169,22 @@ function printIDCard() {
 function printAdmitCard() {
 
     window.open(
+
         "admit-card.html?id=" +
         encodeURIComponent(studentID),
+
         "_blank"
+
     );
 
 }
 
 /* ==========================
-   START
+   INIT
 ========================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    loadProfile
-);
+document.addEventListener("DOMContentLoaded", async () => {
+
+    await loadProfile();
+
+});
