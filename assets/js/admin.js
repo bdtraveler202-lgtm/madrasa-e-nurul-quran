@@ -478,7 +478,15 @@ async function loadRecentStudents() {
 
         const { data, error } = await db
             .from("students")
-            .select("id,name,class,mobile,photo")
+           .select(`
+id,
+student_name_bn,
+student_name_en,
+class_name,
+guardian_mobile,
+father_mobile,
+photo_url
+`)
             .order("created_at", { ascending: false })
             .limit(5);
 
@@ -509,16 +517,14 @@ async function loadRecentStudents() {
                 <td>
 
                     <img
-                    src="${student.photo || 'assets/img/avatar.png'}"
+                    src="${student.photo_url || 'assets/img/avatar.png'}"
                     style="width:45px;height:45px;border-radius:50%;object-fit:cover;">
 
                 </td>
 
-                <td>${student.name}</td>
-
-                <td>${student.class}</td>
-
-                <td>${student.mobile}</td>
+                <td>${student.student_name_bn || student.student_name_en}</td>
+                <td>${student.class_name}</td>
+                <td>${student.guardian_mobile || student.father_mobile}</td>
 
             </tr>
 
