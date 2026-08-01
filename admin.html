@@ -7,7 +7,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard | Madrasa-E Nurul Quran</title>
+<title>Madrasa ERP v2.0 | Dashboard</title>
+
+<meta name="description" content="Madrasa-E Nurul Quran ERP System">
+
+<link rel="icon" href="assets/img/logo.png">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -21,7 +25,9 @@
 
 <div class="dashboard">
 
-<!-- Sidebar -->
+<!-- =========================
+SIDEBAR
+========================= -->
 
 <aside class="sidebar">
 
@@ -29,252 +35,130 @@
 
 <img src="assets/img/logo.png" alt="Logo">
 
-<h3>মাদরাসায়ে নূরুল কুরআন</h3>
+<h3>Madrasa ERP v2.0</h3>
+
+<p>Madrasa-E Nurul Quran</p>
 
 </div>
 
 <ul class="sidebar-menu">
 
-<li><a class="active" href="admin.html"><i class="fa-solid fa-house"></i> <span data-bn="ড্যাশবোর্ড" data-en="Dashboard">ড্যাশবোর্ড</span></a></li>
+<li>
 
-<li><a href="students.html"><i class="fa-solid fa-user-graduate"></i> <span data-bn="শিক্ষার্থী" data-en="Students">শিক্ষার্থী</span></a></li>
+<a class="active" href="admin.html">
 
-<li><a href="teachers.html"><i class="fa-solid fa-chalkboard-user"></i> <span data-bn="শিক্ষক" data-en="Teachers">শিক্ষক</span></a></li>
+<i class="fa-solid fa-gauge-high"></i>
 
-<li><a href="employees.html"><i class="fa-solid fa-users"></i> <span data-bn="কর্মচারী" data-en="Employees">কর্মচারী</span></a></li>
+<span>Dashboard</span>
 
-<li><a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> <span data-bn="উপস্থিতি" data-en="Attendance">উপস্থিতি</span></a></li>
+</a>
 
-<li><a href="results.html"><i class="fa-solid fa-square-poll-vertical"></i> <span data-bn="ফলাফল" data-en="Results">ফলাফল</span></a></li>
+</li>
 
-<li><a href="fees.html"><i class="fa-solid fa-money-bill-wave"></i> <span data-bn="ফি সংগ্রহ" data-en="Fees">ফি সংগ্রহ</span></a></li>
+<li>
 
-<li><a href="donation.html"><i class="fa-solid fa-hand-holding-heart"></i> <span data-bn="অনুদান" data-en="Donation">অনুদান</span></a></li>
+<a href="students.html">
 
-<li><a href="notices.html"><i class="fa-solid fa-bullhorn"></i> <span data-bn="নোটিশ" data-en="Notices">নোটিশ</span></a></li>
+<i class="fa-solid fa-user-graduate"></i>
 
-<li><a href="gallery.html"><i class="fa-solid fa-images"></i> <span data-bn="গ্যালারি" data-en="Gallery">গ্যালারি</span></a></li>
+<span>Students</span>
 
-<li><a href="downloads.html"><i class="fa-solid fa-download"></i> <span data-bn="ডাউনলোড" data-en="Downloads">ডাউনলোড</span></a></li>
+</a>
 
-<li><a href="sms.html"><i class="fa-solid fa-comment-sms"></i> <span data-bn="এসএমএস" data-en="SMS">এসএমএস</span></a></li>
+</li>
 
-<li><a href="settings.html"><i class="fa-solid fa-gear"></i> <span data-bn="সেটিংস" data-en="Settings">সেটিংস</span></a></li>
+<li>
 
-<li><a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> <span data-bn="লগআউট" data-en="Logout">লগআউট</span></a></li>
+<a href="student-profile.html">
 
-</ul>
+<i class="fa-solid fa-address-card"></i>
 
-</aside>
+<span>Student Profile</span>
 
-<!-- Main Content -->
+</a>
 
-<main class="main-content">
+</li>
 
-<header class="topbar">
+<li>
 
-<div>
+<a href="id-card.html">
 
-<h2 data-bn="ড্যাশবোর্ড" data-en="Dashboard">
+<i class="fa-solid fa-id-badge"></i>
 
-ড্যাশবোর্ড
+<span>Student ID Card</span>
 
-</h2>
+</a>
 
-<small id="todayDate"></small>
+</li>
 
-</div>
+<li>
 
-<div class="topbar-right">
+<a href="admit-card.html">
 
-<div id="liveClock"></div>
+<i class="fa-solid fa-file-circle-check"></i>
 
-<select id="languageSwitcher" class="form-select">
+<span>Admit Card</span>
 
-<option value="bn">বাংলা</option>
+</a>
 
-<option value="en">English</option>
+</li>
 
-</select>
+<li>
 
-<input
-type="search"
-id="globalSearch"
-class="form-control"
-placeholder="Search Student ID">
+<a href="teacher.html">
 
-<span id="adminName">Administrator</span>
+<i class="fa-solid fa-chalkboard-user"></i>
 
-</div>
+<span>Teachers</span>
 
-</header>
+</a>
 
-<div class="notice-ticker">
+</li>
 
-<strong data-bn="নোটিশ" data-en="Notice">
+<li>
 
-নোটিশ
+<a href="teacher-id.html">
 
-</strong>
+<i class="fa-solid fa-id-card"></i>
 
-<marquee id="noticeTicker">
+<span>Teacher ID Card</span>
 
-Loading latest notices...
+</a>
 
-</marquee>
+</li>
 
-</div>
+<li>
 
-<section class="cards">
+<a href="teacher-attendance.html">
 
-<div class="card-box primary">
-    <div>
-        <h6>মোট শিক্ষার্থী</h6>
-        <h2 id="cardStudents">0</h2>
-    </div>
-    <i class="fa-solid fa-user-graduate"></i>
-</div>
+<i class="fa-solid fa-calendar-check"></i>
 
-<div class="card-box success">
-    <div>
-        <h6>মোট শিক্ষক</h6>
-        <h2 id="cardTeachers">0</h2>
-    </div>
-    <i class="fa-solid fa-chalkboard-user"></i>
-</div>
+<span>Teacher Attendance</span>
 
-<div class="card-box warning">
-    <div>
-        <h6>মোট কর্মচারী</h6>
-        <h2 id="cardEmployees">0</h2>
-    </div>
-    <i class="fa-solid fa-users"></i>
-</div>
+</a>
 
-<div class="card-box danger">
-    <div>
-        <h6>আজকের আদায়</h6>
-        <h2 id="todayCollection">৳ 0</h2>
-    </div>
-    <i class="fa-solid fa-money-bill-wave"></i>
-</div>
+</li>
 
-</section>
-<section class="row mt-4">
+<li>
 
-<div class="col-lg-4">
+<a href="teacher-salary.html">
 
-<div class="dashboard-card">
+<i class="fa-solid fa-money-check-dollar"></i>
 
-<h4>আজকের উপস্থিতি</h4>
+<span>Teacher Salary</span>
 
-<div class="attendance-summary">
+</a>
 
-<p>উপস্থিত</p>
+</li>
 
-<h2 id="presentCount">0</h2>
+<li>
 
-<hr>
+<a href="employee.html">
 
-<p>অনুপস্থিত</p>
+<i class="fa-solid fa-users"></i>
 
-<h2 id="absentCount">0</h2>
+<span>Employees</span>
 
-</div>
+</a>
 
-</div>
-
-</div>
-
-<div class="col-lg-8">
-
-<div class="dashboard-card">
-
-<h4>সাম্প্রতিক ভর্তি</h4>
-
-<div class="table-responsive">
-
-<table class="table">
-
-<thead>
-
-<tr>
-
-<th>ছবি</th>
-
-<th>নাম</th>
-
-<th>শ্রেণি</th>
-
-<th>মোবাইল</th>
-
-</tr>
-
-</thead>
-
-<tbody id="recentStudents">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<section class="row mt-4">
-
-<div class="col-lg-8">
-
-<div class="dashboard-card">
-
-<h4 data-bn="মাসিক আয় ও ব্যয়" data-en="Monthly Income & Expense">
-
-মাসিক আয় ও ব্যয়
-
-</h4>
-
-<div style="height:350px">
-    <canvas id="financeChart"></canvas>
-</div>
-
-</div>
-
-</div>
-
-<div class="col-lg-4">
-
-<div class="dashboard-card">
-
-<h4 data-bn="সাম্প্রতিক নোটিশ" data-en="Recent Notices">
-
-সাম্প্রতিক নোটিশ
-
-</h4>
-
-<div id="recentNoticeList"></div>
-
-</div>
-
-</div>
-
-</section>
-
-</main>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="assets/js/supabase.js"></script>
-
-<script src="assets/js/admin.js"></script>
-
-</body>
-
-</html>
+</li>
