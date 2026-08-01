@@ -1,12 +1,12 @@
-/* ===========================================
-   MADRASA ERP
+/* ==========================================
+   Madrasa-E Nurul Quran
    ID CARD
-=========================================== */
+========================================== */
 
 const db = window.supabaseClient;
 
 /* ==========================
-SESSION
+   SESSION
 ========================== */
 
 async function checkSession() {
@@ -25,14 +25,14 @@ async function checkSession() {
 }
 
 /* ==========================
-LOAD STUDENT
+   LOAD STUDENT
 ========================== */
 
 async function loadStudent() {
 
-    const id = new URLSearchParams(location.search).get("id");
+    const studentID = new URLSearchParams(location.search).get("id");
 
-    if (!id) {
+    if (!studentID) {
 
         alert("Student ID Missing");
         return;
@@ -45,7 +45,7 @@ async function loadStudent() {
 
         .select("*")
 
-        .eq("id", id)
+        .eq("student_id", studentID)
 
         .single();
 
@@ -57,51 +57,56 @@ async function loadStudent() {
     }
 
     document.getElementById("photo").src =
-        data.photo || "assets/img/default-user.png";
+        data.photo_url || "assets/img/default-user.png";
 
     document.getElementById("studentID").textContent =
-        data.id || "-";
+        data.student_id || "-";
 
     document.getElementById("studentName").textContent =
-        data.name || "-";
-
-    document.getElementById("studentClass").textContent =
-        data.class || "-";
-
-    document.getElementById("roll").textContent =
-        data.roll || "-";
+        data.student_name_bn ||
+        data.student_name_en ||
+        "-";
 
     document.getElementById("department").textContent =
         data.department || "-";
+
+    document.getElementById("studentClass").textContent =
+        data.class_name || "-";
+
+    document.getElementById("roll").textContent =
+        data.roll || "-";
 
     document.getElementById("session").textContent =
         data.session || "-";
 
     document.getElementById("mobile").textContent =
-        data.mobile || "-";
-
-    document.getElementById("bloodGroup").textContent =
-        data.blood_group || "-";
+        data.guardian_mobile ||
+        data.father_mobile ||
+        "-";
 
     const qrText =
         location.origin +
         "/student-profile.html?id=" +
-        data.id;
+        encodeURIComponent(data.student_id);
 
-    QRCode.toDataURL(qrText, function (err, url) {
-
-        if (!err) {
-
-            document.getElementById("qrCode").src = url;
-
-        }
-
-    });
+    document.getElementById("qrCode").src =
+        "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+        encodeURIComponent(qrText);
 
 }
 
 /* ==========================
-INIT
+   PRINT
+========================== */
+
+function printCard() {
+
+    window.print();
+
+}
+
+/* ==========================
+   INIT
 ========================== */
 
 document.addEventListener("DOMContentLoaded", async () => {
