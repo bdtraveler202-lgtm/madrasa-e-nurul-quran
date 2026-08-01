@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Salary</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container py-4">
+
+<div class="card shadow">
+
+<div class="card-header bg-success text-white">
+
+<h3>
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Teacher Salary Management
+
+</h3>
+
+</div>
+
+<div class="card-body">
+
+<form id="salaryForm">
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+
+<label>Teacher</label>
+
+<select
+id="teacherSelect"
+class="form-select"
+required>
+
+<option value="">Select Teacher</option>
+
+</select>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label>Month</label>
+
+<input
+type="month"
+id="salaryMonth"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-2 mb-3">
+
+<label>Salary</label>
+
+<input
+type="number"
+id="salary"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label>Payment Date</label>
+
+<input
+type="date"
+id="paymentDate"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-12 mb-3">
+
+<label>Remarks</label>
+
+<textarea
+id="remarks"
+class="form-control"></textarea>
+
+</div>
+
+<div class="col-md-12">
+
+<button
+class="btn btn-success"
+type="submit">
+
+<i class="fa-solid fa-floppy-disk"></i>
+
+Save Salary
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+<hr>
+
+<table class="table table-bordered">
+
+<thead>
+
+<tr>
+
+<th>Teacher</th>
+
+<th>Month</th>
+
+<th>Salary</th>
+
+<th>Date</th>
+
+<th>Remarks</th>
+
+</tr>
+
+</thead>
+
+<tbody id="salaryTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="assets/js/supabase.js"></script>
+
+<script src="assets/js/teacher-salary.js"></script>
+
+</body>
+
+</html>
