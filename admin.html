@@ -162,3 +162,675 @@ SIDEBAR
 </a>
 
 </li>
+<li>
+
+<a href="attendance.html">
+
+<i class="fa-solid fa-user-check"></i>
+
+<span>Student Attendance</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="attendance-report.html">
+
+<i class="fa-solid fa-chart-column"></i>
+
+<span>Attendance Report</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="results.html">
+
+<i class="fa-solid fa-square-poll-vertical"></i>
+
+<span>Results</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="marksheet.html">
+
+<i class="fa-solid fa-file-lines"></i>
+
+<span>Marksheet</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="fees.html">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+<span>Fees Collection</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="receipt.html">
+
+<i class="fa-solid fa-receipt"></i>
+
+<span>Receipt</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="notices.html">
+
+<i class="fa-solid fa-bullhorn"></i>
+
+<span>Notice</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="gallery.html">
+
+<i class="fa-solid fa-images"></i>
+
+<span>Gallery</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="downloads.html">
+
+<i class="fa-solid fa-download"></i>
+
+<span>Downloads</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="settings.html">
+
+<i class="fa-solid fa-gear"></i>
+
+<span>Settings</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="#" id="logoutBtn">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+<span>Logout</span>
+
+</a>
+
+</li>
+
+</ul>
+
+</aside>
+
+<!-- =========================
+MAIN CONTENT
+========================= -->
+
+<main class="main-content">
+
+<header class="topbar">
+
+<div>
+
+<h2>Dashboard</h2>
+
+<p id="todayDate"></p>
+
+</div>
+
+<div class="topbar-right">
+
+<div id="liveClock"></div>
+
+<input
+
+type="search"
+
+id="globalSearch"
+
+class="form-control"
+
+placeholder="Search Student ID">
+
+<span class="admin-user">
+
+<i class="fa-solid fa-user-shield"></i>
+
+Administrator
+
+</span>
+
+</div>
+
+</header>
+
+<div class="notice-ticker">
+
+<strong>
+
+<i class="fa-solid fa-bullhorn"></i>
+
+Latest Notice
+
+</strong>
+
+<marquee id="noticeTicker">
+
+Loading latest notices...
+
+</marquee>
+
+</div>
+
+<section class="cards"> 
+<div class="card-box primary">
+
+<div class="card-icon">
+
+<i class="fa-solid fa-user-graduate"></i>
+
+</div>
+
+<div class="card-info">
+
+<h6>Total Students</h6>
+
+<h2 id="cardStudents">0</h2>
+
+<p>Registered Students</p>
+
+</div>
+
+</div>
+
+<div class="card-box success">
+
+<div class="card-icon">
+
+<i class="fa-solid fa-chalkboard-user"></i>
+
+</div>
+
+<div class="card-info">
+
+<h6>Total Teachers</h6>
+
+<h2 id="cardTeachers">0</h2>
+
+<p>Teaching Staff</p>
+
+</div>
+
+</div>
+
+<div class="card-box warning">
+
+<div class="card-icon">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+<div class="card-info">
+
+<h6>Total Employees</h6>
+
+<h2 id="cardEmployees">0</h2>
+
+<p>Office Staff</p>
+
+</div>
+
+</div>
+
+<div class="card-box danger">
+
+<div class="card-icon">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+</div>
+
+<div class="card-info">
+
+<h6>Today's Collection</h6>
+
+<h2 id="todayCollection">৳0</h2>
+
+<p>Fees Collected</p>
+
+</div>
+
+</div>
+
+<div class="card-box info">
+
+<div class="card-icon">
+
+<i class="fa-solid fa-calendar-check"></i>
+
+</div>
+
+<div class="card-info">
+
+<h6>Today's Attendance</h6>
+
+<h2 id="todayAttendance">0%</h2>
+
+<p>Present Students</p>
+
+</div>
+
+</div>
+
+<div class="card-box purple">
+
+<div class="card-icon">
+
+<i class="fa-solid fa-book-open"></i>
+
+</div>
+
+<div class="card-info">
+
+<h6>Active Classes</h6>
+
+<h2 id="totalClasses">0</h2>
+
+<p>Running Classes</p>
+
+</div>
+
+</div>
+
+<div class="card-box dark">
+
+<div class="card-icon">
+
+<i class="fa-solid fa-file-lines"></i>
+
+</div>
+
+<div class="card-info">
+
+<h6>Total Results</h6>
+
+<h2 id="totalResults">0</h2>
+
+<p>Published Results</p>
+
+</div>
+
+</div>
+
+<div class="card-box orange">
+
+<div class="card-icon">
+
+<i class="fa-solid fa-receipt"></i>
+
+</div>
+
+<div class="card-info">
+
+<h6>Today's Receipts</h6>
+
+<h2 id="todayReceipts">0</h2>
+
+<p>Generated Receipts</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="row mt-4">
+  <div class="col-lg-4">
+
+<div class="dashboard-card">
+
+<h4>
+
+<i class="fa-solid fa-bolt"></i>
+
+Quick Actions
+
+</h4>
+
+<div class="d-grid gap-2 mt-3">
+
+<a href="students.html" class="btn btn-primary">
+
+<i class="fa-solid fa-user-plus"></i>
+
+Add Student
+
+</a>
+
+<a href="teacher.html" class="btn btn-success">
+
+<i class="fa-solid fa-chalkboard-user"></i>
+
+Add Teacher
+
+</a>
+
+<a href="attendance.html" class="btn btn-warning">
+
+<i class="fa-solid fa-calendar-check"></i>
+
+Take Attendance
+
+</a>
+
+<a href="fees.html" class="btn btn-info">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Collect Fees
+
+</a>
+
+<a href="results.html" class="btn btn-secondary">
+
+<i class="fa-solid fa-file-lines"></i>
+
+Publish Result
+
+</a>
+
+</div>
+
+<hr>
+
+<h5>Today's Attendance</h5>
+
+<div class="mt-3">
+
+<p>
+
+Present
+
+<strong id="presentCount">0</strong>
+
+</p>
+
+<div class="progress mb-3">
+
+<div
+
+id="presentBar"
+
+class="progress-bar bg-success"
+
+style="width:0%">
+
+</div>
+
+</div>
+
+<p>
+
+Absent
+
+<strong id="absentCount">0</strong>
+
+</p>
+
+<div class="progress">
+
+<div
+
+id="absentBar"
+
+class="progress-bar bg-danger"
+
+style="width:0%">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-8">
+
+<div class="dashboard-card">
+
+<h4>
+
+<i class="fa-solid fa-user-graduate"></i>
+
+Recent Students
+
+</h4>
+
+<div class="table-responsive">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Photo</th>
+
+<th>Name</th>
+
+<th>Class</th>
+
+<th>Roll</th>
+
+<th>Mobile</th>
+
+</tr>
+
+</thead>
+
+<tbody id="recentStudents">
+
+<tr>
+
+<td colspan="5" class="text-center">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="row mt-4"> 
+  <div class="col-lg-6">
+
+<div class="dashboard-card">
+
+<h4>
+
+<i class="fa-solid fa-chalkboard-user"></i>
+
+Recent Teachers
+
+</h4>
+
+<div class="table-responsive">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Photo</th>
+
+<th>Name</th>
+
+<th>Department</th>
+
+<th>Mobile</th>
+
+</tr>
+
+</thead>
+
+<tbody id="recentTeachers">
+
+<tr>
+
+<td colspan="4" class="text-center">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="dashboard-card">
+
+<h4>
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Recent Fee Collection
+
+</h4>
+
+<div class="table-responsive">
+
+<table class="table table-hover">
+
+<thead>
+
+<tr>
+
+<th>Receipt</th>
+
+<th>Student</th>
+
+<th>Amount</th>
+
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody id="recentPayments">
+
+<tr>
+
+<td colspan="4" class="text-center">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer class="mt-4 text-center">
+
+<hr>
+
+<p>
+
+© 2026 Madrasa ERP v2.0 |
+
+Developed for
+
+<strong>Madrasa-E Nurul Quran</strong>
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="assets/js/supabase.js"></script>
+
+<script src="assets/js/admin.js"></script>
+
+</body>
+
+</html>
