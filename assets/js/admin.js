@@ -1,541 +1,418 @@
 /* ===========================================
-   MADRASA-E NURUL QURAN
+   MADRASA ERP v2.0
    ADMIN.JS
 =========================================== */
 
 const db = window.supabaseClient;
 
 /* ===========================================
-   SESSION CHECK
+SESSION
 =========================================== */
 
-async function checkSession() {
+async function checkSession(){
 
-    try {
+const {data:{session}}=await db.auth.getSession();
 
-        const {
-            data: { session }
-        } = await db.auth.getSession();
+if(!session){
 
-        if (!session) {
+location.href="login.html";
 
-            window.location.href = "login.html";
-            return false;
+return false;
 
-        }
+}
 
-        const adminName = document.getElementById("adminName");
-
-        if (adminName) {
-
-            adminName.textContent = session.user.email;
-
-        }
-
-        return true;
-
-    } catch (err) {
-
-        console.error(err);
-
-        window.location.href = "login.html";
-
-        return false;
-
-    }
+return true;
 
 }
 
 /* ===========================================
-   LOGOUT
+DATE & CLOCK
 =========================================== */
 
-const logoutBtn = document.getElementById("logoutBtn");
+function startClock(){
 
-if (logoutBtn) {
+function update(){
 
-    logoutBtn.addEventListener("click", async (e) => {
+const now=new Date();
 
-        e.preventDefault();
+document.getElementById("todayDate").textContent=
 
-        if (!confirm("Logout করবেন?")) return;
+now.toLocaleDateString("en-GB",{
 
-        await db.auth.signOut();
+weekday:"long",
 
-        window.location.href = "login.html";
+day:"2-digit",
 
-    });
+month:"long",
+
+year:"numeric"
+
+});
+
+document.getElementById("liveClock").textContent=
+
+now.toLocaleTimeString();
+
+}
+
+update();
+
+setInterval(update,1000);
+
+}
+
+/* ===========================================
+DASHBOARD COUNTS
+=========================================== */
+
+async function loadCounts(){
+
+const students=await db
+
+.from("students")
+
+.select("*",{count:"exact",head:true});
+
+document.getElementById("cardStudents").textContent=
+
+students.count||0;
+
+const teachers=await db
+
+.from("teachers")
+
+.select("*",{count:"exact",head:true});
+
+document.getElementById("cardTeachers").textContent=
+
+teachers.count||0;
+
+const employees=await db
+
+.from("employees")
+
+.select("*",{count:"exact",head:true});
+
+document.getElementById("cardEmployees").textContent=
+
+employees.count||0;
+
+const results=await db
+
+.from("results")
+
+.select("*",{count:"exact",head:true});
+
+document.getElementById("totalResults").textContent=
+
+results.count||0;
 
 } 
 /* ===========================================
-   DASHBOARD CARDS
+TODAY COLLECTION
 =========================================== */
 
-async function loadDashboardCards() {
+async function loadTodayCollection(){
 
-    try {
+const today=new Date().toISOString().split("T")[0];
 
-        const students = await db
-            .from("students")
-            .select("*", { count: "exact", head: true });
+const {data}=await db
 
-        const teachers = await db
-            .from("teachers")
-            .select("*", { count: "exact", head: true });
+.from("fees")
 
-        const employees = await db
-            .from("employees")
-            .select("*", { count: "exact", head: true });
+.select("paid")
 
-        document.getElementById("cardStudents").textContent =
-            students.count ?? 0;
+.eq("payment_date",today);
 
-        document.getElementById("cardTeachers").textContent =
-            teachers.count ?? 0;
+let total=0;
 
-        document.getElementById("cardEmployees").textContent =
-            employees.count ?? 0;
+(data||[]).forEach(item=>{
 
-    } catch (err) {
+total+=Number(item.paid||0);
 
-        console.error(err);
+});
 
-    }
+document.getElementById("todayCollection").textContent=
+
+"৳"+total.toLocaleString();
 
 }
 
 /* ===========================================
-   TODAY COLLECTION
+ATTENDANCE SUMMARY
 =========================================== */
 
-async function loadTodayCollection() {
+async function loadAttendance(){
 
-    try {
+const today=new Date().toISOString().split("T")[0];
 
-        const today = new Date().toISOString().split("T")[0];
+const {data}=await db
 
-        const { data } = await db
-            .from("fees")
-            .select("amount")
-            .eq("payment_date", today);
+.from("attendance")
 
-        let total = 0;
+.select("status")
 
-        (data || []).forEach(item => {
+.eq("attendance_date",today);
 
-            total += Number(item.amount || 0);
+let present=0;
 
-        });
+let absent=0;
 
-        document.getElementById("todayCollection").textContent =
-            "৳ " + total.toLocaleString();
+(data||[]).forEach(item=>{
 
-    } catch (err) {
+if(item.status==="Present") present++;
 
-        console.error(err);
+else absent++;
 
-    }
+});
+
+document.getElementById("presentCount").textContent=present;
+
+document.getElementById("absentCount").textContent=absent;
+
+const total=present+absent;
+
+const percent=
+
+total===0?0:Math.round((present/total)*100);
+
+document.getElementById("todayAttendance").textContent=
+
+percent+"%";
+
+document.getElementById("presentBar").style.width=
+
+percent+"%";
+
+document.getElementById("absentBar").style.width=
+
+(100-percent)+"%";
 
 }
 
 /* ===========================================
-   RECENT NOTICES
+RECENT STUDENTS
 =========================================== */
 
-async function loadRecentNotices() {
+async function loadRecentStudents(){
 
-    try {
+const {data}=await db
 
-        const box = document.getElementById("recentNoticeList");
+.from("students")
 
-        if (!box) return;
+.select("*")
 
-        const { data } = await db
-            .from("notices")
-            .select("*")
-            .order("notice_date", { ascending: false })
-            .limit(5);
+.order("created_at",{ascending:false})
 
-        box.innerHTML = "";
+.limit(5);
 
-        (data || []).forEach(item => {
+const tbody=document.getElementById("recentStudents");
 
-            box.innerHTML += `
-            <div class="notice-item">
-                <h6>${item.title}</h6>
-                <small>${item.notice_date || ""}</small>
-            </div>
-            `;
+tbody.innerHTML="";
 
-        });
+(data||[]).forEach(student=>{
 
-    } catch (err) {
+tbody.innerHTML+=`
 
-        console.error(err);
+<tr>
 
-    }
+<td>
+
+<img
+src="${student.photo_url||'assets/img/default-user.png'}"
+style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+
+</td>
+
+<td>
+
+${student.student_name_bn||student.student_name_en||"-"}
+
+</td>
+
+<td>${student.class_name||"-"}</td>
+
+<td>${student.roll||"-"}</td>
+
+<td>${student.father_mobile||student.guardian_mobile||"-"}</td>
+
+</tr>
+
+`;
+
+});
 
 }
 /* ===========================================
-   MONTHLY FINANCE CHART
+RECENT TEACHERS
 =========================================== */
 
-async function financeChart() {
+async function loadRecentTeachers(){
 
-    const canvas = document.getElementById("financeChart");
+const {data}=await db
 
-    if (!canvas) return;
+.from("teachers")
 
-    const months = [
-        "Jan","Feb","Mar","Apr","May","Jun",
-        "Jul","Aug","Sep","Oct","Nov","Dec"
-    ];
+.select("*")
 
-    const income = new Array(12).fill(0);
+.order("created_at",{ascending:false})
 
-    try {
+.limit(5);
 
-        const { data } = await db
-            .from("fees")
-            .select("amount,payment_date");
+const tbody=document.getElementById("recentTeachers");
 
-        (data || []).forEach(item => {
+tbody.innerHTML="";
 
-            if (!item.payment_date) return;
+(data||[]).forEach(teacher=>{
 
-            const month = new Date(item.payment_date).getMonth();
+tbody.innerHTML+=`
 
-            income[month] += Number(item.amount || 0);
+<tr>
 
-        });
+<td>
 
-    } catch(err){
+<img
+src="${teacher.photo_url||'assets/img/default-user.png'}"
+style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
 
-        console.error(err);
+</td>
 
-    }
+<td>${teacher.name||"-"}</td>
 
-    new Chart(canvas, {
+<td>${teacher.department||"-"}</td>
 
-        type: "line",
+<td>${teacher.mobile||"-"}</td>
 
-        data: {
+</tr>
 
-            labels: months,
+`;
 
-            datasets: [{
-
-                label: "Monthly Collection",
-
-                data: income,
-
-                fill: true,
-
-                tension: .35
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            maintainAspectRatio: false
-
-        }
-
-    });
+});
 
 }
 
 /* ===========================================
-   GLOBAL SEARCH
+RECENT PAYMENTS
 =========================================== */
 
-const search = document.getElementById("globalSearch");
+async function loadRecentPayments(){
 
-if (search) {
+const {data}=await db
 
-    search.addEventListener("keypress", e => {
+.from("fees")
 
-        if (e.key !== "Enter") return;
+.select("*")
 
-        const id = search.value.trim();
+.order("payment_date",{ascending:false})
 
-        if (!id) return;
+.limit(5);
 
-        window.location.href =
-            "student-profile.html?id=" +
-            encodeURIComponent(id);
+const tbody=document.getElementById("recentPayments");
 
-    });
+tbody.innerHTML="";
+
+(data||[]).forEach(item=>{
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${item.receipt_no||"-"}</td>
+
+<td>${item.student_id||"-"}</td>
+
+<td>৳${Number(item.paid||0).toLocaleString()}</td>
+
+<td>${item.payment_date||"-"}</td>
+
+</tr>
+
+`;
+
+});
 
 }
 
 /* ===========================================
-   LIVE CLOCK & DATE
+NOTICE
 =========================================== */
 
-const todayDate = document.getElementById("todayDate");
-const liveClock = document.getElementById("liveClock");
-const languageSwitcher = document.getElementById("languageSwitcher");
+async function loadNotice(){
 
-let currentLang =
-    localStorage.getItem("language") || "bn";
+const {data}=await db
 
-function updateClock() {
+.from("notices")
 
-    const now = new Date();
+.select("*")
 
-    if (todayDate) {
+.order("created_at",{ascending:false})
 
-        todayDate.textContent =
-            now.toLocaleDateString(
-                currentLang === "bn"
-                    ? "bn-BD"
-                    : "en-GB",
-                {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                }
-            );
+.limit(5);
 
-    }
+const ticker=document.getElementById("noticeTicker");
 
-    if (liveClock) {
+if(!ticker) return;
 
-        liveClock.textContent =
-            now.toLocaleTimeString(
-                currentLang === "bn"
-                    ? "bn-BD"
-                    : "en-GB"
-            );
+if(!data||data.length===0){
 
-    }
+ticker.textContent="No Notice Available";
+
+return;
 
 }
 
-setInterval(updateClock, 1000);
+ticker.textContent=
 
-updateClock();
-
-/* ===========================================
-   LANGUAGE SWITCHER
-=========================================== */
-
-if (languageSwitcher) {
-
-    languageSwitcher.value = currentLang;
-
-    languageSwitcher.addEventListener("change", () => {
-
-        currentLang = languageSwitcher.value;
-
-        localStorage.setItem(
-            "language",
-            currentLang
-        );
-
-        document.querySelectorAll("[data-bn]").forEach(el => {
-
-            el.textContent =
-                currentLang === "bn"
-                    ? el.dataset.bn
-                    : el.dataset.en;
-
-        });
-
-        updateClock();
-
-    });
+data.map(n=>n.title).join("  |  ");
 
 }
 
 /* ===========================================
-   INIT
+LOGOUT
 =========================================== */
 
-async function initDashboard() {
+const logoutBtn=document.getElementById("logoutBtn");
 
-    const loggedIn = await checkSession();
+if(logoutBtn){
 
-    if (!loggedIn) return;
+logoutBtn.addEventListener("click",async(e)=>{
 
-    await loadDashboardCards();
+e.preventDefault();
 
-    await loadTodayCollection();
+await db.auth.signOut();
 
-    await loadRecentNotices();
-    await loadNoticeTicker();
-    await loadAttendanceSummary(); 
-    await loadRecentStudents(); 
-   
-    financeChart(); 
+location.href="login.html";
+
+});
 
 }
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initDashboard
-);
 /* ===========================================
-   LIVE NOTICE TICKER
+INIT
 =========================================== */
 
-async function loadNoticeTicker() {
+document.addEventListener("DOMContentLoaded",async()=>{
 
-    const ticker = document.getElementById("noticeTicker");
+const ok=await checkSession();
 
-    if (!ticker) return;
+if(!ok) return;
 
-    try {
+startClock();
 
-        const { data, error } = await db
-            .from("notices")
-            .select("title")
-            .order("notice_date", { ascending: false })
-            .limit(10);
+await loadCounts();
 
-        if (error) throw error;
+await loadTodayCollection();
 
-        if (!data || data.length === 0) {
+await loadAttendance();
 
-            ticker.textContent = "কোনো নোটিশ পাওয়া যায়নি";
-            return;
+await loadRecentStudents();
 
-        }
+await loadRecentTeachers();
 
-        ticker.textContent = data
-            .map(item => item.title)
-            .join("  •  ");
+await loadRecentPayments();
 
-    } catch (err) {
+await loadNotice();
 
-        console.error(err);
+});
 
-        ticker.textContent = "নোটিশ লোড করা যায়নি";
 
-    }
-
-}
-/* ===========================================
-   TODAY ATTENDANCE
-=========================================== */
-
-async function loadAttendanceSummary() {
-
-    try {
-
-        const today = new Date().toISOString().split("T")[0];
-
-        const { data } = await db
-            .from("attendance")
-            .select("status")
-            .eq("attendance_date", today);
-
-        let present = 0;
-        let absent = 0;
-
-        (data || []).forEach(item => {
-
-            if (item.status === "Present") {
-
-                present++;
-
-            } else {
-
-                absent++;
-
-            }
-
-        });
-
-        document.getElementById("presentCount").textContent = present;
-
-        document.getElementById("absentCount").textContent = absent;
-
-    } catch (err) {
-
-        console.error(err);
-
-    }
-
-}
-/* ===========================================
-   RECENT STUDENTS
-=========================================== */
-
-async function loadRecentStudents() {
-
-    try {
-
-        const tbody = document.getElementById("recentStudents");
-
-        if (!tbody) return;
-
-        const { data, error } = await db
-            .from("students")
-           .select(`
-id,
-student_name_bn,
-student_name_en,
-class_name,
-guardian_mobile,
-father_mobile,
-photo_url
-`)
-            .order("created_at", { ascending: false })
-            .limit(5);
-
-        if (error) throw error;
-
-        tbody.innerHTML = "";
-
-        if (!data || data.length === 0) {
-
-            tbody.innerHTML = `
-            <tr>
-                <td colspan="4" class="text-center">
-                    No Student Found
-                </td>
-            </tr>
-            `;
-
-            return;
-
-        }
-
-        data.forEach(student => {
-
-            tbody.innerHTML += `
-
-            <tr>
-
-                <td>
-
-                    <img
-                    src="${student.photo_url || 'assets/img/avatar.png'}"
-                    style="width:45px;height:45px;border-radius:50%;object-fit:cover;">
-
-                </td>
-
-                <td>${student.student_name_bn || student.student_name_en}</td>
-                <td>${student.class_name}</td>
-                <td>${student.guardian_mobile || student.father_mobile}</td>
-
-            </tr>
-
-            `;
-
-        });
-
-    } catch (err) {
-
-        console.error(err);
-
-    }
-
-}
