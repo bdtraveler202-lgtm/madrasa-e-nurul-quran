@@ -204,46 +204,46 @@ photo=await uploadPhoto(photoFile);
 
 }
 
-const student={
+const student = {
 
-id:document.getElementById("studentID").value,
+student_id: document.getElementById("studentID").value,
 
-name:document.getElementById("studentName").value,
+full_name: document.getElementById("studentName").value,
 
-father_name:document.getElementById("fatherName").value,
+father_name: document.getElementById("fatherName").value,
 
-mother_name:document.getElementById("motherName").value,
+mother_name: document.getElementById("motherName").value,
 
-mobile:document.getElementById("mobile").value,
+mobile: document.getElementById("mobile").value,
 
-guardian_mobile:document.getElementById("guardianMobile").value,
+guardian_mobile: document.getElementById("guardianMobile").value,
 
-department:document.getElementById("department").value,
+department: document.getElementById("department").value,
 
-class:document.getElementById("studentClass").value,
+class: document.getElementById("studentClass").value,
 
-roll:Number(document.getElementById("roll").value)||0,
+roll: Number(document.getElementById("roll").value) || 0,
 
-gender:document.getElementById("gender").value,
+gender: document.getElementById("gender").value,
 
-dob:document.getElementById("dob").value,
+dob: document.getElementById("dob").value,
 
-blood_group:document.getElementById("bloodGroup").value,
+blood_group: document.getElementById("bloodGroup").value,
 
-religion:document.getElementById("religion").value,
+religion: document.getElementById("religion").value,
 
-present_address:document.getElementById("presentAddress").value,
+present_address: document.getElementById("presentAddress").value,
 
-permanent_address:document.getElementById("permanentAddress").value,
+permanent_address: document.getElementById("permanentAddress").value,
 
-status:document.getElementById("status").value,
+status: document.getElementById("status").value,
 
-admission_date:document.getElementById("admissionDate").value,
+admission_date: document.getElementById("admissionDate").value,
 
-photo:photo
+photo: photo
 
 };
-
+   
 let error;
 
 if(editID){
