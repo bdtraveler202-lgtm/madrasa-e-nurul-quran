@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="bn">
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Student Management | Madrasa-E Nurul Quran</title>
+<title>Students | Madrasa-E Nurul Quran</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="assets/css/admin.css">
-<link rel="stylesheet" href="assets/css/students.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/supabase.js"></script>
 
 </head>
 
@@ -21,104 +21,277 @@
 
 <div class="dashboard">
 
-<!-- ===========================
-SIDEBAR
-=========================== -->
-
 <aside class="sidebar">
 
 <div class="brand">
 
-<img src="assets/img/logo.png" alt="Logo">
+<img src="assets/img/logo.png">
 
 <h3>মাদরাসায়ে নূরুল কুরআন</h3>
 
-<p>Management System</p>
-
 </div>
 
-<ul>
+<ul class="sidebar-menu">
 
-<li><a href="admin.html">
-<i class="fa-solid fa-house"></i>
-Dashboard
-</a></li>
+<li><a href="admin.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
 
-<li><a class="active">
-<i class="fa-solid fa-user-graduate"></i>
-Students
-</a></li>
+<li><a class="active" href="students.html"><i class="fa-solid fa-user-graduate"></i> Students</a></li>
 
-<li><a href="teachers.html">
-<i class="fa-solid fa-chalkboard-user"></i>
-Teachers
-</a></li>
+<li><a href="teachers.html"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a></li>
 
-<li><a href="employees.html">
-<i class="fa-solid fa-users"></i>
-Employees
-</a></li>
+<li><a href="employees.html"><i class="fa-solid fa-users"></i> Employees</a></li>
 
-<li><a href="attendance.html">
-<i class="fa-solid fa-calendar-check"></i>
-Attendance
-</a></li>
-
-<li><a href="results.html">
-<i class="fa-solid fa-file-lines"></i>
-Results
-</a></li>
-
-<li><a href="fees.html">
-<i class="fa-solid fa-money-bill-wave"></i>
-Fees
-</a></li>
-
-<li><a href="sms.html">
-<i class="fa-solid fa-comment-sms"></i>
-SMS System
-</a></li>
-
-<li><a href="settings.html">
-<i class="fa-solid fa-gear"></i>
-Settings
-</a></li>
-
-<li><a href="#" id="logoutBtn">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
-</a></li>
+<li><a href="#" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
 
 </ul>
 
 </aside>
 
-<!-- ===========================
-MAIN
-=========================== -->
-
 <main class="main-content">
 
-<div class="topbar">
+<div class="dashboard-card">
 
-<div>
+<h3 class="mb-4">
 
-<h2>Student Management</h2>
+Student Registration
 
-<p>মাদরাসায়ে নূরুল কুরআন</p>
+</h3>
+
+<form id="studentForm" enctype="multipart/form-data">
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+
+<label>Student ID</label>
+
+<input
+type="text"
+id="studentID"
+class="form-control"
+readonly>
 
 </div>
 
-<div>
+<div class="col-md-8 mb-3">
+
+<label>Full Name</label>
+
+<input
+type="text"
+id="studentName"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Father Name</label>
+
+<input
+type="text"
+id="fatherName"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Mother Name</label>
+
+<input
+type="text"
+id="motherName"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Department</label>
+
+<select
+id="department"
+class="form-select">
+
+<option value="">Select</option>
+
+<option value="Nurani">Nurani</option>
+
+<option value="Nazera">Nazera</option>
+
+<option value="Hifz">Hifz</option>
+
+<option value="Kitab">Kitab</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Class</label>
+
+<select
+id="studentClass"
+class="form-select">
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Roll</label>
+
+<input
+type="number"
+id="roll"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Mobile</label>
+
+<input
+type="text"
+id="mobile"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Guardian Mobile</label>
+
+<input
+type="text"
+id="guardianMobile"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Gender</label>
+
+<select
+id="gender"
+class="form-select">
+
+<option>Male</option>
+
+<option>Female</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Date Of Birth</label>
+
+<input
+type="date"
+id="dob"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Blood Group</label>
+
+<input
+type="text"
+id="bloodGroup"
+class="form-control">
+
+</div> 
+<div class="col-md-4 mb-3">
+
+<label>Religion</label>
+
+<input
+type="text"
+id="religion"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Status</label>
+
+<select
+id="status"
+class="form-select">
+
+<option value="Active">Active</option>
+
+<option value="Inactive">Inactive</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Admission Date</label>
+
+<input
+type="date"
+id="admissionDate"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Present Address</label>
+
+<textarea
+id="presentAddress"
+class="form-control"
+rows="3"></textarea>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Permanent Address</label>
+
+<textarea
+id="permanentAddress"
+class="form-control"
+rows="3"></textarea>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Student Photo</label>
+
+<input
+type="file"
+id="photo"
+accept="image/*"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3 d-flex align-items-end">
 
 <button
-class="btn btn-success"
-data-bs-toggle="modal"
-data-bs-target="#studentModal">
+type="submit"
+class="btn btn-success w-100">
 
-<i class="fa-solid fa-plus"></i>
+<i class="fa-solid fa-floppy-disk"></i>
 
-New Student
+Save Student
 
 </button>
 
@@ -126,74 +299,29 @@ New Student
 
 </div>
 
-<!-- ===========================
-SEARCH
-=========================== -->
+</form>
 
-<div class="dashboard-card mb-4">
+</div>
 
-<div class="row g-3">
+<div class="dashboard-card mt-4">
 
-<div class="col-lg-3">
+<div class="row mb-3">
+
+<div class="col-md-4">
 
 <input
+type="text"
 id="searchStudent"
 class="form-control"
-placeholder="Student ID / Name / Mobile">
+placeholder="Search Student">
 
 </div>
 
-<div class="col-lg-2">
-
-<select
-id="departmentFilter"
-class="form-select">
-
-<option value="">Department</option>
-
-<option value="Nurani">নূরানী</option>
-
-<option value="Nazera">নাজেরা</option>
-
-<option value="Hifz">হিফজ</option>
-
-</select>
-
-</div>
-
-<div class="col-lg-2">
-
-<select
-id="classFilter"
-class="form-select">
-
-<option value="">Class</option>
-
-</select>
-
-</div>
-
-<div class="col-lg-2">
-
-<select
-id="statusFilter"
-class="form-select">
-
-<option value="">Status</option>
-
-<option>Active</option>
-
-<option>Inactive</option>
-
-</select>
-
-</div>
-
-<div class="col-lg-2">
+<div class="col-md-2">
 
 <button
 id="searchBtn"
-class="btn btn-success w-100">
+class="btn btn-primary w-100">
 
 Search
 
@@ -201,27 +329,54 @@ Search
 
 </div>
 
-</div>
+<div class="col-md-3">
+
+<select
+id="departmentFilter"
+class="form-select">
+
+<option value="">All Department</option>
+
+<option value="Nurani">Nurani</option>
+
+<option value="Nazera">Nazera</option>
+
+<option value="Hifz">Hifz</option>
+
+<option value="Kitab">Kitab</option>
+
+</select>
 
 </div>
 
-<!-- ===========================
-TABLE
-=========================== -->
+<div class="col-md-3">
 
-<div class="dashboard-card">
+<select
+id="statusFilter"
+class="form-select">
 
+<option value="">All Status</option>
+
+<option value="Active">Active</option>
+
+<option value="Inactive">Inactive</option>
+
+</select>
+
+</div>
+
+</div>
 <div class="table-responsive">
 
-<table class="table align-middle">
+<table class="table table-bordered table-hover align-middle">
 
-<thead>
+<thead class="table-dark">
 
 <tr>
 
-<th>ID</th>
-
 <th>Photo</th>
+
+<th>Student ID</th>
 
 <th>Name</th>
 
@@ -243,6 +398,16 @@ TABLE
 
 <tbody id="studentTable">
 
+<tr>
+
+<td colspan="9" class="text-center">
+
+Loading...
+
+</td>
+
+</tr>
+
 </tbody>
 
 </table>
@@ -255,495 +420,10 @@ TABLE
 
 </div>
 
-<!-- ===========================
-REGISTRATION MODAL
-=========================== -->
-
-<div
-class="modal fade"
-id="studentModal">
-
-<div class="modal-dialog modal-xl modal-dialog-scrollable">
-
-<div class="modal-content">
-
-<div class="modal-header">
-
-<h4>
-
-Student Registration
-
-</h4>
-
-<button
-class="btn-close"
-data-bs-dismiss="modal">
-
-</button>
-
-</div>
-
-<div class="modal-body">
-
-<form id="studentForm">
-
-<div class="card mb-4">
-
-<div class="card-header">
-
-<h5>Basic Information</h5>
-
-</div>
-
-<div class="card-body">
-
-<div class="row">
-
-<div class="col-md-3 mb-3">
-
-<label>Student ID</label>
-
-<input
-id="studentID"
-class="form-control"
-readonly>
-
-</div>
-
-<div class="col-md-3 mb-3">
-
-<label>Admission Date</label>
-
-<input
-type="date"
-id="admissionDate"
-class="form-control">
-
-</div>
-
-<div class="col-md-3 mb-3">
-
-<label>Department</label>
-
-<select
-id="department"
-class="form-select">
-
-<option value="">Select</option>
-
-<option value="Nurani">নূরানী</option>
-
-<option value="Nazera">নাজেরা</option>
-
-<option value="Hifz">হিফজ</option>
-
-</select>
-
-</div>
-
-<div class="col-md-3 mb-3">
-
-<label>Class</label>
-
-<select
-id="studentClass"
-class="form-select">
-
-<option value="">Select Class</option>
-
-</select>
-
-</div>
-
-<div class="col-md-3 mb-3">
-
-<label>Roll</label>
-
-<input
-id="roll"
-class="form-control">
-
-</div>
-
-<div class="col-md-3 mb-3">
-
-<label>Section</label>
-
-<select
-id="section"
-class="form-select">
-
-<option>A</option>
-
-<option>B</option>
-
-<option>C</option>
-
-</select>
-
-</div>
-
-<div class="col-md-3 mb-3">
-
-<label>Session</label>
-
-<input
-id="session"
-class="form-control"
-value="2026">
-
-</div>
-
-<div class="col-md-3 mb-3">
-
-<label>Status</label>
-
-<select
-id="studentStatus"
-class="form-select">
-
-<option>Active</option>
-
-<option>Inactive</option>
-
-</select>
-
-</div> 
-<!-- ===========================
-PERSONAL INFORMATION
-=========================== -->
-
-<div class="card mb-4">
-
-<div class="card-header">
-
-<h5>Personal Information</h5>
-
-</div>
-
-<div class="card-body">
-
-<div class="row">
-
-<div class="col-md-4 mb-3">
-<label>Student Name (Bangla)</label>
-<input id="studentNameBn" class="form-control" required>
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Student Name (English)</label>
-<input id="studentNameEn" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Student Name (Arabic)</label>
-<input id="studentNameAr" class="form-control">
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Date of Birth</label>
-<input type="date" id="dob" class="form-control">
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Gender</label>
-<select id="gender" class="form-select">
-<option>Male</option>
-<option>Female</option>
-</select>
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Blood Group</label>
-<select id="bloodGroup" class="form-select">
-<option>A+</option>
-<option>A-</option>
-<option>B+</option>
-<option>B-</option>
-<option>AB+</option>
-<option>AB-</option>
-<option>O+</option>
-<option>O-</option>
-</select>
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Religion</label>
-<select id="religion" class="form-select">
-<option>Islam</option>
-<option>Hindu</option>
-<option>Buddhist</option>
-<option>Christian</option>
-</select>
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Birth Certificate No</label>
-<input id="birthCertificate" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>NID</label>
-<input id="nid" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Student Photo</label>
-<input type="file" id="studentPhoto" class="form-control">
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ===========================
-PARENTS INFORMATION
-=========================== -->
-
-<div class="card mb-4">
-
-<div class="card-header">
-
-<h5>Parents Information</h5>
-
-</div>
-
-<div class="card-body">
-
-<div class="row">
-
-<div class="col-md-4 mb-3">
-<label>Father Name</label>
-<input id="fatherName" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Father Occupation</label>
-<input id="fatherOccupation" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Father Mobile</label>
-<input id="fatherMobile" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Mother Name</label>
-<input id="motherName" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Mother Occupation</label>
-<input id="motherOccupation" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Mother Mobile</label>
-<input id="motherMobile" class="form-control">
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ===========================
-GUARDIAN
-=========================== -->
-
-<div class="card mb-4">
-
-<div class="card-header">
-
-<h5>Guardian Information</h5>
-
-</div>
-
-<div class="card-body">
-
-<div class="row">
-
-<div class="col-md-4 mb-3">
-<label>Guardian Name</label>
-<input id="guardianName" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Relation</label>
-<input id="guardianRelation" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Guardian Mobile</label>
-<input id="guardianMobile" class="form-control">
-</div>
-
-</div>
-
-</div>
-
-</div>
-<!-- ===========================
-ADDRESS INFORMATION
-=========================== -->
-
-<div class="card mb-4">
-
-<div class="card-header">
-
-<h5>Address Information</h5>
-
-</div>
-
-<div class="card-body">
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-<label>Present Address</label>
-<textarea id="presentAddress" class="form-control" rows="3"></textarea>
-</div>
-
-<div class="col-md-6 mb-3">
-<label>Permanent Address</label>
-<textarea id="permanentAddress" class="form-control" rows="3"></textarea>
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Village</label>
-<input id="village" class="form-control">
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Post Office</label>
-<input id="postOffice" class="form-control">
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Upazila</label>
-<input id="upazila" class="form-control">
-</div>
-
-<div class="col-md-3 mb-3">
-<label>District</label>
-<input id="district" class="form-control">
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ===========================
-ACADEMIC & FEES
-=========================== -->
-
-<div class="card mb-4">
-
-<div class="card-header">
-
-<h5>Academic & Fee Information</h5>
-
-</div>
-
-<div class="card-body">
-
-<div class="row">
-
-<div class="col-md-3 mb-3">
-<label>Previous Institute</label>
-<input id="previousInstitute" class="form-control">
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Admission Fee</label>
-<input type="number" id="admissionFee" class="form-control">
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Monthly Fee</label>
-<input type="number" id="monthlyFee" class="form-control">
-</div>
-
-<div class="col-md-3 mb-3">
-<label>Scholarship (%)</label>
-<input type="number" id="scholarship" class="form-control" value="0">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Emergency Contact</label>
-<input id="emergencyContact" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>SMS Number</label>
-<input id="smsNumber" class="form-control">
-</div>
-
-<div class="col-md-4 mb-3">
-<label>Email</label>
-<input type="email" id="studentEmail" class="form-control">
-</div>
-
-<div class="col-12 mb-3">
-<label>Remarks</label>
-<textarea id="remarks" class="form-control" rows="3"></textarea>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="text-end">
-
-<button
-type="button"
-class="btn btn-secondary"
-data-bs-dismiss="modal">
-
-Cancel
-
-</button>
-
-<button
-type="submit"
-class="btn btn-success">
-
-<i class="fa-solid fa-floppy-disk"></i>
-
-Save Student
-
-</button>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="assets/js/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
 
 <script src="assets/js/students.js"></script>
 
 </body>
 
 </html>
-
-
-  
