@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Students | Madrasa-E Nurul Quran</title>
+<title>MNQ | Student Registration</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="assets/css/admin.css">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="assets/js/supabase.js"></script>
 
 </head>
@@ -21,13 +24,15 @@
 
 <div class="dashboard">
 
+<!-- Sidebar -->
+
 <aside class="sidebar">
 
 <div class="brand">
 
 <img src="assets/img/logo.png">
 
-<h3>মাদরাসায়ে নূরুল কুরআন</h3>
+<h3>মাদরাসা-ই নূরুল কুরআন</h3>
 
 </div>
 
@@ -47,13 +52,17 @@
 
 </aside>
 
+<!-- Main -->
+
 <main class="main-content">
 
 <div class="dashboard-card">
 
 <h3 class="mb-4">
 
-Student Registration
+<i class="fa-solid fa-user-plus"></i>
+
+Student Registration Form
 
 </h3>
 
@@ -61,9 +70,13 @@ Student Registration
 
 <div class="row">
 
-<div class="col-md-4 mb-3">
+<div class="col-md-3 mb-3">
 
-<label>Student ID</label>
+<label class="form-label">
+
+Student ID
+
+</label>
 
 <input
 type="text"
@@ -73,13 +86,63 @@ readonly>
 
 </div>
 
-<div class="col-md-8 mb-3">
+<div class="col-md-3 mb-3">
 
-<label>Full Name</label>
+<label class="form-label">
+
+Admission Date
+
+</label>
+
+<input
+type="date"
+id="admissionDate"
+class="form-control">
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+Session
+
+</label>
 
 <input
 type="text"
-id="studentName"
+id="session"
+class="form-control"
+placeholder="2026">
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+Student Photo
+
+</label>
+
+<input
+type="file"
+id="photo"
+accept="image/*"
+class="form-control">
+
+</div>
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Student Name (বাংলা)
+
+</label>
+
+<input
+type="text"
+id="studentNameBn"
 class="form-control"
 required>
 
@@ -87,33 +150,31 @@ required>
 
 <div class="col-md-6 mb-3">
 
-<label>Father Name</label>
+<label class="form-label">
+
+Student Name (English)
+
+</label>
 
 <input
 type="text"
-id="fatherName"
+id="studentNameEn"
 class="form-control">
 
 </div>
 
-<div class="col-md-6 mb-3">
+<div class="col-md-3 mb-3">
 
-<label>Mother Name</label>
+<label class="form-label">
 
-<input
-type="text"
-id="motherName"
-class="form-control">
+Department
 
-</div>
-
-<div class="col-md-4 mb-3">
-
-<label>Department</label>
+</label>
 
 <select
 id="department"
-class="form-select">
+class="form-select"
+required>
 
 <option value="">Select</option>
 
@@ -129,21 +190,32 @@ class="form-select">
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-3 mb-3">
 
-<label>Class</label>
+<label class="form-label">
+
+Class
+
+</label>
 
 <select
 id="studentClass"
-class="form-select">
+class="form-select"
+required>
+
+<option value="">Select Class</option>
 
 </select>
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-2 mb-3">
 
-<label>Roll</label>
+<label class="form-label">
+
+Roll
+
+</label>
 
 <input
 type="number"
@@ -152,79 +224,33 @@ class="form-control">
 
 </div>
 
-<div class="col-md-6 mb-3">
+<div class="col-md-2 mb-3">
 
-<label>Mobile</label>
+<label class="form-label">
 
-<input
-type="text"
-id="mobile"
-class="form-control">
+Gender
 
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label>Guardian Mobile</label>
-
-<input
-type="text"
-id="guardianMobile"
-class="form-control">
-
-</div>
-
-<div class="col-md-4 mb-3">
-
-<label>Gender</label>
+</label>
 
 <select
 id="gender"
 class="form-select">
 
-<option>Male</option>
+<option value="Male">Male</option>
 
-<option>Female</option>
+<option value="Female">Female</option>
 
 </select>
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-2 mb-3">
 
-<label>Date Of Birth</label>
+<label class="form-label">
 
-<input
-type="date"
-id="dob"
-class="form-control">
+Status
 
-</div>
-
-<div class="col-md-4 mb-3">
-
-<label>Blood Group</label>
-
-<input
-type="text"
-id="bloodGroup"
-class="form-control">
-
-</div> 
-<div class="col-md-4 mb-3">
-
-<label>Religion</label>
-
-<input
-type="text"
-id="religion"
-class="form-control">
-
-</div>
-
-<div class="col-md-4 mb-3">
-
-<label>Status</label>
+</label>
 
 <select
 id="status"
@@ -238,20 +264,379 @@ class="form-select">
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-3 mb-3">
 
-<label>Admission Date</label>
+<label class="form-label">
+
+Date of Birth
+
+</label>
 
 <input
 type="date"
-id="admissionDate"
+id="dob"
+class="form-control">
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+Blood Group
+
+</label>
+
+<select
+id="bloodGroup"
+class="form-select">
+
+<option value="">Select</option>
+
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>AB+</option>
+<option>AB-</option>
+<option>O+</option>
+<option>O-</option>
+
+</select>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+Religion
+
+</label>
+
+<input
+type="text"
+id="religion"
+class="form-control"
+value="Islam">
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+Birth Certificate No
+
+</label>
+
+<input
+type="text"
+id="birthCertificate"
+class="form-control">
+
+</div> 
+<!-- ==========================================
+Father Information
+========================================== -->
+
+<div class="col-12 mt-4">
+
+<h4 class="border-bottom pb-2">
+
+<i class="fa-solid fa-user-tie"></i>
+
+Father Information
+
+</h4>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Father Name
+
+</label>
+
+<input
+type="text"
+id="fatherName"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Father Mobile
+
+</label>
+
+<input
+type="text"
+id="fatherMobile"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Father Occupation
+
+</label>
+
+<input
+type="text"
+id="fatherOccupation"
+class="form-control">
+
+</div>
+
+<!-- ==========================================
+Mother Information
+========================================== -->
+
+<div class="col-12 mt-4">
+
+<h4 class="border-bottom pb-2">
+
+<i class="fa-solid fa-person-dress"></i>
+
+Mother Information
+
+</h4>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Mother Name
+
+</label>
+
+<input
+type="text"
+id="motherName"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Mother Mobile
+
+</label>
+
+<input
+type="text"
+id="motherMobile"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Mother Occupation
+
+</label>
+
+<input
+type="text"
+id="motherOccupation"
+class="form-control">
+
+</div>
+<!-- ==========================================
+Guardian Information
+========================================== -->
+
+<div class="col-12 mt-4">
+
+<h4 class="border-bottom pb-2">
+
+<i class="fa-solid fa-user-shield"></i>
+
+Guardian Information
+
+</h4>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Guardian Name
+
+</label>
+
+<input
+type="text"
+id="guardianName"
+class="form-control">
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Relation
+
+</label>
+
+<select
+id="guardianRelation"
+class="form-select">
+
+<option value="">Select</option>
+
+<option>Father</option>
+
+<option>Mother</option>
+
+<option>Brother</option>
+
+<option>Sister</option>
+
+<option>Uncle</option>
+
+<option>Aunt</option>
+
+<option>Grandfather</option>
+
+<option>Grandmother</option>
+
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Guardian Mobile
+
+</label>
+
+<input
+type="text"
+id="guardianMobile"
 class="form-control">
 
 </div>
 
 <div class="col-md-6 mb-3">
 
-<label>Present Address</label>
+<label class="form-label">
+
+Emergency Contact
+
+</label>
+
+<input
+type="text"
+id="emergencyContact"
+class="form-control">
+
+</div>
+
+<!-- ==========================================
+Address Information
+========================================== -->
+
+<div class="col-12 mt-4">
+
+<h4 class="border-bottom pb-2">
+
+<i class="fa-solid fa-location-dot"></i>
+
+Address Information
+
+</h4>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+Village
+
+</label>
+
+<input
+type="text"
+id="village"
+class="form-control">
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+Post Office
+
+</label>
+
+<input
+type="text"
+id="postOffice"
+class="form-control">
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+Upazila
+
+</label>
+
+<input
+type="text"
+id="upazila"
+class="form-control">
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<label class="form-label">
+
+District
+
+</label>
+
+<input
+type="text"
+id="district"
+class="form-control">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Present Address
+
+</label>
 
 <textarea
 id="presentAddress"
@@ -262,7 +647,11 @@ rows="3"></textarea>
 
 <div class="col-md-6 mb-3">
 
-<label>Permanent Address</label>
+<label class="form-label">
+
+Permanent Address
+
+</label>
 
 <textarea
 id="permanentAddress"
@@ -270,28 +659,73 @@ class="form-control"
 rows="3"></textarea>
 
 </div>
+ <!-- ==========================================
+Fee Information
+========================================== -->
 
-<div class="col-md-6 mb-3">
+<div class="col-12 mt-4">
 
-<label>Student Photo</label>
+<h4 class="border-bottom pb-2">
 
-<input
-type="file"
-id="photo"
-accept="image/*"
-class="form-control">
+<i class="fa-solid fa-money-bill-wave"></i>
+
+Fee Information
+
+</h4>
 
 </div>
 
-<div class="col-md-6 mb-3 d-flex align-items-end">
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Admission Fee
+
+</label>
+
+<input
+type="number"
+id="admissionFee"
+class="form-control"
+placeholder="0">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+
+Monthly Fee
+
+</label>
+
+<input
+type="number"
+id="monthlyFee"
+class="form-control"
+placeholder="0">
+
+</div>
+
+<div class="col-12 mt-4">
 
 <button
 type="submit"
-class="btn btn-success w-100">
+class="btn btn-success btn-lg">
 
 <i class="fa-solid fa-floppy-disk"></i>
 
 Save Student
+
+</button>
+
+<button
+type="reset"
+class="btn btn-secondary btn-lg ms-2">
+
+<i class="fa-solid fa-rotate"></i>
+
+Reset
 
 </button>
 
@@ -303,9 +737,21 @@ Save Student
 
 </div>
 
+<!-- ==========================================
+Student List
+========================================== -->
+
 <div class="dashboard-card mt-4">
 
-<div class="row mb-3">
+<h3>
+
+<i class="fa-solid fa-users"></i>
+
+Student List
+
+</h3>
+
+<div class="row my-3">
 
 <div class="col-md-4">
 
@@ -313,19 +759,7 @@ Save Student
 type="text"
 id="searchStudent"
 class="form-control"
-placeholder="Search Student">
-
-</div>
-
-<div class="col-md-2">
-
-<button
-id="searchBtn"
-class="btn btn-primary w-100">
-
-Search
-
-</button>
+placeholder="Search by Name / ID / Mobile">
 
 </div>
 
@@ -365,7 +799,20 @@ class="form-select">
 
 </div>
 
+<div class="col-md-2">
+
+<button
+id="searchBtn"
+class="btn btn-primary w-100">
+
+Search
+
+</button>
+
 </div>
+
+</div>
+
 <div class="table-responsive">
 
 <table class="table table-bordered table-hover align-middle">
@@ -376,7 +823,7 @@ class="form-select">
 
 <th>Photo</th>
 
-<th>Student ID</th>
+<th>ID</th>
 
 <th>Name</th>
 
@@ -390,7 +837,7 @@ class="form-select">
 
 <th>Status</th>
 
-<th width="180">Action</th>
+<th width="220">Action</th>
 
 </tr>
 
@@ -426,4 +873,4 @@ Loading...
 
 </body>
 
-</html>
+</html> 
