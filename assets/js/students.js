@@ -671,14 +671,6 @@ window.open(
 PRINT FUNCTIONS
 =========================================== */
 
-function printApplicationForm(studentID){
-
-window.open(
-`javascript:alert('Application Form Print will be added in Part 5\\nStudent ID: ${studentID}')`
-);
-
-}
-
 function printIDCard(studentID){
 
 window.open(
@@ -724,3 +716,511 @@ await generateStudentID();
 await loadStudents();
 
 });
+/* ===========================================
+APPLICATION FORM PRINT
+=========================================== */
+
+async function printApplicationForm(studentID){
+
+try{
+
+const {data,error}=await db
+.from("students")
+.select("*")
+.eq("student_id",studentID)
+.single();
+
+if(error) throw error;
+
+const win=window.open("","_blank");
+
+const photo=data.photo_url||"assets/img/default-user.png";
+
+const qr=
+`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${data.student_id}`;
+
+win.document.write(`
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Admission Application</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+padding:25px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+border:3px solid #000;
+padding:20px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:2px solid #000;
+padding-bottom:15px;
+margin-bottom:20px;
+}
+
+.logo{
+width:90px;
+height:90px;
+}
+
+.photo{
+width:120px;
+height:140px;
+border:1px solid #000;
+object-fit:cover;
+}
+
+.title{
+text-align:center;
+flex:1;
+}
+
+table{
+width:100%;
+}
+
+table td{
+padding:8px;
+border:1px solid #999;
+}
+
+.section{
+background:#0d6efd;
+color:#fff;
+padding:8px;
+margin-top:20px;
+font-weight:bold;
+}
+
+.sign{
+margin-top:70px;
+display:flex;
+justify-content:space-between;
+text-align:center;
+}
+
+.sign div{
+width:30%;
+border-top:1px solid #000;
+padding-top:8px;
+}
+
+@media print{
+
+button{
+display:none;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="text-center mb-3">
+
+<button onclick="window.print()" class="btn btn-success">
+
+Print Form
+
+</button>
+
+</div>
+
+<div class="container">
+
+<div class="header">
+
+<img src="assets/img/logo.png" class="logo">
+
+<div class="title">
+
+<h2>মাদরাসা-ই নূরুল কুরআন</h2>
+
+<h5>Admission Application Form</h5>
+
+<p>Vollobpur, Dighuli, Chandraganj, Lakshmipur</p>
+
+</div>
+
+<img src="${photo}" class="photo">
+
+</div>
+<div class="section">
+
+Student Information
+
+</div>
+
+<table>
+
+<tr>
+
+<td width="25%"><b>Student ID</b></td>
+
+<td>${data.student_id}</td>
+
+<td width="25%"><b>Admission Date</b></td>
+
+<td>${data.admission_date||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Session</b></td>
+
+<td>${data.session||""}</td>
+
+<td><b>Department</b></td>
+
+<td>${data.department||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Class</b></td>
+
+<td>${data.class_name||""}</td>
+
+<td><b>Roll</b></td>
+
+<td>${data.roll||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Name (Bangla)</b></td>
+
+<td>${data.full_name_bn||""}</td>
+
+<td><b>Name (English)</b></td>
+
+<td>${data.full_name_en||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Date of Birth</b></td>
+
+<td>${data.dob||""}</td>
+
+<td><b>Gender</b></td>
+
+<td>${data.gender||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Blood Group</b></td>
+
+<td>${data.blood_group||""}</td>
+
+<td><b>Religion</b></td>
+
+<td>${data.religion||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Birth Certificate</b></td>
+
+<td colspan="3">
+
+${data.birth_certificate||""}
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="section">
+
+Father Information
+
+</div>
+
+<table>
+
+<tr>
+
+<td width="25%"><b>Father Name</b></td>
+
+<td>${data.father_name||""}</td>
+
+<td width="25%"><b>Mobile</b></td>
+
+<td>${data.father_mobile||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Occupation</b></td>
+
+<td colspan="3">
+
+${data.father_occupation||""}
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="section">
+
+Mother Information
+
+</div>
+
+<table>
+
+<tr>
+
+<td width="25%"><b>Mother Name</b></td>
+
+<td>${data.mother_name||""}</td>
+
+<td width="25%"><b>Mobile</b></td>
+
+<td>${data.mother_mobile||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Occupation</b></td>
+
+<td colspan="3">
+
+${data.mother_occupation||""}
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="section">
+
+Guardian Information
+
+</div>
+
+<table>
+
+<tr>
+
+<td width="25%"><b>Guardian</b></td>
+
+<td>${data.guardian_name||""}</td>
+
+<td width="25%"><b>Relation</b></td>
+
+<td>${data.guardian_relation||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Guardian Mobile</b></td>
+
+<td>${data.guardian_mobile||""}</td>
+
+<td><b>Emergency</b></td>
+
+<td>${data.emergency_contact||""}</td>
+
+</tr>
+
+</table>
+<div class="section">
+
+Address Information
+
+</div>
+
+<table>
+
+<tr>
+
+<td width="25%"><b>Village</b></td>
+
+<td>${data.village||""}</td>
+
+<td width="25%"><b>Post Office</b></td>
+
+<td>${data.post_office||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Upazila</b></td>
+
+<td>${data.upazila||""}</td>
+
+<td><b>District</b></td>
+
+<td>${data.district||""}</td>
+
+</tr>
+
+<tr>
+
+<td><b>Present Address</b></td>
+
+<td colspan="3">
+
+${data.present_address||""}
+
+</td>
+
+</tr>
+
+<tr>
+
+<td><b>Permanent Address</b></td>
+
+<td colspan="3">
+
+${data.permanent_address||""}
+
+</td>
+
+</tr>
+
+</table>
+
+<div class="section">
+
+Fee Information
+
+</div>
+
+<table>
+
+<tr>
+
+<td width="25%"><b>Admission Fee</b></td>
+
+<td>৳ ${data.admission_fee||0}</td>
+
+<td width="25%"><b>Monthly Fee</b></td>
+
+<td>৳ ${data.monthly_fee||0}</td>
+
+</tr>
+
+</table>
+
+<div class="mt-4 text-center">
+
+<img
+src="${qr}"
+width="110"
+height="110">
+
+<p class="mt-2">
+
+<b>${data.student_id}</b>
+
+</p>
+
+</div>
+
+<div class="sign">
+
+<div>
+
+Student Signature
+
+</div>
+
+<div>
+
+Guardian Signature
+
+</div>
+
+<div>
+
+Principal Signature
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="text-center">
+
+<b>
+
+Madrasa-E Nurul Quran
+
+</b>
+
+<br>
+
+Admission Application Form
+
+</div>
+
+</div>
+
+<script>
+
+setTimeout(()=>{
+
+window.print();
+
+},500);
+
+</script>
+
+</body>
+
+</html>
+
+`);
+
+win.document.close();
+
+}catch(err){
+
+console.error(err);
+
+alert(err.message);
+
+}
+
+}
+
+ 
