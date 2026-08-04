@@ -528,4 +528,199 @@ loadStudents();
 departmentFilter.addEventListener("change",loadStudents);
 
 statusFilter.addEventListener("change",loadStudents);
+/* ===========================================
+EDIT STUDENT
+=========================================== */
 
+async function editStudent(studentID){
+
+const {data,error}=await db
+.from("students")
+.select("*")
+.eq("student_id",studentID)
+.single();
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+editID=studentID;
+
+document.getElementById("studentID").value=data.student_id||"";
+document.getElementById("session").value=data.session||"";
+document.getElementById("admissionDate").value=data.admission_date||"";
+
+document.getElementById("studentNameBn").value=data.full_name_bn||"";
+document.getElementById("studentNameEn").value=data.full_name_en||"";
+
+document.getElementById("department").value=data.department||"";
+
+department.dispatchEvent(new Event("change"));
+
+setTimeout(()=>{
+
+document.getElementById("studentClass").value=data.class_name||"";
+
+},100);
+
+document.getElementById("roll").value=data.roll||"";
+
+document.getElementById("gender").value=data.gender||"";
+
+document.getElementById("dob").value=data.dob||"";
+
+document.getElementById("bloodGroup").value=data.blood_group||"";
+
+document.getElementById("religion").value=data.religion||"";
+
+document.getElementById("birthCertificate").value=data.birth_certificate||"";
+
+document.getElementById("fatherName").value=data.father_name||"";
+
+document.getElementById("fatherMobile").value=data.father_mobile||"";
+
+document.getElementById("fatherOccupation").value=data.father_occupation||"";
+
+document.getElementById("motherName").value=data.mother_name||"";
+
+document.getElementById("motherMobile").value=data.mother_mobile||"";
+
+document.getElementById("motherOccupation").value=data.mother_occupation||"";
+
+document.getElementById("guardianName").value=data.guardian_name||"";
+
+document.getElementById("guardianRelation").value=data.guardian_relation||"";
+
+document.getElementById("guardianMobile").value=data.guardian_mobile||"";
+
+document.getElementById("emergencyContact").value=data.emergency_contact||"";
+
+document.getElementById("village").value=data.village||"";
+
+document.getElementById("postOffice").value=data.post_office||"";
+
+document.getElementById("upazila").value=data.upazila||"";
+
+document.getElementById("district").value=data.district||"";
+
+document.getElementById("presentAddress").value=data.present_address||"";
+
+document.getElementById("permanentAddress").value=data.permanent_address||"";
+
+document.getElementById("admissionFee").value=data.admission_fee||0;
+
+document.getElementById("monthlyFee").value=data.monthly_fee||0;
+
+document.getElementById("status").value=data.status||"Active";
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+}
+
+/* ===========================================
+DELETE STUDENT
+=========================================== */
+
+async function deleteStudent(studentID){
+
+if(!confirm("Delete this student?")) return;
+
+const {error}=await db
+.from("students")
+.delete()
+.eq("student_id",studentID);
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+alert("Student Deleted Successfully");
+
+loadStudents();
+
+}
+
+/* ===========================================
+VIEW PROFILE
+=========================================== */
+
+function viewStudent(studentID){
+
+window.open(
+`student-profile.html?id=${studentID}`,
+"_blank"
+);
+
+}
+
+/* ===========================================
+PRINT FUNCTIONS
+=========================================== */
+
+function printApplicationForm(studentID){
+
+window.open(
+`javascript:alert('Application Form Print will be added in Part 5\\nStudent ID: ${studentID}')`
+);
+
+}
+
+function printIDCard(studentID){
+
+window.open(
+`javascript:alert('ID Card Print will be added in Part 5\\nStudent ID: ${studentID}')`
+);
+
+}
+
+function printAdmitCard(studentID){
+
+window.open(
+`javascript:alert('Admit Card Print will be added in Part 5\\nStudent ID: ${studentID}')`
+);
+
+}
+
+/* ===========================================
+LOGOUT
+=========================================== */
+
+logoutBtn.addEventListener("click",async(e)=>{
+
+e.preventDefault();
+
+await db.auth.signOut();
+
+location.href="login.html";
+
+});
+
+/* ===========================================
+INIT
+=========================================== */
+
+document.addEventListener("DOMContentLoaded",async()=>{
+
+const ok=await checkSession();
+
+if(!ok) return;
+
+await generateStudentID();
+
+await loadStudents();
+
+});
